@@ -58,6 +58,16 @@ export default class MainPage extends Component {
         }
     }
 
+    calculatePace() {
+        let minutes = this.state.finish.diff(this.state.start, 'm');
+        let miles = this.getMilesRemaining();
+        let pace = minutes / miles;
+
+        let min = pace.toFixed(0);
+        let sec = (pace * 60) % 60;
+        return `${min}:${sec.toFixed(0)}`;
+    }
+
     formatTime = (momentTime) => momentTime.format("h:mma").slice(0, -1);
 
     leftTableData = () => [
@@ -65,7 +75,7 @@ export default class MainPage extends Component {
             ['finish', this.formatTime(this.state.finish)],
             ['duration', `${this.convertDuration(this.state.start, this.state.finish)}`],
             ['distance', `${this.state.goal_miles.toFixed(2)} mi`],
-            ['pace', `${this.state.goal_miles.toFixed(2)} mi`],
+            ['pace', `${this.calculatePace()} min/mi`],
         ];
 
     rightTableData = () => [
@@ -118,11 +128,13 @@ export default class MainPage extends Component {
                         </View>
                         <View style={{flexDirection: "row"}}>
                             <View style={{flex: 1}}>
+                                <Text style={styles.tableTitle}>Parameters</Text>
                                 <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
                                     <Rows data={this.leftTableData()}/>
                                 </Table>
                             </View>
                             <View style={{flex: 1}}>
+                                <Text style={styles.tableTitle}>Progress</Text>
                                 <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
                                     <Rows data={this.rightTableData()}/>
                                 </Table>
@@ -137,6 +149,13 @@ export default class MainPage extends Component {
 };
 
 const styles = StyleSheet.create({
+    tableTitle: {
+        fontSize: 24,
+        fontWeight: '600',
+        color: Colors.black,
+        textAlign: 'center',
+    },
+    // Examples only below. Actually used above
     scrollView: {
         backgroundColor: Colors.lighter,
     },
@@ -150,11 +169,6 @@ const styles = StyleSheet.create({
     sectionContainer: {
         marginTop: 32,
         paddingHorizontal: 24,
-    },
-    sectionTitle: {
-        fontSize: 24,
-        fontWeight: '600',
-        color: Colors.black,
     },
     sectionDescription: {
         marginTop: 8,
