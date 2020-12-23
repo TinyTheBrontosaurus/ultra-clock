@@ -19,6 +19,7 @@ import {
 import InputSpinner from "react-native-input-spinner";
 
 import {Table, Rows} from 'react-native-table-component';
+import moment from 'moment';
 
 /**
  * The full board for crickets, including all the targets, the control board, and the statistics
@@ -30,24 +31,50 @@ export default class MainPage extends Component {
             progress_miles: 0,
             goal_miles: 52.42,
             projected_miles: 15.3,
+            start: moment("2021-01-01T07:13"),
+            finish: moment("2021-01-01T16:22"),
+            now: moment("2021-01-01T09:45"),
         };
     }
 
     getMilesRemaining = () => this.state.goal_miles - this.state.progress_miles;
 
+    convertDuration(start, end) {
+        // calculate total duration
+        let duration = moment.duration(end.diff(start));
+
+        let days = parseInt(duration.asDays());
+        let hours = parseInt(duration.asHours()) % 24;
+        let minutes = parseInt(duration.asMinutes()) % 60;
+
+        if(days > 0) {
+            return `${days.toFixed(0)}d ${hours.toFixed(0)}h ${minutes.toFixed(0)}m`
+        }
+        else if(hours > 0) {
+            return `${hours.toFixed(0)}h ${minutes.toFixed(0)}m`
+        }
+        else {
+            return `${minutes.toFixed(0)}m`
+        }
+    }
+
+    formatTime = (momentTime) => momentTime.format("h:mma").slice(0, -1);
+
     leftTableData = () => [
-            ['start', "7:13a"],
-            ['finish', "4:22p"],
+            ['start', this.formatTime(this.state.start)],
+            ['finish', this.formatTime(this.state.finish)],
+            ['duration', `${this.convertDuration(this.state.start, this.state.finish)}`],
             ['distance', `${this.state.goal_miles.toFixed(2)} mi`],
-            ['duration', "9h 9m"],
+            ['pace', `${this.state.goal_miles.toFixed(2)} mi`],
         ];
 
     rightTableData = () => [
+            ['now', this.formatTime(this.state.now)],
             ['ran', `${this.state.progress_miles.toFixed(1)} mi`],
             ['left', `${this.getMilesRemaining().toFixed(2)} mi`],
-            ['pace', "10:23 min/mi"],
-            ['elapsed', "4h 43m"],
-            ['remaining', "4h 26m"],
+            ['elapsed', `${this.convertDuration(this.state.start, this.state.now)}`],
+            ['remaining', `${this.convertDuration(this.state.now, this.state.finish)}`],
+            ['avg pace', "10:23 min/mi"],
             ['projected', `${this.state.projected_miles.toFixed(2)} mi`],
         ];
 
