@@ -1,9 +1,9 @@
 [x] try cticket trainer -- Failed. 
 [ ] Upgrade dev env -- https://reactnative.dev/docs/environment-setup
-  [ ] Upgrade android studio
-  [ ] Upgrade nodejs
-  [ ] install chocolatey -- https://chocolatey.org/install
-  [ ] create hellow world in new setup
+  [x] Upgrade android studio
+  [x] install chocolatey -- https://chocolatey.org/install
+  [x] Upgrade nodejs
+  [ ] create hello world in new setup
   [ ] debug on device
   [ ] release on device
   [ ] setup jest
