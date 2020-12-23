@@ -53,6 +53,7 @@ export default class MainPage extends Component {
                             colorMin={"#40c5f4"}
                             value={this.state.progress_miles}
                             onChange={(num) => {
+                                this.setState({progress_miles: num});
                                 console.log(num);
                             }}
                             fontSize={48}
