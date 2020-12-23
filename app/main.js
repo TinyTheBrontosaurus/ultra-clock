@@ -58,14 +58,13 @@ export default class MainPage extends Component {
         }
     }
 
-    calculatePace() {
-        let minutes = this.state.finish.diff(this.state.start, 'm');
-        let miles = this.getMilesRemaining();
+    calculatePace(start, finish, miles) {
+        let minutes = finish.diff(start, 'm');
         let pace = minutes / miles;
 
-        let min = pace.toFixed(0);
+        let min = Math.floor(pace);
         let sec = (pace * 60) % 60;
-        return `${min}:${sec.toFixed(0)}`;
+        return `${min}:${sec.toFixed(0).padStart(2, '0')}`;
     }
 
     formatTime = (momentTime) => momentTime.format("h:mma").slice(0, -1);
@@ -75,7 +74,7 @@ export default class MainPage extends Component {
             ['finish', this.formatTime(this.state.finish)],
             ['duration', `${this.convertDuration(this.state.start, this.state.finish)}`],
             ['distance', `${this.state.goal_miles.toFixed(2)} mi`],
-            ['pace', `${this.calculatePace()} min/mi`],
+            ['min pace', `${this.calculatePace(this.state.start, this.state.finish, this.state.goal_miles)} min/mi`],
         ];
 
     rightTableData = () => [
@@ -84,7 +83,8 @@ export default class MainPage extends Component {
             ['left', `${this.getMilesRemaining().toFixed(2)} mi`],
             ['elapsed', `${this.convertDuration(this.state.start, this.state.now)}`],
             ['remaining', `${this.convertDuration(this.state.now, this.state.finish)}`],
-            ['avg pace', "10:23 min/mi"],
+            ['avg pace', `${this.calculatePace(this.state.start, this.state.now, this.state.progress_miles)} min/mi`],
+            ['req pace', `${this.calculatePace(this.state.now, this.state.finish, this.getMilesRemaining())} min/mi`],
             ['projected', `${this.state.projected_miles.toFixed(2)} mi`],
         ];
 
