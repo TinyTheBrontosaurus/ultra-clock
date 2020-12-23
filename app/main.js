@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
     SafeAreaView,
     StyleSheet,
@@ -18,7 +18,7 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import InputSpinner from "react-native-input-spinner";
 
-import { Table, Rows } from 'react-native-table-component';
+import {Table, Rows} from 'react-native-table-component';
 
 /**
  * The full board for crickets, including all the targets, the control board, and the statistics
@@ -45,61 +45,63 @@ export default class MainPage extends Component {
             ]
         };
     }
+
     updateMiles() {
         this.setState({progress_miles: this.state.projected_miles});
         console.log(`${this.state.progress_miles} = ${this.state.projected_miles}`);
     }
+
     render() {
         return (
-        <>
-        <StatusBar barStyle="dark-content" />
-        <SafeAreaView>
-            <ScrollView
-                contentInsetAdjustmentBehavior="automatic"
-                style={styles.scrollView}>
-                <View style={styles.body}>
-                    <View style={styles.sectionContainer}>
-                        <InputSpinner
-                            min={0}
-                            step={0.1}
-                            type={"real"}
-                            precision={1}
-                            colorMax={"#f04048"}
-                            colorMin={"#40c5f4"}
-                            value={this.state.progress_miles}
-                            onChange={(num) => {
-                                this.setState({progress_miles: num});
-                                console.log(num);
-                            }}
-                            fontSize={48}
-                            buttonFontSize={48}
-                            height={100}
-                            width={300}
-                        />
-                        <Button
-                            onPress={() => this.updateMiles()}
-                            title={`Snap to ${this.state.projected_miles} miles`}
-                            color="#40c5f4"
-                        />
-                    </View>
-                    <View style={{flexDirection:"row"}}>
-                        <View style={{flex:1}}>
-                    <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
-                        <Rows data={this.state.leftTableData}/>
-                    </Table>
+            <>
+            <StatusBar barStyle="dark-content"/>
+            <SafeAreaView>
+                <ScrollView
+                    contentInsetAdjustmentBehavior="automatic"
+                    style={styles.scrollView}>
+                    <View style={styles.body}>
+                        <View style={styles.sectionContainer}>
+                            <InputSpinner
+                                min={0}
+                                step={0.1}
+                                type={"real"}
+                                precision={1}
+                                colorMax={"#f04048"}
+                                colorMin={"#40c5f4"}
+                                value={this.state.progress_miles}
+                                onChange={(num) => {
+                                    this.setState({progress_miles: num});
+                                    console.log(num);
+                                }}
+                                fontSize={48}
+                                buttonFontSize={48}
+                                height={100}
+                                width={300}
+                            />
+                            <Button
+                                onPress={() => this.updateMiles()}
+                                title={`Snap to ${this.state.projected_miles} miles`}
+                                color="#40c5f4"
+                            />
                         </View>
-                        <View style={{flex:1}}>
-                    <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
-                        <Rows data={this.state.rightTableData}/>
-                    </Table>
+                        <View style={{flexDirection: "row"}}>
+                            <View style={{flex: 1}}>
+                                <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+                                    <Rows data={this.state.leftTableData}/>
+                                </Table>
+                            </View>
+                            <View style={{flex: 1}}>
+                                <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+                                    <Rows data={this.state.rightTableData}/>
+                                </Table>
+                            </View>
                         </View>
                     </View>
-                </View>
-            </ScrollView>
-        </SafeAreaView>
-        </>
-    );
-};
+                </ScrollView>
+            </SafeAreaView>
+            </>
+        );
+    };
 };
 
 const styles = StyleSheet.create({
