@@ -23,7 +23,9 @@ import {
   DebugInstructions,
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
+import InputSpinner from "react-native-input-spinner";
 
+let number = 0.0;
 const App: () => React$Node = () => {
   return (
     <>
@@ -41,9 +43,22 @@ const App: () => React$Node = () => {
           <View style={styles.body}>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>Step One</Text>
+              <InputSpinner
+                  max={200}
+                  min={-1.1}
+                  step={0.1}
+                  type={"real"}
+                  precision={1}
+                  colorMax={"#f04048"}
+                  colorMin={"#40c5f4"}
+                  value={number}
+                  onChange={(num) => {
+                      console.log(num);
+                  }}
+              />
               <Text style={styles.sectionDescription}>
                 Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
+                screen and then come back to see your edits. My EDITS!!
               </Text>
             </View>
             <View style={styles.sectionContainer}>
