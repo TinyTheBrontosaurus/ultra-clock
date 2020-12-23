@@ -28,23 +28,28 @@ export default class MainPage extends Component {
         super(props);
         this.state = {
             progress_miles: 0,
+            goal_miles: 52.42,
             projected_miles: 15.3,
-            leftTableData: [
-                ['start', "7:13a"],
-                ['finish', "4:22p"],
-                ['distance', "52.42 mi"],
-                ['duration', "9h 9m"]
-            ],
-            rightTableData: [
-                ['ran', "26.4 mi"],
-                ['left', "26.0 mi"],
-                ['pace', "10:23 min/mi"],
-                ['elapsed', "4h 43m"],
-                ['remaining', "4h 26m"],
-                ['projected', "50.1 mi"],
-            ]
         };
     }
+
+    getMilesRemaining = () => this.state.goal_miles - this.state.progress_miles;
+
+    leftTableData = () => [
+            ['start', "7:13a"],
+            ['finish', "4:22p"],
+            ['distance', `${this.state.goal_miles.toFixed(2)} mi`],
+            ['duration', "9h 9m"],
+        ];
+
+    rightTableData = () => [
+            ['ran', `${this.state.progress_miles.toFixed(1)} mi`],
+            ['left', `${this.getMilesRemaining().toFixed(2)} mi`],
+            ['pace', "10:23 min/mi"],
+            ['elapsed', "4h 43m"],
+            ['remaining', "4h 26m"],
+            ['projected', `${this.state.projected_miles.toFixed(2)} mi`],
+        ];
 
     updateMiles() {
         this.setState({progress_miles: this.state.projected_miles});
@@ -87,12 +92,12 @@ export default class MainPage extends Component {
                         <View style={{flexDirection: "row"}}>
                             <View style={{flex: 1}}>
                                 <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
-                                    <Rows data={this.state.leftTableData}/>
+                                    <Rows data={this.leftTableData()}/>
                                 </Table>
                             </View>
                             <View style={{flex: 1}}>
                                 <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
-                                    <Rows data={this.state.rightTableData}/>
+                                    <Rows data={this.rightTableData()}/>
                                 </Table>
                             </View>
                         </View>
