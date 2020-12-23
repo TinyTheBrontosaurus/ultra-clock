@@ -18,6 +18,7 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import InputSpinner from "react-native-input-spinner";
 
+import { Table, Rows } from 'react-native-table-component';
 
 /**
  * The full board for crickets, including all the targets, the control board, and the statistics
@@ -27,7 +28,21 @@ export default class MainPage extends Component {
         super(props);
         this.state = {
             progress_miles: 0,
-            projected_miles: 15.3
+            projected_miles: 15.3,
+            leftTableData: [
+                ['start', "7:13a"],
+                ['finish', "4:22p"],
+                ['distance', "52.42 mi"],
+                ['duration', "9h 9m"]
+            ],
+            rightTableData: [
+                ['ran', "26.4 mi"],
+                ['left', "26.0 mi"],
+                ['pace', "10:23 min/mi"],
+                ['elapsed', "4h 43m"],
+                ['remaining', "4h 26m"],
+                ['projected', "50.1 mi"],
+            ]
         };
     }
     updateMiles() {
@@ -66,6 +81,18 @@ export default class MainPage extends Component {
                             title={`Snap to ${this.state.projected_miles} miles`}
                             color="#40c5f4"
                         />
+                    </View>
+                    <View style={{flexDirection:"row"}}>
+                        <View style={{flex:1}}>
+                    <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+                        <Rows data={this.state.leftTableData}/>
+                    </Table>
+                        </View>
+                        <View style={{flex:1}}>
+                    <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+                        <Rows data={this.state.rightTableData}/>
+                    </Table>
+                        </View>
                     </View>
                 </View>
             </ScrollView>
