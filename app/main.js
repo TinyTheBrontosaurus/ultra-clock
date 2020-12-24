@@ -20,6 +20,7 @@ import InputSpinner from "react-native-input-spinner";
 
 import {Table, Rows} from 'react-native-table-component';
 import moment from 'moment';
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 /**
  * The full board for crickets, including all the targets, the control board, and the statistics
@@ -34,6 +35,8 @@ export default class MainPage extends Component {
             start: moment("2021-01-01T07:13"),
             finish: moment("2021-01-01T16:22"),
             now: moment(),
+            showDatePicker: false,
+            modeDatePicker: "date",
         };
     }
 
@@ -94,6 +97,28 @@ export default class MainPage extends Component {
         this.setState({now: moment()});
     }
 
+    pressDateTime(date) {
+        console.log(date);
+        if(!this.state.showDatePicker) {
+            // Button pressed
+            this.setState({showDatePicker: true, modeDatePicker: 'date'});
+            return;
+        }
+
+        if(date === undefined) {
+            // Cancelled
+            this.setState({showDatePicker: false, modeDatePicker: 'date'});
+        }
+        else if(this.state.modeDatePicker === "date") {
+            // Date was set. now select time
+            this.setState({showDatePicker: true, modeDatePicker: 'time', now: moment(date)});
+        }
+        else {
+            // Time was set. done now.
+            this.setState({showDatePicker: false, modeDatePicker: 'date', now: moment(date)});
+        }
+    }
+
     render() {
         return (
             <>
@@ -126,6 +151,11 @@ export default class MainPage extends Component {
                                 title={`Update Time to now`}
                                 color="#40c5f4"
                             />
+                            <Button
+                                onPress={() => this.pressDateTime()}
+                                title={`Set Time`}
+                                color="#40c5f4"
+                            />
                         </View>
                         <View style={{flexDirection: "row"}}>
                             <View style={{flex: 1}}>
@@ -141,6 +171,16 @@ export default class MainPage extends Component {
                                 </Table>
                             </View>
                         </View>
+                        {this.state.showDatePicker && (
+                            <DateTimePicker
+                                testID="dateTimePicker"
+                                mode={this.state.modeDatePicker}
+                                is24Hour={false}
+                                display="default"
+                                value={this.state.now.toDate()}
+                                onChange={(event, date) => this.pressDateTime(date)}
+                            />
+                        )}
                     </View>
                 </ScrollView>
             </SafeAreaView>
