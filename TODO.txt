@@ -3,13 +3,21 @@
   [x] Upgrade android studio
   [x] install chocolatey -- https://chocolatey.org/install
   [x] Upgrade nodejs
-  [ ] create hello world in new setup
-  [ ] debug on device
+  [x] create hello world in new setup
+  [x] debug on device
   [ ] release on device
   [ ] setup jest
-[ ] Find time package
-[ ] Do backend math
-[ ] Show on front end
-[ ] fancify frontend
-[ ] Add input time test
-
+[x] Find time package
+[x] Do backend math
+[x] Show on front end
+[x] fancify frontend
+[x] Add input time test
+[ ] Add large/small miles steps
+[ ] Add miles auto-set
+[ ] Remove hardcoded dates & distances
+[ ] About page
+[ ] Split up tables (Parameters, distance, time)
+[ ] Dark mode
+[ ] Redesign front end
+[ ] Add version
+[ ] Add auto-version
