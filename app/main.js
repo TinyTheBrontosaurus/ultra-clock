@@ -33,11 +33,13 @@ export default class MainPage extends Component {
             projected_miles: 15.3,
             start: moment("2021-01-01T07:13"),
             finish: moment("2021-01-01T16:22"),
-            now: moment("2021-01-01T09:45"),
+            now: moment(),
         };
     }
 
     getMilesRemaining = () => this.state.goal_miles - this.state.progress_miles;
+
+    isStarted  = () => this.state.now.diff(this.state.start) > 0;
 
     convertDuration(start, end) {
         // calculate total duration
@@ -73,24 +75,23 @@ export default class MainPage extends Component {
             ['start', this.formatTime(this.state.start)],
             ['finish', this.formatTime(this.state.finish)],
             ['duration', `${this.convertDuration(this.state.start, this.state.finish)}`],
-            ['distance', `${this.state.goal_miles.toFixed(2)} mi`],
-            ['min pace', `${this.calculatePace(this.state.start, this.state.finish, this.state.goal_miles)} min/mi`],
+            ['distance', `${this.state.goal_miles.toFixed(2)} ${labels.distance}`],
+            ['min pace', `${this.calculatePace(this.state.start, this.state.finish, this.state.goal_miles)} ${labels.pace}`],
         ];
 
     rightTableData = () => [
             ['now', this.formatTime(this.state.now)],
-            ['ran', `${this.state.progress_miles.toFixed(1)} mi`],
-            ['left', `${this.getMilesRemaining().toFixed(2)} mi`],
-            ['elapsed', `${this.convertDuration(this.state.start, this.state.now)}`],
+            ['ran', `${this.state.progress_miles.toFixed(1)} ${labels.distance}`],
+            ['left', `${this.getMilesRemaining().toFixed(2)} ${labels.distance}`],
+            ['elapsed', `${this.isStarted() ? this.convertDuration(this.state.start, this.state.now) : "Not started"}`],
             ['remaining', `${this.convertDuration(this.state.now, this.state.finish)}`],
-            ['avg pace', `${this.calculatePace(this.state.start, this.state.now, this.state.progress_miles)} min/mi`],
-            ['req pace', `${this.calculatePace(this.state.now, this.state.finish, this.getMilesRemaining())} min/mi`],
-            ['projected', `${this.state.projected_miles.toFixed(2)} mi`],
+            ['avg pace', `${this.isStarted() ?  this.calculatePace(this.state.start, this.state.now, this.state.progress_miles) : labels.na} ${labels.pace}`],
+            ['req pace', `${this.isStarted() ? this.calculatePace(this.state.now, this.state.finish, this.getMilesRemaining()) : labels.na} ${labels.pace}`],
+            ['projected', `${this.isStarted() ? this.state.projected_miles.toFixed(2) : labels.na} mi`],
         ];
 
-    updateMiles() {
-        this.setState({progress_miles: this.state.projected_miles});
-        console.log(`${this.state.progress_miles} = ${this.state.projected_miles}`);
+    updateTime() {
+        this.setState({now: moment()});
     }
 
     render() {
@@ -121,8 +122,8 @@ export default class MainPage extends Component {
                                 width={300}
                             />
                             <Button
-                                onPress={() => this.updateMiles()}
-                                title={`Snap to ${this.state.projected_miles} miles`}
+                                onPress={() => this.updateTime()}
+                                title={`Update Time to now`}
                                 color="#40c5f4"
                             />
                         </View>
@@ -146,6 +147,12 @@ export default class MainPage extends Component {
             </>
         );
     };
+};
+
+const labels = {
+    pace: "min/mi",
+    distance: "mi",
+    na: "--",
 };
 
 const styles = StyleSheet.create({
