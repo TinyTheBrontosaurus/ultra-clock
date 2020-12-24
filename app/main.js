@@ -31,7 +31,6 @@ export default class MainPage extends Component {
         this.state = {
             progress_miles: 0,
             goal_miles: 52.42,
-            projected_miles: 15.3,
             start: moment("2021-01-01T07:13"),
             finish: moment("2021-01-01T16:22"),
             now: moment(),
@@ -72,6 +71,20 @@ export default class MainPage extends Component {
         return `${min}:${sec.toFixed(0).padStart(2, '0')}`;
     }
 
+    getProjectedMiles() {
+        let total = this.state.finish.diff(this.state.start, 'm');
+        let elapsed = this.state.now.diff(this.state.start, 'm');
+
+        return total / elapsed * this.state.progress_miles;
+    }
+
+    getExpectedMiles() {
+        let total = this.state.finish.diff(this.state.start, 'm');
+        let elapsed = this.state.now.diff(this.state.start, 'm');
+
+        return elapsed / total * this.state.goal_miles;
+    }
+
     formatTime = (momentTime) => momentTime.format("h:mma").slice(0, -1);
 
     leftTableData = () => [
@@ -90,7 +103,8 @@ export default class MainPage extends Component {
             ['remaining', `${this.convertDuration(this.state.now, this.state.finish)}`],
             ['avg pace', `${this.isStarted() ?  this.calculatePace(this.state.start, this.state.now, this.state.progress_miles) : labels.na} ${labels.pace}`],
             ['req pace', `${this.isStarted() ? this.calculatePace(this.state.now, this.state.finish, this.getMilesRemaining()) : labels.na} ${labels.pace}`],
-            ['projected', `${this.isStarted() ? this.state.projected_miles.toFixed(2) : labels.na} mi`],
+            ['projected', `${this.isStarted() ? this.getProjectedMiles().toFixed(2) : labels.na} mi`],
+            ['expected', `${this.isStarted() ? this.getExpectedMiles().toFixed(2) : labels.na} mi`],
         ];
 
     updateTime() {
