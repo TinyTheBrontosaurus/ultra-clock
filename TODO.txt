@@ -13,11 +13,15 @@
 [x] fancify frontend
 [x] Add input time test
 [ ] Add large/small miles steps
+[ ] Save state to DB
+[ ] Add version
+---
+[ ] Test jog
+---
 [ ] Add miles auto-set
 [ ] Remove hardcoded dates & distances
 [ ] About page
 [ ] Split up tables (Parameters, distance, time)
 [ ] Dark mode
 [ ] Redesign front end
-[ ] Add version
 [ ] Add auto-version
