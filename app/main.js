@@ -190,7 +190,7 @@ export default class MainPage extends Component {
                                 </Table>
                             </View>
                         </View>
-                        <Text>{this.state.version}</Text>
+                        <Text>{this.state.version}{__DEV__ ? "-Debug" : ""}</Text>
                         {this.state.showDatePicker && (
                             <DateTimePicker
                                 testID="dateTimePicker"

@@ -14,7 +14,7 @@
 [x] Add input time test
 [ ] Add large/small miles steps
 [ ] Save state to DB
-[ ] Add version
+[x] Add version
 ---
 [x] Test jog
 --- (post jog)
