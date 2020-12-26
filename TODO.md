@@ -15,25 +15,29 @@
 - [x] Show on front end
 - [x] fancify frontend
 - [x] Add input time test
-- [ ] Add large/small miles steps
+- [x] Add large/small miles steps
 - [ ] Save state to DB
 - [x] Add version
 - [x] Add readme
 ---
-- [x] Test jog
+- [x] Test jog (v0.1.0)
 --- 
 ## Post MVP test list
 - [x] Add bigger text
 - [x] Use multiple screens (swipe-able?)
 - [x] Remove optional / debug buttons
 - [ ] Bigger set-to-now button
-- [ ] Auto set-to-now
+- [x] Auto set-to-now
+- [ ] Test jog again (v0.1.0)
+---
+## Post v0.2.0 test list
+
 ---
 ## Backlog
 - [ ] Add miles auto-set
 - [ ] Remove hardcoded dates & distances
 - [ ] About page
-- [ ] Split up tables (Parameters, distance, time)
+- [x] Split up tables (Parameters, distance, time)
 - [ ] Dark mode
 - [ ] Redesign front end
 - [ ] Add auto-version
