@@ -21,6 +21,9 @@ import InputSpinner from "react-native-input-spinner";
 import {Table, Rows} from 'react-native-table-component';
 import moment from 'moment';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { NativeModules } from 'react-native';
+const { VersionModule } = NativeModules;
+
 
 /**
  * The full board for crickets, including all the targets, the control board, and the statistics
@@ -28,6 +31,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 export default class MainPage extends Component {
     constructor(props) {
         super(props);
+        const { VERSION_STRING } = VersionModule.getConstants();
         this.state = {
             progress_miles: 0,
             goal_miles: 52.42,
@@ -36,6 +40,7 @@ export default class MainPage extends Component {
             now: moment(),
             showDatePicker: false,
             modeDatePicker: "date",
+            version: VERSION_STRING
         };
     }
 
@@ -185,6 +190,7 @@ export default class MainPage extends Component {
                                 </Table>
                             </View>
                         </View>
+                        <Text>{this.state.version}</Text>
                         {this.state.showDatePicker && (
                             <DateTimePicker
                                 testID="dateTimePicker"
