@@ -33,12 +33,13 @@ export default class MainPage extends Component {
     this.state = {
       progress_miles: 0,
       goal_miles: 52.42,
-      start: moment("2021-01-01T07:13"),
-      finish: moment("2021-01-01T16:22"),
+      start: moment("2020-12-26T07:13"),
+      finish: moment("2020-12-26T16:22"),
       now: moment(),
       showDatePicker: false,
       modeDatePicker: "date",
-      version: VERSION_STRING
+      version: VERSION_STRING,
+      milesStep: 1,
     };
   }
 
@@ -154,13 +155,29 @@ export default class MainPage extends Component {
     }
   }
 
+  componentDidMount() {
+    setInterval(() => {
+      this.setState({
+        now: moment()
+      })
+    }, 10000)
+  }
+
+  toggleMilesSteps() {
+    let new_step = 0.1;
+    if(this.state.milesStep === 0.1) {
+      new_step = 1;
+    }
+    this.setState({milesStep: new_step});
+  }
+
   render() {
     let MilesSelector = (props) => {
       return <View style={{    justifyContent: 'center',
         alignItems: 'center'}}>
         <InputSpinner
         min={0}
-        step={1}
+        step={this.state.milesStep}
         type={"real"}
         precision={1}
         colorMax={"#f04048"}
@@ -173,9 +190,14 @@ export default class MainPage extends Component {
         fontSize={48}
         buttonFontSize={48}
         height={100}
-        width={300}
+        width={350}
         append={<Text style={{fontSize: 48}}>{labels.distance}</Text>}
       />
+        <Button
+          onPress={() => this.toggleMilesSteps()}
+          title={`Step: ${this.state.milesStep.toFixed(1)} ${labels.distance}`}
+          color="#40c5f4"
+        />
       </View>
     };
 
