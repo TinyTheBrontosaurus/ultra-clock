@@ -156,7 +156,9 @@ export default class MainPage extends Component {
 
   render() {
     let MilesSelector = (props) => {
-      return <InputSpinner
+      return <View style={{    justifyContent: 'center',
+        alignItems: 'center'}}>
+        <InputSpinner
         min={0}
         step={1}
         type={"real"}
@@ -172,8 +174,9 @@ export default class MainPage extends Component {
         buttonFontSize={48}
         height={100}
         width={300}
-        append={<Text>{labels.distance}</Text>}
+        append={<Text style={{fontSize: 48}}>{labels.distance}</Text>}
       />
+      </View>
     };
 
     return (
