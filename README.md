@@ -10,7 +10,8 @@ to do this run on January 1, 2021 so I will be unlikely to maintain this app aft
 
 
 # History
-* v0.1.0 -- MVP. Calculates basic statistics. Hard-coded dates for sunrise/sunset on 1/1/2021. 
+* v0.2.0 (12/26/2020) -- Make text bigger. Add tabs. Based upon feedback from run
+* v0.1.0 (12/24/2020) -- MVP. Calculates basic statistics. Hard-coded dates for sunrise/sunset on 1/1/2021. 
 
 
 # Developer information
@@ -30,16 +31,22 @@ appears incompatible now.
 
 ## To run the app
 ### In one PowerShell window
-`npx react-native start --reset-cache`
+```
+npx react-native start --reset-cache
+```
 
 ### In the other window
 
 #### Debug
 In debug (best for faster dev). Takes a few minutes the first time, then update immediately
 
-`npx react-native run-android`
+```
+npx react-native run-android
+```
 
 #### Release
 To send a release (for faster execution). Takes ~5 minutes
 
-`npx react-native run-android --variant=release`
+```
+npx react-native run-android --variant=release
+```
