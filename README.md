@@ -5,8 +5,8 @@ go, how fast they have to run to make it, how much slack they have, etc. This ap
 automatically.
 
 This app was inspired by "Bryan's Soul Searching Solstice Run" on December 21, 2020 featured on the "How Was Your Run 
-Today" Podcast. My plan is to do this run on January 1, 2021 so I will be unlikely to maintain this app
-after that day. 
+Today" Podcast (https://howwasyourruntoday.com/episodes/hwyrt-holiday-bonus-bryans-soul-searching-s1!b121d). My plan is 
+to do this run on January 1, 2021 so I will be unlikely to maintain this app after that day. 
 
 
 # History
