@@ -10,11 +10,7 @@ import {
 } from 'react-native';
 
 import {
-  Header,
-  LearnMoreLinks,
   Colors,
-  DebugInstructions,
-  ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 import InputSpinner from "react-native-input-spinner";
 
@@ -142,86 +138,80 @@ export default class MainPage extends Component {
 
   render() {
     return (
-      <>
-      <StatusBar barStyle="dark-content"/>
-      <SafeAreaView>
-        <Container>
-          <Header hasTabs/>
-          <Tabs>
-            <Tab heading="Info">
-            </Tab>
-            <Tab heading="Distance">
-            </Tab>
-            <Tab heading="Pace">
-            </Tab>
-            <Tab heading="Time">
-            </Tab>
-            <Tab heading="v0.1.0">
-              <ScrollView
-                contentInsetAdjustmentBehavior="automatic"
-                style={styles.scrollView}>
-                <View style={styles.body}>
-                  <View style={styles.sectionContainer}>
-                    <InputSpinner
-                      min={0}
-                      step={0.1}
-                      type={"real"}
-                      precision={1}
-                      colorMax={"#f04048"}
-                      colorMin={"#40c5f4"}
-                      value={this.state.progress_miles}
-                      onChange={(num) => {
-                        this.setState({progress_miles: num});
-                        console.log(num);
-                      }}
-                      fontSize={48}
-                      buttonFontSize={48}
-                      height={100}
-                      width={300}
-                    />
-                    <Button
-                      onPress={() => this.updateTime()}
-                      title={`Update Time to now`}
-                      color="#40c5f4"
-                    />
-                    <Button
-                      onPress={() => this.pressDateTime()}
-                      title={`Set Time`}
-                      color="#40c5f4"
-                    />
-                  </View>
-                  <View style={{flexDirection: "row"}}>
-                    <View style={{flex: 1}}>
-                      <Text style={styles.tableTitle}>Parameters</Text>
-                      <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
-                        <Rows data={this.leftTableData()}/>
-                      </Table>
-                    </View>
-                    <View style={{flex: 1}}>
-                      <Text style={styles.tableTitle}>Progress</Text>
-                      <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
-                        <Rows data={this.rightTableData()}/>
-                      </Table>
-                    </View>
-                  </View>
-                  <Text>{this.state.version}{__DEV__ ? "-Debug" : ""}</Text>
-                  {this.state.showDatePicker && (
-                    <DateTimePicker
-                      testID="dateTimePicker"
-                      mode={this.state.modeDatePicker}
-                      is24Hour={false}
-                      display="default"
-                      value={this.state.now.toDate()}
-                      onChange={(event, date) => this.pressDateTime(date)}
-                    />
-                  )}
+      <Container>
+        <Header hasTabs/>
+        <Tabs>
+          <Tab heading="Info">
+            <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+              <Rows data={this.leftTableData()} textStyle={{fontSize: 36}}/>
+            </Table>
+          </Tab>
+          <Tab heading="Distance">
+          </Tab>
+          <Tab heading="Pace">
+          </Tab>
+          <Tab heading="Time">
+          </Tab>
+          <Tab heading="v0.1.0">
+            <View style={styles.body}>
+              <View style={styles.sectionContainer}>
+                <InputSpinner
+                  min={0}
+                  step={0.1}
+                  type={"real"}
+                  precision={1}
+                  colorMax={"#f04048"}
+                  colorMin={"#40c5f4"}
+                  value={this.state.progress_miles}
+                  onChange={(num) => {
+                    this.setState({progress_miles: num});
+                    console.log(num);
+                  }}
+                  fontSize={48}
+                  buttonFontSize={48}
+                  height={100}
+                  width={300}
+                />
+                <Button
+                  onPress={() => this.updateTime()}
+                  title={`Update Time to now`}
+                  color="#40c5f4"
+                />
+                <Button
+                  onPress={() => this.pressDateTime()}
+                  title={`Set Time`}
+                  color="#40c5f4"
+                />
+              </View>
+              <View style={{flexDirection: "row"}}>
+                <View style={{flex: 1}}>
+                  <Text style={styles.tableTitle}>Parameters</Text>
+                  <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+                    <Rows data={this.leftTableData()}/>
+                  </Table>
                 </View>
-              </ScrollView>
-            </Tab>
-          </Tabs>
-        </Container>
-      </SafeAreaView>
-      </>
+                <View style={{flex: 1}}>
+                  <Text style={styles.tableTitle}>Progress</Text>
+                  <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+                    <Rows data={this.rightTableData()}/>
+                  </Table>
+                </View>
+              </View>
+              <Text>{this.state.version}{__DEV__ ? "-Debug" : ""}</Text>
+              {this.state.showDatePicker && (
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  mode={this.state.modeDatePicker}
+                  is24Hour={false}
+                  display="default"
+                  value={this.state.now.toDate()}
+                  onChange={(event, date) => this.pressDateTime(date)}
+                />
+              )}
+            </View>
+          </Tab>
+        </Tabs>
+      </Container>
     );
   };
 };
