@@ -172,6 +172,7 @@ export default class MainPage extends Component {
         buttonFontSize={48}
         height={100}
         width={300}
+        append={<Text>{labels.distance}</Text>}
       />
     };
 
