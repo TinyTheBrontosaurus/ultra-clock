@@ -155,6 +155,26 @@ export default class MainPage extends Component {
   }
 
   render() {
+    let MilesSelector = (props) => {
+      return <InputSpinner
+        min={0}
+        step={1}
+        type={"real"}
+        precision={1}
+        colorMax={"#f04048"}
+        colorMin={"#40c5f4"}
+        value={this.state.progress_miles}
+        onChange={(num) => {
+          this.setState({progress_miles: num});
+          console.log(num);
+        }}
+        fontSize={48}
+        buttonFontSize={48}
+        height={100}
+        width={300}
+      />
+    };
+
     return (
       <Container>
         <Header hasTabs/>
@@ -163,42 +183,30 @@ export default class MainPage extends Component {
             <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
               <Rows data={this.leftTableData()} textStyle={{fontSize: 36}}/>
             </Table>
+            <MilesSelector />
           </Tab>
           <Tab heading="Dist">
             <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
               <Rows data={this.distTableData()} textStyle={{fontSize: 36}}/>
             </Table>
+            <MilesSelector />
           </Tab>
           <Tab heading="Pace">
             <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
               <Rows data={this.paceTableData()} textStyle={{fontSize: 36}}/>
             </Table>
+            <MilesSelector />
           </Tab>
           <Tab heading="Time">
             <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
               <Rows data={this.timeTableData()} textStyle={{fontSize: 36}}/>
             </Table>
+            <MilesSelector />
           </Tab>
           <Tab heading="v0.1.0">
             <View style={styles.body}>
               <View style={styles.sectionContainer}>
-                <InputSpinner
-                  min={0}
-                  step={0.1}
-                  type={"real"}
-                  precision={1}
-                  colorMax={"#f04048"}
-                  colorMin={"#40c5f4"}
-                  value={this.state.progress_miles}
-                  onChange={(num) => {
-                    this.setState({progress_miles: num});
-                    console.log(num);
-                  }}
-                  fontSize={48}
-                  buttonFontSize={48}
-                  height={100}
-                  width={300}
-                />
+                <MilesSelector />
                 <Button
                   onPress={() => this.updateTime()}
                   title={`Update Time to now`}

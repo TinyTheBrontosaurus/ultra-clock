@@ -2,7 +2,7 @@
 ---
 ## MVP
 - [x] try cricket trainer -- Failed. 
-- [ ] Upgrade dev env -- https://reactnative.dev/docs/environment-setup
+- [x] Upgrade dev env -- https://reactnative.dev/docs/environment-setup
   - [x] Upgrade android studio
   - [x] install chocolatey -- https://chocolatey.org/install
   - [x] Upgrade nodejs
