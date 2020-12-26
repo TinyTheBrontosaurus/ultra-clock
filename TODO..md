@@ -5,8 +5,8 @@
   [x] Upgrade nodejs
   [x] create hello world in new setup
   [x] debug on device
-  [ ] release on device
-  [ ] setup jest
+  [x] release on device
+  [x] setup jest
 [x] Find time package
 [x] Do backend math
 [x] Show on front end
@@ -15,13 +15,14 @@
 [ ] Add large/small miles steps
 [ ] Save state to DB
 [x] Add version
+[x] Add readme
 ---
 [x] Test jog
 --- (post jog)
 [ ] Add bigger text
 [ ] Use multiple screens (swipe-able?)
 [ ] Remove optional / debug buttons
-[ ] Bigget set-to-now button
+[ ] Bigger set-to-now button
 [ ] Auto set-to-now
 ---
 [ ] Add miles auto-set
@@ -31,3 +32,5 @@
 [ ] Dark mode
 [ ] Redesign front end
 [ ] Add auto-version
+[ ] Post on app store
+[ ] Integrate with CI (Travis or whatever)

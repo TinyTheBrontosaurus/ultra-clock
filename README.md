@@ -20,7 +20,15 @@ This was developed on Windows 10 for a Samsun Galaxy S7 Edge using
 
 I use IntelliJ for all JS dev and open it from the project root. I use AS for Java development and open from the `android` folder
 
-# To run the app
+## To run unit tests
+From the root:
+```
+nps jest
+```
+Note: I Have not yet successfully integrated with the old version of IntelliJ. I was successful back in 2017-2018 but it
+appears incompatible now. 
+
+## To run the app
 ### In one PowerShell window
 `npx react-native start --reset-cache`
 
