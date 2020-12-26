@@ -23,9 +23,9 @@
 - [x] Test jog
 --- 
 ## Post MVP test list
-- [ ] Add bigger text
-- [ ] Use multiple screens (swipe-able?)
-- [ ] Remove optional / debug buttons
+- [x] Add bigger text
+- [x] Use multiple screens (swipe-able?)
+- [x] Remove optional / debug buttons
 - [ ] Bigger set-to-now button
 - [ ] Auto set-to-now
 ---

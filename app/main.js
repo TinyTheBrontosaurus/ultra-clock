@@ -110,6 +110,24 @@ export default class MainPage extends Component {
     ['expected', `${this.isStarted() ? this.getExpectedMiles().toFixed(2) : labels.na} mi`],
   ];
 
+  timeTableData = () => [
+    ['now', this.formatTime(this.state.now)],
+    ['elapsed', `${this.isStarted() ? this.convertDuration(this.state.start, this.state.now) : "Not started"}`],
+    ['remaining', `${this.convertDuration(this.state.now, this.state.finish)}`],
+  ];
+
+  distTableData = () => [
+    ['ran', `${this.state.progress_miles.toFixed(1)} ${labels.distance}`],
+    ['left', `${this.getMilesRemaining().toFixed(2)} ${labels.distance}`],
+    ['projected', `${this.isStarted() ? this.getProjectedMiles().toFixed(2) : labels.na} mi`],
+    ['expected', `${this.isStarted() ? this.getExpectedMiles().toFixed(2) : labels.na} mi`],
+  ];
+
+  paceTableData = () => [
+    ['avg pace', `${this.isStarted() ? this.calculatePace(this.state.start, this.state.now, this.state.progress_miles) : labels.na} ${labels.pace}`],
+    ['req pace', `${this.isStarted() ? this.calculatePace(this.state.now, this.state.finish, this.getMilesRemaining()) : labels.na} ${labels.pace}`],
+  ];
+
   updateTime() {
     this.setState({now: moment()});
   }
@@ -146,11 +164,20 @@ export default class MainPage extends Component {
               <Rows data={this.leftTableData()} textStyle={{fontSize: 36}}/>
             </Table>
           </Tab>
-          <Tab heading="Distance">
+          <Tab heading="Dist">
+            <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+              <Rows data={this.distTableData()} textStyle={{fontSize: 36}}/>
+            </Table>
           </Tab>
           <Tab heading="Pace">
+            <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+              <Rows data={this.paceTableData()} textStyle={{fontSize: 36}}/>
+            </Table>
           </Tab>
           <Tab heading="Time">
+            <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+              <Rows data={this.timeTableData()} textStyle={{fontSize: 36}}/>
+            </Table>
           </Tab>
           <Tab heading="v0.1.0">
             <View style={styles.body}>
