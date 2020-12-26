@@ -16,7 +16,13 @@
 [ ] Save state to DB
 [ ] Add version
 ---
-[ ] Test jog
+[x] Test jog
+--- (post jog)
+[ ] Add bigger text
+[ ] Use multiple screens (swipe-able?)
+[ ] Remove optional / debug buttons
+[ ] Bigget set-to-now button
+[ ] Auto set-to-now
 ---
 [ ] Add miles auto-set
 [ ] Remove hardcoded dates & distances
