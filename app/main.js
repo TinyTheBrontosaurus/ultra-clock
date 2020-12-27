@@ -35,7 +35,7 @@ export default class MainPage extends Component {
       progress_miles: 0,
       goal_miles: 52.42,
       start: moment("2020-12-26T07:13"),
-      finish: moment("2020-12-26T16:22"),
+      finish: moment("2020-12-27T16:22"),
       now: moment(),
       showDatePicker: false,
       modeDatePicker: "date",
@@ -217,6 +217,18 @@ export default class MainPage extends Component {
             <MilesSelector />
           </Tab>
           <Tab heading="Dist">
+            <View style={{position: "absolute"}}>
+              <AnimatedCircularProgress
+                rotation={this.milesToPercent(this.state.progress_miles)*3.6}
+                size={360}
+                width={25}
+                arcSweepAngle={this.milesToPercent(this.getExpectedMilesDelta())*3.6}
+                fill={100}
+                tintColor={colorsDistance.delta}
+                backgroundColor={colorsDistance.delta}
+              />
+            </View>
+            <View style={{position: "absolute"}}>
             <AnimatedCircularProgress
               rotation={0}
               size={360}
@@ -240,6 +252,7 @@ export default class MainPage extends Component {
               )
             }
             </AnimatedCircularProgress>
+            </View>
 
             <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
               <Rows data={this.distTableData()} textStyle={{fontSize: 36}}/>
