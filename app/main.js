@@ -20,11 +20,14 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import {NativeModules} from 'react-native';
 
 const {VersionModule} = NativeModules;
-import {Container, Header, Left, Right, Body, Title, Tab, Tabs,
+import {
+  Container, Header, Left, Right, Body, Title, Tab, Tabs,
   Button as NBButton, Drawer, Content, ListItem, Switch,
-  Icon as NBIcon} from 'native-base';
+  Grid, Col,
+  Icon as NBIcon
+} from 'native-base';
 
-import { AnimatedCircularProgress } from 'react-native-circular-progress';
+import {AnimatedCircularProgress} from 'react-native-circular-progress';
 
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import RNSpeedometer from 'react-native-speedometer'
@@ -69,7 +72,7 @@ export default class MainPage extends Component {
     let hours = parseInt(datetime.format("HH"));
     let minutes = parseInt(datetime.format("mm"));
 
-    return ((hours + (minutes/60)) / 24) * 100;
+    return ((hours + (minutes / 60)) / 24) * 100;
   }
 
   baselineTimePercent() {
@@ -111,9 +114,10 @@ export default class MainPage extends Component {
     let duration = moment.duration(end.diff(start));
     return this.formatDuration(duration);
   }
+
   formatDuration(duration) {
     let prefix = "";
-    if(duration.asMilliseconds() < 0) {
+    if (duration.asMilliseconds() < 0) {
       duration = moment.duration(-duration.asMilliseconds());
       prefix = "-";
     }
@@ -147,7 +151,7 @@ export default class MainPage extends Component {
     let num = a_ms - t_ms;
     let walk_pace_ms = this.state.paceWalkingMinutes * 60 * 1000;
 
-    if(pace_ms >= walk_pace_ms) {
+    if (pace_ms >= walk_pace_ms) {
       return -1;
     }
     let den = 1 - (pace_ms / walk_pace_ms);
@@ -170,7 +174,7 @@ export default class MainPage extends Component {
 
   formatPace(pace) {
     let prefix = "";
-    if(pace < 0) {
+    if (pace < 0) {
       prefix = "-";
       pace = -pace;
     }
@@ -182,6 +186,7 @@ export default class MainPage extends Component {
   getAveragePace() {
     return this.calculatePace2(this.state.start, this.state.now, this.state.progress_miles);
   }
+
   getRequiredPace() {
     return this.calculatePace2(this.state.start, this.state.finish, this.state.goal_miles);
   }
@@ -196,10 +201,10 @@ export default class MainPage extends Component {
     let fastest = mid - this.state.paceSpanMinutes / 2;
     let slowest = mid + this.state.paceSpanMinutes / 2;
 
-    if(pace > slowest) {
+    if (pace > slowest) {
       return 100;
     }
-    else if(pace < fastest) {
+    else if (pace < fastest) {
       return 0;
     }
     else {
@@ -300,13 +305,13 @@ export default class MainPage extends Component {
 
   toggleMilesSteps() {
     let new_step = 0.1;
-    if(this.state.milesStep === 0.1) {
+    if (this.state.milesStep === 0.1) {
       new_step = 0.5;
     }
-    else if(this.state.milesStep === 0.5) {
+    else if (this.state.milesStep === 0.5) {
       new_step = 1;
     }
-    else if(this.state.milesStep === 1) {
+    else if (this.state.milesStep === 1) {
       new_step = 10;
     }
     this.setState({milesStep: new_step});
@@ -316,7 +321,7 @@ export default class MainPage extends Component {
     // Time quickly gets stale, which makes the stats deteriorate. Instead only show the time
     // for when the stats were updated
     this.setState({progress_miles: num});
-    if(!this.state.demoMode) {
+    if (!this.state.demoMode) {
       this.setState({now: this.state.wallClock});
     }
   }
@@ -330,27 +335,31 @@ export default class MainPage extends Component {
         bottom: 0,
       }}>
         <Text style={{fontSize: 20}}>{this.state.now.fromNow()}</Text>
-        <InputSpinner
-        min={0}
-        step={this.state.milesStep}
-        type={"real"}
-        precision={1}
-        colorMax={"#f04048"}
-        colorMin={"#40c5f4"}
-        value={this.state.progress_miles}
-        onChange={(num) => this.updateProgressMiles(num)}
-        fontSize={48}
-        buttonFontSize={48}
-        height={100}
-        width={350}
-        rounded={false}
-        showBorder={true}
-        ><Text style={{fontSize: 20, marginTop: 48, marginRight: 10}}>{labels.distance}</Text></InputSpinner>
-        {false && <Button
-          onPress={() => this.toggleMilesSteps()}
-          title={`Step: ${this.state.milesStep.toFixed(1)} ${labels.distance}`}
-          color="#40c5f4"
-        />}
+        <Grid>
+          <Col>
+            <InputSpinner
+              min={0}
+              step={this.state.milesStep}
+              type={"real"}
+              precision={1}
+              colorMax={"#f04048"}
+              colorMin={"#40c5f4"}
+              value={this.state.progress_miles}
+              onChange={(num) => this.updateProgressMiles(num)}
+              fontSize={48}
+              buttonFontSize={48}
+              height={100}
+              width={350}
+              rounded={false}
+              showBorder={true}
+            ><Text style={{fontSize: 20, marginTop: 48, marginRight: 10}}>{labels.distance}</Text></InputSpinner>
+          </Col>
+          <Col>
+            <NBButton block light style={{height: 100, width: 84}}>
+              <Icon name='step-forward' size={48}/>
+            </NBButton>
+          </Col>
+        </Grid>
         <Text>{this.state.version}{__DEV__ ? "-Debug" : ""}</Text>
       </View>
     };
@@ -359,7 +368,7 @@ export default class MainPage extends Component {
     let fill_pct;
     let deltaColor;
     let prefix = "";
-    if(this.getExpectedMilesDelta() > 0) {
+    if (this.getExpectedMilesDelta() > 0) {
       // Expected is first
       rotation_deg = this.milesToPercent(this.getExpectedMiles()) * 3.6;
       fill_pct = this.milesToPercent(this.getExpectedMilesDelta());
@@ -374,12 +383,12 @@ export default class MainPage extends Component {
     }
 
     let SideBar = (props) => <Container>
-      <Header />
+      <Header/>
       <Content>
         <ListItem icon>
           <Left>
-            <NBButton style={{ backgroundColor: "#FF9501" }}>
-              <NBIcon active name="airplane" />
+            <NBButton style={{backgroundColor: "#FF9501"}}>
+              <NBIcon active name="airplane"/>
             </NBButton>
           </Left>
           <Body>
@@ -392,8 +401,8 @@ export default class MainPage extends Component {
         </ListItem>
         <ListItem icon>
           <Left>
-            <NBButton style={{ backgroundColor: "#007AFF" }}>
-              <NBIcon active name="boat-outline" />
+            <NBButton style={{backgroundColor: "#007AFF"}}>
+              <NBIcon active name="boat-outline"/>
             </NBButton>
           </Left>
           <Body>
@@ -405,186 +414,191 @@ export default class MainPage extends Component {
 
     return (
       <Drawer
-        ref={(ref) => { this._drawer = ref; }}
-        content={<SideBar />}
+        ref={(ref) => {
+          this._drawer = ref;
+        }}
+        content={<SideBar/>}
       >
-      <Container>
-        <Header hasTabs>
-          <Left>
-            <NBButton transparent>
-              <NBIcon name='menu' onPress={this.openDrawer.bind(this)}/>
-            </NBButton>
-          </Left>
-          <Body>
+        <Container>
+          <Header hasTabs>
+            <Left>
+              <NBButton transparent>
+                <NBIcon name='menu' onPress={this.openDrawer.bind(this)}/>
+              </NBButton>
+            </Left>
+            <Body>
             <Title>Soul-Searching Ultra Clock</Title>
-          </Body>
-        </Header>
-        <Tabs>
-          <Tab heading="Course">
-            <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
-              <Rows data={this.leftTableData()} textStyle={{fontSize: 36}}/>
-            </Table>
-            <MilesSelector />
-          </Tab>
-          <Tab heading="Dist">
-            <View style={{position: "absolute"}}>
-              <AnimatedCircularProgress
+            </Body>
+          </Header>
+          <Tabs>
+            <Tab heading="Course">
+              <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+                <Rows data={this.leftTableData()} textStyle={{fontSize: 36}}/>
+              </Table>
+              <MilesSelector/>
+            </Tab>
+            <Tab heading="Dist">
+              <View style={{position: "absolute"}}>
+                <AnimatedCircularProgress
                   rotation={rotation_deg}
                   size={360}
                   width={25}
                   fill={fill_pct}
                   tintColor={deltaColor}
                 />
-            </View>
-            <View style={{position: "absolute"}}>
-            <AnimatedCircularProgress
-              rotation={0}
-              size={360}
-              width={15}
-              fill={this.milesToPercent(this.state.progress_miles)}
-              tintColor={colorsDistance.progress}
-              backgroundColor={colorsDistance.remaining}
-            >{
-              (fill) => (
-                <>
-                <Text style={Object.assign({}, styles.progressLabelMinor, {color: deltaColor})}>
-                  <Icon style={styles.progressLabelMinor} name='share'/>{" "}
-                  {prefix}{this.getExpectedMilesDelta().toFixed((1))} {labels.distance}
-                </Text>
-                <Text style={Object.assign({}, styles.progressLabelMain, {color: colorsDistance.progress})}>
-                  <Icon style={styles.progressLabelMain} name='running'/>{" "}
-                  {this.state.progress_miles.toFixed((1))} {labels.distance}
-                </Text>
-                <Text style={Object.assign({}, styles.progressLabelMid, {color: colorsDistance.remaining})}>
-                  <Icon style={styles.progressLabelMid} name='road'/>{" "}
-                  {this.getMilesRemaining().toFixed((2))} {labels.distance}
-                </Text>
-                <Text style={Object.assign({}, styles.progressLabelMinor, {color: deltaColor})}>
-                  <Icon style={styles.progressLabelMinor} name='chart-line'/> {" "}
-                  {this.getProjectedMiles().toFixed((2))} {labels.distance}
-                </Text>
-                </>
-              )
-            }
-            </AnimatedCircularProgress>
-            </View>
-            <MilesSelector />
-          </Tab>
-          <Tab heading="Pace">
-            <View style={{ justifyContent: 'center',
-              alignItems: 'center',}}>
-            <View style={{
-              transform: [
-                { scaleX: -1 }
-              ]
-            }}>
-            <RNSpeedometer value={this.getPacePercent(this.getAveragePace())} size={300} labelNoteStyle={{fontSize: 0}} labelStyle={{fontSize: 0}} />
-            </View>
-              <Text style={Object.assign({}, {color: colorsPace.average}, styles.progressLabelMain)}>
-                {this.isStarted() ? this.formatPace(this.getAveragePace()) : labels.na}
-                <Text style={styles.progressLabelMinor}> {labels.pace}</Text>
-              </Text>
-            <Text style={Object.assign({},
-              styles.progressLabelMinor,
-              {color: (this.getAheadOfPace() > 0) ? colorsPace.deltaAhead : colorsPace.deltaBehind})}
-            >{this.getAheadOfPace() > 0 ? "+": ""}{this.formatPace(this.getAheadOfPace())}
-              <Text style={styles.progressLabelMinor}> {labels.pace}</Text>
-            </Text>
-              <Text style={Object.assign({},
-                styles.progressLabelSmall)}
-              >
-                <Icon style={styles.progressLabelSmall} name='bed'/>{" "}
-                {this.getRestTimeToPace() > 0 ? this.formatDuration(this.getRestTimeToPace()): "None"}
-                {"  "}
-                <Icon style={styles.progressLabelSmall} name='walking'/>{" "}
-                {this.getWalkTimeToPace() > 0 ? this.formatDuration(this.getWalkTimeToPace()): "None"}
-              </Text>
-            </View>
-            <MilesSelector />
-          </Tab>
-          <Tab heading="Time">
-            <AnimatedCircularProgress
-              arcSweepAngle={this.baselineTimePercent() * 3.6}
-              rotation={this.momentToPercent(this.state.start) * 3.6 + 180}
-              size={360}
-              width={15}
-              fill={this.timeDeltaAsPercent(this.state.start, this.state.now)}
-              tintColor={colorsTime.progress}
-              backgroundColor={colorsTime.remaining}>
-              {
-                (fill) => (
-                  <>
-                  <Text style={Object.assign({}, styles.progressLabelMinor, {color: colorsTime.now})}>
-                    <Icon style={styles.progressLabelMinor} name='clock'/>{" "}
-                    {this.formatTime(this.state.now)}
-                  </Text>
-                  <Text style={Object.assign({}, styles.progressLabelMain, {color: colorsTime.progress})}>
-                    <Icon style={styles.progressLabelMain} name='check-circle'/>{" "}
-                    {this.isStarted() ? this.convertDuration(this.state.start, this.state.now) : "Not started"}
-                  </Text>
-                  <Text style={Object.assign({}, styles.progressLabelMid, {color: colorsTime.remaining})}>
-                    <Icon style={styles.progressLabelMid} name='stopwatch'/>{" "}
-                    {this.convertDuration(this.state.now, this.state.finish)}
-                  </Text>
-                  <Text style={Object.assign({}, styles.progressLabelMinor, {color: colorsTime.now})}>
-                    <Icon style={styles.progressLabelMinor} name='flag-checkered'/>{" "}
-                    <Icon style={styles.progressLabelMinor} name='clock'/>{" "}
-                    {this.formatTime(this.getPredictedDoneTime())}
-                  </Text>
-                  <Text style={Object.assign({}, styles.progressLabelMinor, {color: colorsTime.now})}>
-                    <Icon style={styles.progressLabelMinor} name='flag-checkered'/>{" "}
-                    <Icon style={styles.progressLabelMinor} name='stopwatch'/>{" "}
-                    {this.formatDuration(this.getPredictedTimeRemaining())}
-                  </Text>
-                  </>
-                )
-              }
-            </AnimatedCircularProgress>
-            <MilesSelector />
-          </Tab>
-          {this.state.demoMode && <Tab heading="Demo">
-            <View style={styles.body}>
-              <View style={styles.sectionContainer}>
-                <Button
-                  onPress={() => this.updateTime()}
-                  title={`Update Time to now`}
-                  color="#40c5f4"
-                />
-                <Button
-                  onPress={() => this.pressDateTime()}
-                  title={`Set Time`}
-                  color="#40c5f4"
-                />
               </View>
-              <View style={{flexDirection: "row"}}>
-                <View style={{flex: 1}}>
-                  <Text style={styles.tableTitle}>Parameters</Text>
-                  <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
-                    <Rows data={this.leftTableData()}/>
-                  </Table>
-                </View>
-                <View style={{flex: 1}}>
-                  <Text style={styles.tableTitle}>Progress</Text>
-                  <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
-                    <Rows data={this.rightTableData()}/>
-                  </Table>
-                </View>
+              <View style={{position: "absolute"}}>
+                <AnimatedCircularProgress
+                  rotation={0}
+                  size={360}
+                  width={15}
+                  fill={this.milesToPercent(this.state.progress_miles)}
+                  tintColor={colorsDistance.progress}
+                  backgroundColor={colorsDistance.remaining}
+                >{
+                  (fill) => (
+                    <>
+                    <Text style={Object.assign({}, styles.progressLabelMinor, {color: deltaColor})}>
+                      <Icon style={styles.progressLabelMinor} name='share'/>{" "}
+                      {prefix}{this.getExpectedMilesDelta().toFixed((1))} {labels.distance}
+                    </Text>
+                    <Text style={Object.assign({}, styles.progressLabelMain, {color: colorsDistance.progress})}>
+                      <Icon style={styles.progressLabelMain} name='running'/>{" "}
+                      {this.state.progress_miles.toFixed((1))} {labels.distance}
+                    </Text>
+                    <Text style={Object.assign({}, styles.progressLabelMid, {color: colorsDistance.remaining})}>
+                      <Icon style={styles.progressLabelMid} name='road'/>{" "}
+                      {this.getMilesRemaining().toFixed((2))} {labels.distance}
+                    </Text>
+                    <Text style={Object.assign({}, styles.progressLabelMinor, {color: deltaColor})}>
+                      <Icon style={styles.progressLabelMinor} name='chart-line'/> {" "}
+                      {this.getProjectedMiles().toFixed((2))} {labels.distance}
+                    </Text>
+                    </>
+                  )
+                }
+                </AnimatedCircularProgress>
               </View>
-              {this.state.showDatePicker && (
-                <DateTimePicker
-                  testID="dateTimePicker"
-                  mode={this.state.modeDatePicker}
-                  is24Hour={false}
-                  display="default"
-                  value={this.state.now.toDate()}
-                  onChange={(event, date) => this.pressDateTime(date)}
-                />
-              )}
-            </View>
-            <MilesSelector />
-          </Tab>}
-        </Tabs>
-      </Container>
+              <MilesSelector/>
+            </Tab>
+            <Tab heading="Pace">
+              <View style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}>
+                <View style={{
+                  transform: [
+                    {scaleX: -1}
+                  ]
+                }}>
+                  <RNSpeedometer value={this.getPacePercent(this.getAveragePace())} size={300}
+                                 labelNoteStyle={{fontSize: 0}} labelStyle={{fontSize: 0}}/>
+                </View>
+                <Text style={Object.assign({}, {color: colorsPace.average}, styles.progressLabelMain)}>
+                  {this.isStarted() ? this.formatPace(this.getAveragePace()) : labels.na}
+                  <Text style={styles.progressLabelMinor}> {labels.pace}</Text>
+                </Text>
+                <Text style={Object.assign({},
+                  styles.progressLabelMinor,
+                  {color: (this.getAheadOfPace() > 0) ? colorsPace.deltaAhead : colorsPace.deltaBehind})}
+                >{this.getAheadOfPace() > 0 ? "+" : ""}{this.formatPace(this.getAheadOfPace())}
+                  <Text style={styles.progressLabelMinor}> {labels.pace}</Text>
+                </Text>
+                <Text style={Object.assign({},
+                  styles.progressLabelSmall)}
+                >
+                  <Icon style={styles.progressLabelSmall} name='bed'/>{" "}
+                  {this.getRestTimeToPace() > 0 ? this.formatDuration(this.getRestTimeToPace()) : "None"}
+                  {"  "}
+                  <Icon style={styles.progressLabelSmall} name='walking'/>{" "}
+                  {this.getWalkTimeToPace() > 0 ? this.formatDuration(this.getWalkTimeToPace()) : "None"}
+                </Text>
+              </View>
+              <MilesSelector/>
+            </Tab>
+            <Tab heading="Time">
+              <AnimatedCircularProgress
+                arcSweepAngle={this.baselineTimePercent() * 3.6}
+                rotation={this.momentToPercent(this.state.start) * 3.6 + 180}
+                size={360}
+                width={15}
+                fill={this.timeDeltaAsPercent(this.state.start, this.state.now)}
+                tintColor={colorsTime.progress}
+                backgroundColor={colorsTime.remaining}>
+                {
+                  (fill) => (
+                    <>
+                    <Text style={Object.assign({}, styles.progressLabelMinor, {color: colorsTime.now})}>
+                      <Icon style={styles.progressLabelMinor} name='clock'/>{" "}
+                      {this.formatTime(this.state.now)}
+                    </Text>
+                    <Text style={Object.assign({}, styles.progressLabelMain, {color: colorsTime.progress})}>
+                      <Icon style={styles.progressLabelMain} name='check-circle'/>{" "}
+                      {this.isStarted() ? this.convertDuration(this.state.start, this.state.now) : "Not started"}
+                    </Text>
+                    <Text style={Object.assign({}, styles.progressLabelMid, {color: colorsTime.remaining})}>
+                      <Icon style={styles.progressLabelMid} name='stopwatch'/>{" "}
+                      {this.convertDuration(this.state.now, this.state.finish)}
+                    </Text>
+                    <Text style={Object.assign({}, styles.progressLabelMinor, {color: colorsTime.now})}>
+                      <Icon style={styles.progressLabelMinor} name='flag-checkered'/>{" "}
+                      <Icon style={styles.progressLabelMinor} name='clock'/>{" "}
+                      {this.formatTime(this.getPredictedDoneTime())}
+                    </Text>
+                    <Text style={Object.assign({}, styles.progressLabelMinor, {color: colorsTime.now})}>
+                      <Icon style={styles.progressLabelMinor} name='flag-checkered'/>{" "}
+                      <Icon style={styles.progressLabelMinor} name='stopwatch'/>{" "}
+                      {this.formatDuration(this.getPredictedTimeRemaining())}
+                    </Text>
+                    </>
+                  )
+                }
+              </AnimatedCircularProgress>
+              <MilesSelector/>
+            </Tab>
+            {this.state.demoMode && <Tab heading="Demo">
+              <View style={styles.body}>
+                <View style={styles.sectionContainer}>
+                  <Button
+                    onPress={() => this.updateTime()}
+                    title={`Update Time to now`}
+                    color="#40c5f4"
+                  />
+                  <Button
+                    onPress={() => this.pressDateTime()}
+                    title={`Set Time`}
+                    color="#40c5f4"
+                  />
+                </View>
+                <View style={{flexDirection: "row"}}>
+                  <View style={{flex: 1}}>
+                    <Text style={styles.tableTitle}>Parameters</Text>
+                    <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+                      <Rows data={this.leftTableData()}/>
+                    </Table>
+                  </View>
+                  <View style={{flex: 1}}>
+                    <Text style={styles.tableTitle}>Progress</Text>
+                    <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+                      <Rows data={this.rightTableData()}/>
+                    </Table>
+                  </View>
+                </View>
+                {this.state.showDatePicker && (
+                  <DateTimePicker
+                    testID="dateTimePicker"
+                    mode={this.state.modeDatePicker}
+                    is24Hour={false}
+                    display="default"
+                    value={this.state.now.toDate()}
+                    onChange={(event, date) => this.pressDateTime(date)}
+                  />
+                )}
+              </View>
+              <MilesSelector/>
+            </Tab>}
+          </Tabs>
+        </Container>
       </Drawer>
     );
   };
