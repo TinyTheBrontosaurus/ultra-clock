@@ -303,7 +303,7 @@ export default class MainPage extends Component {
   getSkipAheadRaw() {
     let pace_min = this.getAveragePace();
     let skip_time_ms = this.state.wallClock.diff(this.state.now);
-    return  (skip_time_ms / 60 / 1000) / pace_min;
+    return (skip_time_ms / 60 / 1000) / pace_min;
   }
 
   getSkipAheadRounded() {
@@ -384,7 +384,15 @@ export default class MainPage extends Component {
         }}>
           <NBButton block light style={{height: 100, width: 100}} onPress={() => this.skipAhead()}>
             <Icon name='step-forward' size={60}/>
-            <Text>{this.getSkipAheadPostValue()}</Text>
+            <View style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              position: 'absolute',
+              bottom: 20,
+              left: 0,
+            }}>
+              <Text style={{fontSize: 48, color: "#eeeeee"}}>{this.getSkipAheadPostValue()}</Text>
+            </View>
           </NBButton>
         </View>}
         <Text> {this.state.version}{__DEV__ ? "-Debug" : ""}</Text>
