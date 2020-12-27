@@ -451,12 +451,12 @@ export default class MainPage extends Component {
                 {this.isStarted() ? this.formatPace(this.getAveragePace()) : labels.na}
                 <Text style={styles.progressLabelMinor}> {labels.pace}</Text>
               </Text>
-            <Text style={styles.progressLabelMinor}>{this.getAheadOfPace() > 0 ? "+": ""}{this.formatPace(this.getAheadOfPace())}
+            <Text style={Object.assign({},
+              styles.progressLabelMinor,
+              {color: (this.getAheadOfPace() > 0) ? colorsPace.deltaAhead : colorsPace.deltaBehind})}
+            >{this.getAheadOfPace() > 0 ? "+": ""}{this.formatPace(this.getAheadOfPace())}
               <Text style={styles.progressLabelMinor}> {labels.pace}</Text>
             </Text>
-            {/*<Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>*/}
-              {/*<Rows data={this.paceTableData()} textStyle={{fontSize: 36}}/>*/}
-            {/*</Table>*/}
             </View>
             <MilesSelector />
           </Tab>
