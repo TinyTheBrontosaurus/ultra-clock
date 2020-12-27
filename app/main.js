@@ -43,6 +43,8 @@ export default class MainPage extends Component {
       modeDatePicker: "date",
       version: VERSION_STRING,
       milesStep: 0.5,
+      wallClock: moment(),
+      demoMode: false,
     };
   }
 
@@ -209,7 +211,7 @@ export default class MainPage extends Component {
   componentDidMount() {
     setInterval(() => {
       this.setState({
-        now: moment()
+        wallClock: moment()
       })
     }, 10000)
   }
@@ -228,6 +230,15 @@ export default class MainPage extends Component {
     this.setState({milesStep: new_step});
   }
 
+  updateProgressMiles(num) {
+    // Time quickly gets stale, which makes the stats deteriorate. Instead only show the time
+    // for when the stats were updated
+    this.setState({
+      progress_miles: num,
+      now: this.state.wallClock
+    });
+  }
+
   render() {
     let MilesSelector = (props) => {
       return <View style={{
@@ -244,9 +255,7 @@ export default class MainPage extends Component {
         colorMax={"#f04048"}
         colorMin={"#40c5f4"}
         value={this.state.progress_miles}
-        onChange={(num) => {
-          this.setState({progress_miles: num});
-        }}
+        onChange={(num) => this.updateProgressMiles(num)}
         fontSize={48}
         buttonFontSize={48}
         height={100}
@@ -378,7 +387,7 @@ export default class MainPage extends Component {
             </AnimatedCircularProgress>
             <MilesSelector />
           </Tab>
-          {false && <Tab heading="v0.1.0">
+          {this.state.demoMode && <Tab heading="Demo">
             <View style={styles.body}>
               <View style={styles.sectionContainer}>
                 <MilesSelector />

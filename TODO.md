@@ -44,8 +44,9 @@
 - [x] Remove v0.1.0 tab
 - [x] Show version on every tab
 - [x] Highlight "main" number in each tab
-- [ ] Test v0.3.0
-
+- [x] Test v0.3.0
+- [ ] Add gauge for pace
+- [ ] Add "demo mode" where user can disable live time
 ---
 ## Backlog
 - [ ] Add miles auto-set
@@ -54,6 +55,6 @@
 - [x] Split up tables (Parameters, distance, time)
 - [ ] Dark mode
 - [ ] Redesign front end
-- [ ] Add auto-version
+- [x] Add auto-version
 - [ ] Post on app store
 - [ ] Integrate with CI (Travis or whatever)
