@@ -112,19 +112,24 @@ export default class MainPage extends Component {
     return this.formatDuration(duration);
   }
   formatDuration(duration) {
+    let prefix = "";
+    if(duration.asMilliseconds() < 0) {
+      duration = moment.duration(-duration.asMilliseconds());
+      prefix = "-";
+    }
     let days = parseInt(duration.asDays());
     let hours = parseInt(duration.asHours()) % 24;
     let minutes = parseInt(duration.asMinutes()) % 60;
 
     if (days > 0) {
-      return "> 1 day";
+      return `> ${prefix}1 day`;
       return `${days.toFixed(0)}d ${hours.toFixed(0)}h ${minutes.toFixed(0)}m`
     }
     else if (hours > 0) {
-      return `${hours.toFixed(0)}h ${minutes.toFixed(0)}m`
+      return `${prefix}${hours.toFixed(0)}h ${minutes.toFixed(0)}m`
     }
     else {
-      return `${minutes.toFixed(0)}m`
+      return `${prefix}${minutes.toFixed(0)}m`
     }
   }
 
