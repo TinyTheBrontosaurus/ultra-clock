@@ -445,11 +445,11 @@ export default class MainPage extends Component {
                   {prefix}{this.getExpectedMilesDelta().toFixed((1))} {labels.distance}
                 </Text>
                 <Text style={Object.assign({}, styles.progressLabelMain, {color: colorsDistance.progress})}>
-                  <Icon style={styles.progressLabelMain} name='check-circle'/>{" "}
+                  <Icon style={styles.progressLabelMain} name='running'/>{" "}
                   {this.state.progress_miles.toFixed((1))} {labels.distance}
                 </Text>
                 <Text style={Object.assign({}, styles.progressLabelMid, {color: colorsDistance.remaining})}>
-                  <Icon style={styles.progressLabelMid} name='clipboard-list'/>{" "}
+                  <Icon style={styles.progressLabelMid} name='road'/>{" "}
                   {this.getMilesRemaining().toFixed((2))} {labels.distance}
                 </Text>
                 <Text style={Object.assign({}, styles.progressLabelMinor, {color: deltaColor})}>
@@ -516,15 +516,17 @@ export default class MainPage extends Component {
                     {this.isStarted() ? this.convertDuration(this.state.start, this.state.now) : "Not started"}
                   </Text>
                   <Text style={Object.assign({}, styles.progressLabelMid, {color: colorsTime.remaining})}>
-                    <Icon style={styles.progressLabelMid} name='clipboard-list'/>{" "}
+                    <Icon style={styles.progressLabelMid} name='stopwatch'/>{" "}
                     {this.convertDuration(this.state.now, this.state.finish)}
                   </Text>
                   <Text style={Object.assign({}, styles.progressLabelMinor, {color: colorsTime.now})}>
                     <Icon style={styles.progressLabelMinor} name='flag-checkered'/>{" "}
+                    <Icon style={styles.progressLabelMinor} name='clock'/>{" "}
                     {this.formatTime(this.getPredictedDoneTime())}
                   </Text>
                   <Text style={Object.assign({}, styles.progressLabelMinor, {color: colorsTime.now})}>
                     <Icon style={styles.progressLabelMinor} name='flag-checkered'/>{" "}
+                    <Icon style={styles.progressLabelMinor} name='stopwatch'/>{" "}
                     {this.formatDuration(this.getPredictedTimeRemaining())}
                   </Text>
                   </>
