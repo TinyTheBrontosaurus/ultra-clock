@@ -22,6 +22,7 @@ import {NativeModules} from 'react-native';
 const {VersionModule} = NativeModules;
 import {Container, Header, Content, Tab, Tabs} from 'native-base';
 
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 /**
  * The full board for crickets, including all the targets, the control board, and the statistics
@@ -224,6 +225,13 @@ export default class MainPage extends Component {
             <MilesSelector />
           </Tab>
           <Tab heading="Time">
+            <AnimatedCircularProgress
+              size={120}
+              width={15}
+              fill={100}
+              tintColor="#00e0ff"
+              onAnimationComplete={() => console.log('onAnimationComplete')}
+              backgroundColor="#3d5875" />
             <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
               <Rows data={this.timeTableData()} textStyle={{fontSize: 36}}/>
             </Table>
