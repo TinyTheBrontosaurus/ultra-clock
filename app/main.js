@@ -21,7 +21,7 @@ import {NativeModules} from 'react-native';
 
 const {VersionModule} = NativeModules;
 import {Container, Header, Left, Body, Title, Tab, Tabs,
-  Button as NBButton,
+  Button as NBButton, Drawer,
   Icon as NBIcon} from 'native-base';
 
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
@@ -49,6 +49,13 @@ export default class MainPage extends Component {
       demoMode: false,
     };
   }
+
+  closeDrawer = () => {
+    this._drawer._root.close();
+  };
+  openDrawer = () => {
+    this._drawer._root.open();
+  };
 
   /// Convert a datetime (moment) to a percentage of the day
   momentToPercent(datetime) {
@@ -291,12 +298,18 @@ export default class MainPage extends Component {
       deltaColor = colorsDistance.deltaBehind;
     }
 
+    let SideBar = (props) => <Text>Sidebar!</Text>;
+
     return (
+      <Drawer
+        ref={(ref) => { this._drawer = ref; }}
+        content={<SideBar />}
+      >
       <Container>
         <Header hasTabs>
           <Left>
             <NBButton transparent>
-              <NBIcon name='menu' />
+              <NBIcon name='menu' onPress={this.openDrawer.bind(this)}/>
             </NBButton>
           </Left>
           <Body>
@@ -441,6 +454,7 @@ export default class MainPage extends Component {
           </Tab>}
         </Tabs>
       </Container>
+      </Drawer>
     );
   };
 };
