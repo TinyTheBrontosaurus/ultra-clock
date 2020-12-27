@@ -213,6 +213,14 @@ export default class MainPage extends Component {
             <MilesSelector />
           </Tab>
           <Tab heading="Dist">
+            <AnimatedCircularProgress
+              rotation={0}
+              size={360}
+              width={15}
+              fill={45}
+              tintColor={colorsDistance.progress}
+              backgroundColor={colorsDistance.remaining} />
+
             <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
               <Rows data={this.distTableData()} textStyle={{fontSize: 36}}/>
             </Table>
@@ -301,6 +309,10 @@ const colors = {
 };
 const colorsTime = {
   progress: colors.yellow,
+  remaining: colors.red,
+};
+const colorsDistance = {
+  progress: colors.blue,
   remaining: colors.red,
 };
 
