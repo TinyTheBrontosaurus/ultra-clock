@@ -260,8 +260,7 @@ export default class MainPage extends Component {
         buttonFontSize={48}
         height={100}
         width={350}
-        append={<Text style={{fontSize: 48}}>{labels.distance}</Text>}
-      />
+        ><Text style={{fontSize: 20, marginTop: 48, marginRight: 10}}>{labels.distance}</Text></InputSpinner>
         {false && <Button
           onPress={() => this.toggleMilesSteps()}
           title={`Step: ${this.state.milesStep.toFixed(1)} ${labels.distance}`}
