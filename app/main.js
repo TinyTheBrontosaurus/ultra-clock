@@ -38,7 +38,7 @@ export default class MainPage extends Component {
       goal_miles: 52.42,
       start: moment("2020-12-27T07:13"),
       finish: moment("2020-12-27T16:22"),
-      now: moment("2020-12-27T10:22"),
+      now: moment(),
       showDatePicker: false,
       modeDatePicker: "date",
       version: VERSION_STRING,
@@ -206,13 +206,13 @@ export default class MainPage extends Component {
     }
   }
 
-  // componentDidMount() {
-  //   setInterval(() => {
-  //     this.setState({
-  //       now: moment()
-  //     })
-  //   }, 10000)
-  // }
+  componentDidMount() {
+    setInterval(() => {
+      this.setState({
+        now: moment()
+      })
+    }, 10000)
+  }
 
   toggleMilesSteps() {
     let new_step = 0.1;
