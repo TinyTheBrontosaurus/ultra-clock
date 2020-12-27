@@ -57,7 +57,7 @@ export default class MainPage extends Component {
   baselineTimePercent() {
     let start_pct = this.momentToPercent(this.state.start);
     let finish_pct = this.momentToPercent(this.state.finish);
-    return (finish_pct - start_pct) * 100;
+    return (finish_pct - start_pct);
   }
 
   timeDeltaAsPercent(del_start, del_finish) {
@@ -65,7 +65,7 @@ export default class MainPage extends Component {
     let del_finish_pct = this.momentToPercent(del_finish);
     let del_pct = del_finish_pct - del_start_pct;
 
-    return ((del_pct * 100) / this.baselineTimePercent()) * 100;
+    return (del_pct / this.baselineTimePercent()) * 100;
 
   }
 
