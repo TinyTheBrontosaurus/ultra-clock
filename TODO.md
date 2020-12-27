@@ -40,7 +40,7 @@
 - [x] Add at-a-glance tab views
 - [x] Miles "expected" is visually confusing
 - [x] Only update stats when miles changed; show T since last update
-- [ ] Use ->| icon to predict mileage
+- [x] Use ->| icon to predict mileage
 - [x] Remove v0.1.0 tab
 - [x] Show version on every tab
 - [x] Highlight "main" number in each tab

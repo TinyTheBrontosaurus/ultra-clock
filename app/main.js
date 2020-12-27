@@ -43,8 +43,8 @@ export default class MainPage extends Component {
     this.state = {
       progress_miles: 0,
       goal_miles: 52.42,
-      start: moment("2020-12-27T07:13"),
-      finish: moment("2020-12-27T16:22"),
+      start: moment("2020-12-28T07:13"),
+      finish: moment("2020-12-28T16:22"),
       now: moment(),
       showDatePicker: false,
       modeDatePicker: "date",
