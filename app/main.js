@@ -343,6 +343,8 @@ export default class MainPage extends Component {
         buttonFontSize={48}
         height={100}
         width={350}
+        rounded={false}
+        showBorder={true}
         ><Text style={{fontSize: 20, marginTop: 48, marginRight: 10}}>{labels.distance}</Text></InputSpinner>
         {false && <Button
           onPress={() => this.toggleMilesSteps()}
