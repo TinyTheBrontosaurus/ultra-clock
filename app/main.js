@@ -36,7 +36,7 @@ export default class MainPage extends Component {
     this.state = {
       progress_miles: 0,
       goal_miles: 52.42,
-      start: moment("2020-12-26T07:13"),
+      start: moment("2020-12-27T07:13"),
       finish: moment("2020-12-27T16:22"),
       now: moment("2020-12-27T10:22"),
       showDatePicker: false,
@@ -328,10 +328,22 @@ export default class MainPage extends Component {
               width={15}
               fill={this.timeDeltaAsPercent(this.state.start, this.state.now)}
               tintColor={colorsTime.progress}
-              backgroundColor={colorsTime.remaining} />
-            <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
-              <Rows data={this.timeTableData()} textStyle={{fontSize: 36}}/>
-            </Table>
+              backgroundColor={colorsTime.remaining}>
+              {
+                (fill) => (
+                  <>
+                  <Text style={Object.assign({}, styles.progressLabelMain, {color: colorsTime.progress})}>
+                    <Icon style={styles.progressLabelMain} name='check-circle'/>{" "}
+                    {this.isStarted() ? this.convertDuration(this.state.start, this.state.now) : "Not started"}
+                  </Text>
+                  <Text style={Object.assign({}, styles.progressLabelMid, {color: colorsTime.remaining})}>
+                    <Icon style={styles.progressLabelMid} name='clipboard-list'/>{" "}
+                    {this.convertDuration(this.state.now, this.state.finish)}
+                  </Text>
+                  </>
+                )
+              }
+            </AnimatedCircularProgress>
             <MilesSelector />
           </Tab>
           {false && <Tab heading="v0.1.0">
