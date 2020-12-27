@@ -308,10 +308,11 @@ export default class MainPage extends Component {
             </NBButton>
           </Left>
           <Body>
-          <Text>Airplane Mode</Text>
+          <Text>Demo Mode</Text>
           </Body>
           <Right>
-            <Switch value={false} />
+            <Switch value={this.state.demoMode}
+                    onValueChange={(val) => this.setState({demoMode: val})}/>
           </Right>
         </ListItem>
         <ListItem icon>
@@ -445,7 +446,6 @@ export default class MainPage extends Component {
           {this.state.demoMode && <Tab heading="Demo">
             <View style={styles.body}>
               <View style={styles.sectionContainer}>
-                <MilesSelector />
                 <Button
                   onPress={() => this.updateTime()}
                   title={`Update Time to now`}
@@ -482,6 +482,7 @@ export default class MainPage extends Component {
                 />
               )}
             </View>
+            <MilesSelector />
           </Tab>}
         </Tabs>
       </Container>
