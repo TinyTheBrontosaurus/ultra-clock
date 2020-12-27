@@ -413,7 +413,7 @@ export default class MainPage extends Component {
           </Body>
         </Header>
         <Tabs>
-          <Tab heading="Info">
+          <Tab heading="Course">
             <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
               <Rows data={this.leftTableData()} textStyle={{fontSize: 36}}/>
             </Table>

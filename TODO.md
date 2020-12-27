@@ -34,8 +34,8 @@
 - [x] Research icons
 - [x] Implement icons
 - [x] Add gauge for progress
-- [ ] Show how much "rest" is okay
-- [ ] Show how much "walking" is okay
+- [x] Show how much "rest" is okay
+- [x] Show how much "walking" is okay
 - [x] Give 0.5 and 1.0 as step options
 - [x] Add at-a-glance tab views
 - [x] Miles "expected" is visually confusing
