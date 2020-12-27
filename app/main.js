@@ -90,6 +90,10 @@ export default class MainPage extends Component {
     return elapsed / total * this.state.goal_miles;
   }
 
+  getExpectedMilesDelta = () => this.state.progress_miles - this.getExpectedMiles();
+
+  milesToPercent = (miles) => miles / this.state.goal_miles * 100;
+
   formatTime = (momentTime) => momentTime.format("h:mma").slice(0, -1);
 
   leftTableData = () => [
@@ -217,18 +221,21 @@ export default class MainPage extends Component {
               rotation={0}
               size={360}
               width={15}
-              fill={45}
+              fill={this.milesToPercent(this.state.progress_miles)}
               tintColor={colorsDistance.progress}
               backgroundColor={colorsDistance.remaining}
             >{
               (fill) => (
                 <>
-                <Text style={Object.assign({}, styles.progressLabel, {color: colorsDistance.progress})}>
+                <Text style={Object.assign({}, styles.progressLabelMinor, {color: colorsDistance.delta})}>
+                  {this.getExpectedMilesDelta().toFixed((1))} {labels.distance}
+                </Text>
+                <Text style={Object.assign({}, styles.progressLabelMain, {color: colorsDistance.progress})}>
                   {this.state.progress_miles.toFixed((1))} {labels.distance}
-                  </Text>
-                <Text style={Object.assign({}, styles.progressLabel, {color: colorsDistance.remaining})}>
+                </Text>
+                <Text style={Object.assign({}, styles.progressLabelMid, {color: colorsDistance.remaining})}>
                   {this.getMilesRemaining().toFixed((2))} {labels.distance}
-                  </Text>
+                </Text>
                 </>
               )
             }
@@ -326,7 +333,8 @@ const colorsTime = {
 };
 const colorsDistance = {
   progress: colors.blue,
-  remaining: colors.red,
+  remaining: colors.brown,
+  delta: colors.green,
 };
 
 const styles = StyleSheet.create({
@@ -336,8 +344,15 @@ const styles = StyleSheet.create({
     color: Colors.black,
     textAlign: 'center',
   },
-  progressLabel: {
+  progressLabelMain: {
+    fontSize: 60,
+  },
+  progressLabelMid: {
     fontSize: 48,
+  },
+  progressLabelMinor: {
+    fontSize: 36,
+
   },
   // Examples only below. Actually used above
   scrollView: {
