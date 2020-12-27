@@ -208,15 +208,20 @@ export default class MainPage extends Component {
 
     let rotation_deg;
     let fill_pct;
+    let deltaColor;
+    let prefix = "";
     if(this.getExpectedMilesDelta() > 0) {
       // Expected is first
       rotation_deg = this.milesToPercent(this.getExpectedMiles()) * 3.6;
       fill_pct = this.milesToPercent(this.getExpectedMilesDelta());
+      deltaColor = colorsDistance.deltaAhead;
+      prefix = "+";
     }
     else {
       // Actual is first
       rotation_deg = this.milesToPercent(this.state.progress_miles) * 3.6;
       fill_pct = this.milesToPercent(-this.getExpectedMilesDelta());
+      deltaColor = colorsDistance.deltaBehind;
     }
 
     return (
@@ -236,7 +241,7 @@ export default class MainPage extends Component {
                   size={360}
                   width={25}
                   fill={fill_pct}
-                  tintColor={colorsDistance.delta}
+                  tintColor={deltaColor}
                 />
             </View>
             <View style={{position: "absolute"}}>
@@ -250,8 +255,8 @@ export default class MainPage extends Component {
             >{
               (fill) => (
                 <>
-                <Text style={Object.assign({}, styles.progressLabelMinor, {color: colorsDistance.delta})}>
-                  {this.getExpectedMilesDelta().toFixed((1))} {labels.distance}
+                <Text style={Object.assign({}, styles.progressLabelMinor, {color: deltaColor})}>
+                  {prefix}{this.getExpectedMilesDelta().toFixed((1))} {labels.distance}
                 </Text>
                 <Text style={Object.assign({}, styles.progressLabelMain, {color: colorsDistance.progress})}>
                   {this.state.progress_miles.toFixed((1))} {labels.distance}
@@ -350,6 +355,7 @@ const colors = {
   yellow: "#DBBB3B",
   green: "#51DB7D",
   brown: "#D9C475",
+  black: "#333333"
 };
 const colorsTime = {
   progress: colors.yellow,
@@ -359,6 +365,8 @@ const colorsDistance = {
   progress: colors.blue,
   remaining: colors.brown,
   delta: colors.green,
+  deltaAhead: colors.black,
+  deltaBehind: colors.red,
 };
 
 const styles = StyleSheet.create({
