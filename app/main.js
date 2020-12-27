@@ -20,8 +20,8 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import {NativeModules} from 'react-native';
 
 const {VersionModule} = NativeModules;
-import {Container, Header, Left, Body, Title, Tab, Tabs,
-  Button as NBButton, Drawer,
+import {Container, Header, Left, Right, Body, Title, Tab, Tabs,
+  Button as NBButton, Drawer, Content, ListItem, Switch,
   Icon as NBIcon} from 'native-base';
 
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
@@ -298,7 +298,38 @@ export default class MainPage extends Component {
       deltaColor = colorsDistance.deltaBehind;
     }
 
-    let SideBar = (props) => <Text>Sidebar!</Text>;
+    let SideBar = (props) => <Container>
+      <Header />
+      <Content>
+        <ListItem icon>
+          <Left>
+            <NBButton style={{ backgroundColor: "#FF9501" }}>
+              <NBIcon active name="airplane" />
+            </NBButton>
+          </Left>
+          <Body>
+          <Text>Airplane Mode</Text>
+          </Body>
+          <Right>
+            <Switch value={false} />
+          </Right>
+        </ListItem>
+        <ListItem icon>
+          <Left>
+            <NBButton style={{ backgroundColor: "#007AFF" }}>
+              <NBIcon active name="wifi" />
+            </NBButton>
+          </Left>
+          <Body>
+          <Text>Wi-Fi</Text>
+          </Body>
+          <Right>
+            <Text>GeekyAnts</Text>
+            <Icon active name="arrow-forward" />
+          </Right>
+        </ListItem>
+      </Content>
+    </Container>;
 
     return (
       <Drawer
