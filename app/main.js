@@ -178,8 +178,12 @@ export default class MainPage extends Component {
 
   render() {
     let MilesSelector = (props) => {
-      return <View style={{    justifyContent: 'center',
-        alignItems: 'center'}}>
+      return <View style={{
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        bottom: 0,
+      }}>
         <InputSpinner
         min={0}
         step={this.state.milesStep}
@@ -203,6 +207,7 @@ export default class MainPage extends Component {
           title={`Step: ${this.state.milesStep.toFixed(1)} ${labels.distance}`}
           color="#40c5f4"
         />
+        <Text>{this.state.version}{__DEV__ ? "-Debug" : ""}</Text>
       </View>
     };
 
@@ -264,15 +269,14 @@ export default class MainPage extends Component {
                 <Text style={Object.assign({}, styles.progressLabelMid, {color: colorsDistance.remaining})}>
                   {this.getMilesRemaining().toFixed((2))} {labels.distance}
                 </Text>
+                <Text style={Object.assign({}, styles.progressLabelMinor, {color: deltaColor})}>
+                  {this.getProjectedMiles().toFixed((2))} {labels.distance}
+                </Text>
                 </>
               )
             }
             </AnimatedCircularProgress>
             </View>
-
-            <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
-              <Rows data={this.distTableData()} textStyle={{fontSize: 36}}/>
-            </Table>
             <MilesSelector />
           </Tab>
           <Tab heading="Pace">
@@ -324,7 +328,6 @@ export default class MainPage extends Component {
                   </Table>
                 </View>
               </View>
-              <Text>{this.state.version}{__DEV__ ? "-Debug" : ""}</Text>
               {this.state.showDatePicker && (
                 <DateTimePicker
                   testID="dateTimePicker"
