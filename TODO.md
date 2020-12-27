@@ -47,6 +47,7 @@
 - [x] Test v0.3.0
 - [ ] Add gauge for pace
 - [ ] Add "demo mode" where user can disable live time
+- [x] Checkered flag for time prediction
 ---
 ## Backlog
 - [ ] Add miles auto-set

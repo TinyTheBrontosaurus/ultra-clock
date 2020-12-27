@@ -385,11 +385,11 @@ export default class MainPage extends Component {
                     {this.convertDuration(this.state.now, this.state.finish)}
                   </Text>
                   <Text style={Object.assign({}, styles.progressLabelMinor, {color: colorsTime.now})}>
-                    <Icon style={styles.progressLabelMinor} name='chart-line'/>{" "}
+                    <Icon style={styles.progressLabelMinor} name='flag-checkered'/>{" "}
                     {this.formatTime(this.getPredictedDoneTime())}
                   </Text>
                   <Text style={Object.assign({}, styles.progressLabelMinor, {color: colorsTime.now})}>
-                    <Icon style={styles.progressLabelMinor} name='chart-line'/>{" "}
+                    <Icon style={styles.progressLabelMinor} name='flag-checkered'/>{" "}
                     {this.convertDuration2(this.getPredictedTimeRemaining())}
                   </Text>
                   </>
