@@ -134,6 +134,23 @@ export default class MainPage extends Component {
     return moment.duration(ms);
   }
 
+  // How much time can we rest to hit the goal pace
+  getWalkTimeToPace() {
+    let pace_ms = this.getRequiredPace() * 60 * 1000;
+    let a_ms = pace_ms * this.state.progress_miles;
+    let t_ms = this.state.now.diff(this.state.start);
+    let num = a_ms - t_ms;
+    let walk_pace_ms = this.state.paceWalkingMinutes * 60 * 1000;
+
+    if(pace_ms >= walk_pace_ms) {
+      return -1;
+    }
+    let den = 1 - (pace_ms / walk_pace_ms);
+
+    return moment.duration(num / den);
+
+  }
+
   calculatePace(start, finish, miles) {
     let pace = this.calculatePace2(start, finish, miles);
 
@@ -471,6 +488,12 @@ export default class MainPage extends Component {
               >
                 <Icon style={styles.progressLabelMinor} name='bed'/>{" "}
                 {this.getRestTimeToPace() > 0 ? this.formatDuration(this.getRestTimeToPace()): "None"}
+              </Text>
+              <Text style={Object.assign({},
+                styles.progressLabelMinor)}
+              >
+                <Icon style={styles.progressLabelMinor} name='walking'/>{" "}
+                {this.getWalkTimeToPace() > 0 ? this.formatDuration(this.getWalkTimeToPace()): "None"}
               </Text>
 
             </View>
