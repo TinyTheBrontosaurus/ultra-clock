@@ -206,6 +206,19 @@ export default class MainPage extends Component {
       </View>
     };
 
+    let rotation_deg;
+    let fill_pct;
+    if(this.getExpectedMilesDelta() > 0) {
+      // Expected is first
+      rotation_deg = this.milesToPercent(this.getExpectedMiles()) * 3.6;
+      fill_pct = this.milesToPercent(this.getExpectedMilesDelta());
+    }
+    else {
+      // Actual is first
+      rotation_deg = this.milesToPercent(this.state.progress_miles) * 3.6;
+      fill_pct = this.milesToPercent(-this.getExpectedMilesDelta());
+    }
+
     return (
       <Container>
         <Header hasTabs/>
@@ -219,14 +232,12 @@ export default class MainPage extends Component {
           <Tab heading="Dist">
             <View style={{position: "absolute"}}>
               <AnimatedCircularProgress
-                rotation={this.milesToPercent(this.state.progress_miles)*3.6}
-                size={360}
-                width={25}
-                arcSweepAngle={this.milesToPercent(this.getExpectedMilesDelta())*3.6}
-                fill={100}
-                tintColor={colorsDistance.delta}
-                backgroundColor={colorsDistance.delta}
-              />
+                  rotation={rotation_deg}
+                  size={360}
+                  width={25}
+                  fill={fill_pct}
+                  tintColor={colorsDistance.delta}
+                />
             </View>
             <View style={{position: "absolute"}}>
             <AnimatedCircularProgress
