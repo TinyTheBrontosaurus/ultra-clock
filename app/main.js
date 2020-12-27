@@ -138,9 +138,14 @@ export default class MainPage extends Component {
 
 
   formatPace(pace) {
+    let prefix = "";
+    if(pace < 0) {
+      prefix = "-";
+      pace = -pace;
+    }
     let min = Math.floor(pace);
     let sec = (pace * 60) % 60;
-    return `${min}:${sec.toFixed(0).padStart(2, '0')}`;
+    return `${prefix}${min}:${sec.toFixed(0).padStart(2, '0')}`;
   }
 
   getAveragePace() {
@@ -148,6 +153,11 @@ export default class MainPage extends Component {
   }
   getRequiredPace() {
     return this.calculatePace2(this.state.start, this.state.finish, this.state.goal_miles);
+  }
+
+  // Positive is faster; negative is slower. Minutes/mile
+  getAheadOfPace() {
+    return this.getRequiredPace() - this.getAveragePace();
   }
 
   getPacePercent(pace) {
@@ -441,7 +451,9 @@ export default class MainPage extends Component {
                 {this.isStarted() ? this.formatPace(this.getAveragePace()) : labels.na}
                 <Text style={styles.progressLabelMinor}> {labels.pace}</Text>
               </Text>
-            <Text>Line 2</Text>
+            <Text style={styles.progressLabelMinor}>{this.getAheadOfPace() > 0 ? "+": ""}{this.formatPace(this.getAheadOfPace())}
+              <Text style={styles.progressLabelMinor}> {labels.pace}</Text>
+            </Text>
             {/*<Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>*/}
               {/*<Rows data={this.paceTableData()} textStyle={{fontSize: 36}}/>*/}
             {/*</Table>*/}
