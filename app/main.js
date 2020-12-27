@@ -27,6 +27,8 @@ import {Container, Header, Left, Right, Body, Title, Tab, Tabs,
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import RNSpeedometer from 'react-native-speedometer'
+
 
 /**
  * The full board for crickets, including all the targets, the control board, and the statistics
@@ -92,10 +94,6 @@ export default class MainPage extends Component {
     let remaining_ratio = 1 / (this.milesToPercent(this.state.progress_miles) / 100);
     let elapsed_ms = this.state.now.diff(this.state.start);
     let total_ms = elapsed_ms * remaining_ratio - elapsed_ms;
-    console.log(`ratio: ${remaining_ratio}`);
-    console.log(`elapsed_ms: ${elapsed_ms}`);
-    console.log(`total_ms: ${total_ms}`);
-    console.log(` `);
     return moment.duration(total_ms);
   }
 
@@ -132,6 +130,10 @@ export default class MainPage extends Component {
     let min = Math.floor(pace);
     let sec = (pace * 60) % 60;
     return `${min}:${sec.toFixed(0).padStart(2, '0')}`;
+  }
+
+  getPacePercent() {
+    return 40;
   }
 
   getProjectedMiles() {
@@ -396,6 +398,7 @@ export default class MainPage extends Component {
             <MilesSelector />
           </Tab>
           <Tab heading="Pace">
+            <RNSpeedometer value={this.getPacePercent()} size={200}/>
             <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
               <Rows data={this.paceTableData()} textStyle={{fontSize: 36}}/>
             </Table>
