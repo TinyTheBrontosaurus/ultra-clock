@@ -226,12 +226,13 @@ export default class MainPage extends Component {
           </Tab>
           <Tab heading="Time">
             <AnimatedCircularProgress
-              size={120}
+              arcSweepAngle={135}
+              rotation={285}
+              size={360}
               width={15}
-              fill={100}
-              tintColor="#00e0ff"
-              onAnimationComplete={() => console.log('onAnimationComplete')}
-              backgroundColor="#3d5875" />
+              fill={45}
+              tintColor={colorsTime.progress}
+              backgroundColor={colorsTime.remaining} />
             <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
               <Rows data={this.timeTableData()} textStyle={{fontSize: 36}}/>
             </Table>
@@ -289,6 +290,18 @@ const labels = {
   pace: "min/mi",
   distance: "mi",
   na: "--",
+};
+
+const colors = {
+  red: "#DB4441",
+  blue: "#4B53DB",
+  yellow: "#DBBB3B",
+  green: "#51DB7D",
+  brown: "#D9C475",
+};
+const colorsTime = {
+  progress: colors.yellow,
+  remaining: colors.red,
 };
 
 const styles = StyleSheet.create({
