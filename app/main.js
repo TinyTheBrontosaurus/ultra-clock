@@ -307,7 +307,15 @@ export default class MainPage extends Component {
   }
 
   getSkipAheadRounded() {
-    return Math.floor(this.getSkipAheadRaw() / this.state.milesStep) * this.milesStep;
+    return Math.floor(this.getSkipAheadRaw() / this.state.milesStep) * this.state.milesStep;
+  }
+
+  getSkipAheadPostValue() {
+    return this.state.progress_miles + this.getSkipAheadRounded();
+  }
+
+  skipAhead() {
+    this.setState({progress_miles: this.getSkipAheadPostValue()});
   }
 
   componentDidMount() {
@@ -374,9 +382,9 @@ export default class MainPage extends Component {
           bottom: 20,
           left: 0,
         }}>
-          <NBButton block light style={{height: 100, width: 100}}>
+          <NBButton block light style={{height: 100, width: 100}} onPress={() => this.skipAhead()}>
             <Icon name='step-forward' size={60}/>
-            <Text>{this.state.progress_miles + this.getSkipAheadRounded()}</Text>
+            <Text>{this.getSkipAheadPostValue()}</Text>
           </NBButton>
         </View>}
         <Text> {this.state.version}{__DEV__ ? "-Debug" : ""}</Text>
