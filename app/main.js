@@ -20,7 +20,9 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import {NativeModules} from 'react-native';
 
 const {VersionModule} = NativeModules;
-import {Container, Header, Content, Tab, Tabs} from 'native-base';
+import {Container, Header, Left, Body, Title, Tab, Tabs,
+  Button as NBButton,
+  Icon as NBIcon} from 'native-base';
 
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
@@ -291,7 +293,16 @@ export default class MainPage extends Component {
 
     return (
       <Container>
-        <Header hasTabs/>
+        <Header hasTabs>
+          <Left>
+            <NBButton transparent>
+              <NBIcon name='menu' />
+            </NBButton>
+          </Left>
+          <Body>
+            <Title>Soul-Searching Ultra Clock</Title>
+          </Body>
+        </Header>
         <Tabs>
           <Tab heading="Info">
             <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>

@@ -39,7 +39,7 @@
 - [x] Give 0.5 and 1.0 as step options
 - [x] Add at-a-glance tab views
 - [x] Miles "expected" is visually confusing
-- [ ] Only update stats when miles changed; show T since last update
+- [x] Only update stats when miles changed; show T since last update
 - [ ] Use ->| icon to predict mileage
 - [x] Remove v0.1.0 tab
 - [x] Show version on every tab
