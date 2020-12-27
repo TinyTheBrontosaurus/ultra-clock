@@ -31,19 +31,20 @@
 - [x] Test jog again (v0.2.0)
 ---
 ## Post v0.2.0 user testing list
-- [ ] Research icons
-- [ ] Implement icons
-- [ ] Add gauge for progress
+- [x] Research icons
+- [x] Implement icons
+- [x] Add gauge for progress
 - [ ] Show how much "rest" is okay
 - [ ] Show how much "walking" is okay
-- [ ] Give 0.5 and 1.0 as step options
-- [ ] Add at-a-glance tab views
-- [ ] Miles "expected" is visually confusing
+- [x] Give 0.5 and 1.0 as step options
+- [x] Add at-a-glance tab views
+- [x] Miles "expected" is visually confusing
 - [ ] Only update stats when miles changed; show T since last update
 - [ ] Use ->| icon to predict mileage
-- [ ] Remove v0.1.0 tab
-- [ ] Show version on every tab
-- [ ] Highlight "main" number in each tab
+- [x] Remove v0.1.0 tab
+- [x] Show version on every tab
+- [x] Highlight "main" number in each tab
+- [ ] Test v0.3.0
 
 ---
 ## Backlog
