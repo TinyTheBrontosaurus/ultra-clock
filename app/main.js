@@ -219,7 +219,20 @@ export default class MainPage extends Component {
               width={15}
               fill={45}
               tintColor={colorsDistance.progress}
-              backgroundColor={colorsDistance.remaining} />
+              backgroundColor={colorsDistance.remaining}
+            >{
+              (fill) => (
+                <>
+                <Text style={Object.assign({}, styles.progressLabel, {color: colorsDistance.progress})}>
+                  {this.state.progress_miles.toFixed((1))} {labels.distance}
+                  </Text>
+                <Text style={Object.assign({}, styles.progressLabel, {color: colorsDistance.remaining})}>
+                  {this.getMilesRemaining().toFixed((2))} {labels.distance}
+                  </Text>
+                </>
+              )
+            }
+            </AnimatedCircularProgress>
 
             <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
               <Rows data={this.distTableData()} textStyle={{fontSize: 36}}/>
@@ -322,6 +335,9 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: Colors.black,
     textAlign: 'center',
+  },
+  progressLabel: {
+    fontSize: 48,
   },
   // Examples only below. Actually used above
   scrollView: {
