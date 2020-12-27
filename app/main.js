@@ -60,6 +60,7 @@ export default class MainPage extends Component {
     return (finish_pct - start_pct);
   }
 
+  /// Calculate a time delta as a percentage of the total time of this race
   timeDeltaAsPercent(del_start, del_finish) {
     let del_start_pct = this.momentToPercent(del_start);
     let del_finish_pct = this.momentToPercent(del_finish);
@@ -69,6 +70,24 @@ export default class MainPage extends Component {
 
   }
 
+  getPredictedDoneTime() {
+    let remaining_ratio = 1 / (this.milesToPercent(this.state.progress_miles) / 100);
+    let elapsed_ms = this.state.now.diff(this.state.start);
+    let total_ms = elapsed_ms * remaining_ratio;
+    return moment(this.state.start.format()).add(moment.duration(total_ms));
+  }
+
+  getPredictedTimeRemaining() {
+    let remaining_ratio = 1 / (this.milesToPercent(this.state.progress_miles) / 100);
+    let elapsed_ms = this.state.now.diff(this.state.start);
+    let total_ms = elapsed_ms * remaining_ratio - elapsed_ms;
+    console.log(`ratio: ${remaining_ratio}`);
+    console.log(`elapsed_ms: ${elapsed_ms}`);
+    console.log(`total_ms: ${total_ms}`);
+    console.log(` `);
+    return moment.duration(total_ms);
+  }
+
   getMilesRemaining = () => this.state.goal_miles - this.state.progress_miles;
 
   isStarted = () => this.state.now.diff(this.state.start) > 0;
@@ -76,12 +95,15 @@ export default class MainPage extends Component {
   convertDuration(start, end) {
     // calculate total duration
     let duration = moment.duration(end.diff(start));
-
+    return this.convertDuration2(duration);
+  }
+  convertDuration2(duration) {
     let days = parseInt(duration.asDays());
     let hours = parseInt(duration.asHours()) % 24;
     let minutes = parseInt(duration.asMinutes()) % 60;
 
     if (days > 0) {
+      return "> 1 day";
       return `${days.toFixed(0)}d ${hours.toFixed(0)}h ${minutes.toFixed(0)}m`
     }
     else if (hours > 0) {
@@ -164,7 +186,6 @@ export default class MainPage extends Component {
   }
 
   pressDateTime(date) {
-    console.log(date);
     if (!this.state.showDatePicker) {
       // Button pressed
       this.setState({showDatePicker: true, modeDatePicker: 'date'});
@@ -225,7 +246,6 @@ export default class MainPage extends Component {
         value={this.state.progress_miles}
         onChange={(num) => {
           this.setState({progress_miles: num});
-          console.log(num);
         }}
         fontSize={48}
         buttonFontSize={48}
@@ -332,6 +352,10 @@ export default class MainPage extends Component {
               {
                 (fill) => (
                   <>
+                  <Text style={Object.assign({}, styles.progressLabelMinor, {color: colorsTime.now})}>
+                    <Icon style={styles.progressLabelMinor} name='clock'/>{" "}
+                    {this.formatTime(this.state.now)}
+                  </Text>
                   <Text style={Object.assign({}, styles.progressLabelMain, {color: colorsTime.progress})}>
                     <Icon style={styles.progressLabelMain} name='check-circle'/>{" "}
                     {this.isStarted() ? this.convertDuration(this.state.start, this.state.now) : "Not started"}
@@ -339,6 +363,14 @@ export default class MainPage extends Component {
                   <Text style={Object.assign({}, styles.progressLabelMid, {color: colorsTime.remaining})}>
                     <Icon style={styles.progressLabelMid} name='clipboard-list'/>{" "}
                     {this.convertDuration(this.state.now, this.state.finish)}
+                  </Text>
+                  <Text style={Object.assign({}, styles.progressLabelMinor, {color: colorsTime.now})}>
+                    <Icon style={styles.progressLabelMinor} name='chart-line'/>{" "}
+                    {this.formatTime(this.getPredictedDoneTime())}
+                  </Text>
+                  <Text style={Object.assign({}, styles.progressLabelMinor, {color: colorsTime.now})}>
+                    <Icon style={styles.progressLabelMinor} name='chart-line'/>{" "}
+                    {this.convertDuration2(this.getPredictedTimeRemaining())}
                   </Text>
                   </>
                 )
