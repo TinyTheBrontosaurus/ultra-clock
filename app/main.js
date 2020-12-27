@@ -42,7 +42,7 @@ export default class MainPage extends Component {
       showDatePicker: false,
       modeDatePicker: "date",
       version: VERSION_STRING,
-      milesStep: 1,
+      milesStep: 0.5,
     };
   }
 
@@ -173,7 +173,13 @@ export default class MainPage extends Component {
   toggleMilesSteps() {
     let new_step = 0.1;
     if(this.state.milesStep === 0.1) {
+      new_step = 0.5;
+    }
+    else if(this.state.milesStep === 0.5) {
       new_step = 1;
+    }
+    else if(this.state.milesStep === 1) {
+      new_step = 10;
     }
     this.setState({milesStep: new_step});
   }
@@ -204,11 +210,11 @@ export default class MainPage extends Component {
         width={350}
         append={<Text style={{fontSize: 48}}>{labels.distance}</Text>}
       />
-        <Button
+        {false && <Button
           onPress={() => this.toggleMilesSteps()}
           title={`Step: ${this.state.milesStep.toFixed(1)} ${labels.distance}`}
           color="#40c5f4"
-        />
+        />}
         <Text>{this.state.version}{__DEV__ ? "-Debug" : ""}</Text>
       </View>
     };
