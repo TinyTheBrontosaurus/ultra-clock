@@ -242,10 +242,10 @@ export default class MainPage extends Component {
   updateProgressMiles(num) {
     // Time quickly gets stale, which makes the stats deteriorate. Instead only show the time
     // for when the stats were updated
-    this.setState({
-      progress_miles: num,
-      now: this.state.wallClock
-    });
+    this.setState({progress_miles: num});
+    if(!this.state.demoMode) {
+      this.setState({now: this.state.wallClock});
+    }
   }
 
   render() {
@@ -318,16 +318,12 @@ export default class MainPage extends Component {
         <ListItem icon>
           <Left>
             <NBButton style={{ backgroundColor: "#007AFF" }}>
-              <NBIcon active name="wifi" />
+              <NBIcon active name="boat-outline" />
             </NBButton>
           </Left>
           <Body>
-          <Text>Wi-Fi</Text>
+          <Text>{this.state.version}</Text>
           </Body>
-          <Right>
-            <Text>GeekyAnts</Text>
-            <Icon active name="arrow-forward" />
-          </Right>
         </ListItem>
       </Content>
     </Container>;
