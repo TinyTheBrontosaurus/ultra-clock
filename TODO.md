@@ -45,7 +45,7 @@
 - [x] Show version on every tab
 - [x] Highlight "main" number in each tab
 - [x] Test v0.3.0
-- [ ] Add gauge for pace
+- [x] Add gauge for pace
 - [x] Add "demo mode" where user can disable live time
 - [x] Checkered flag for time prediction
 ---

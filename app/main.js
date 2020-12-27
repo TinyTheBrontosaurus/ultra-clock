@@ -50,7 +50,10 @@ export default class MainPage extends Component {
       wallClock: moment(),
       demoMode: false,
       // Distance from far sides of the speedometer in min/mile
-      paceSpanMinutes: 5
+      paceSpanMinutes: 5,
+      // Walking pace, in minutes per mile
+      paceWalkingMinutes: 20,
+
     };
   }
 
@@ -106,9 +109,9 @@ export default class MainPage extends Component {
   convertDuration(start, end) {
     // calculate total duration
     let duration = moment.duration(end.diff(start));
-    return this.convertDuration2(duration);
+    return this.formatDuration(duration);
   }
-  convertDuration2(duration) {
+  formatDuration(duration) {
     let days = parseInt(duration.asDays());
     let hours = parseInt(duration.asHours()) % 24;
     let minutes = parseInt(duration.asMinutes()) % 60;
@@ -123,6 +126,12 @@ export default class MainPage extends Component {
     else {
       return `${minutes.toFixed(0)}m`
     }
+  }
+
+  // How much time can we rest to hit the goal pace
+  getRestTimeToPace() {
+    let ms = (this.getRequiredPace() * this.state.progress_miles * 60 * 1000) - (this.state.now.diff(this.state.start));
+    return moment.duration(ms);
   }
 
   calculatePace(start, finish, miles) {
@@ -457,6 +466,13 @@ export default class MainPage extends Component {
             >{this.getAheadOfPace() > 0 ? "+": ""}{this.formatPace(this.getAheadOfPace())}
               <Text style={styles.progressLabelMinor}> {labels.pace}</Text>
             </Text>
+              <Text style={Object.assign({},
+                styles.progressLabelMinor)}
+              >
+                <Icon style={styles.progressLabelMinor} name='bed'/>{" "}
+                {this.getRestTimeToPace() > 0 ? this.formatDuration(this.getRestTimeToPace()): "None"}
+              </Text>
+
             </View>
             <MilesSelector />
           </Tab>
@@ -490,7 +506,7 @@ export default class MainPage extends Component {
                   </Text>
                   <Text style={Object.assign({}, styles.progressLabelMinor, {color: colorsTime.now})}>
                     <Icon style={styles.progressLabelMinor} name='flag-checkered'/>{" "}
-                    {this.convertDuration2(this.getPredictedTimeRemaining())}
+                    {this.formatDuration(this.getPredictedTimeRemaining())}
                   </Text>
                   </>
                 )
