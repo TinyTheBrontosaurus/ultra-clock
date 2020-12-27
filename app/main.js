@@ -295,6 +295,21 @@ export default class MainPage extends Component {
     }
   }
 
+  showSkipAhead() {
+    // Only worth skipping if it'll add at least a copule presses
+    return (this.getSkipAheadRaw() / this.state.milesStep) > 2.5;
+  }
+
+  getSkipAheadRaw() {
+    let pace_min = this.getAveragePace();
+    let skip_time_ms = this.state.wallClock.diff(this.state.now);
+    return  (skip_time_ms / 60 / 1000) / pace_min;
+  }
+
+  getSkipAheadRounded() {
+    return Math.floor(this.getSkipAheadRaw() / this.state.milesStep) * this.milesStep;
+  }
+
   componentDidMount() {
     setInterval(() => {
       this.setState({
@@ -335,32 +350,36 @@ export default class MainPage extends Component {
         bottom: 0,
       }}>
         <Text style={{fontSize: 20}}>{this.state.now.fromNow()}</Text>
-        <Grid>
-          <Col>
-            <InputSpinner
-              min={0}
-              step={this.state.milesStep}
-              type={"real"}
-              precision={1}
-              colorMax={"#f04048"}
-              colorMin={"#40c5f4"}
-              value={this.state.progress_miles}
-              onChange={(num) => this.updateProgressMiles(num)}
-              fontSize={48}
-              buttonFontSize={48}
-              height={100}
-              width={350}
-              rounded={false}
-              showBorder={true}
-            ><Text style={{fontSize: 20, marginTop: 48, marginRight: 10}}>{labels.distance}</Text></InputSpinner>
-          </Col>
-          <Col>
-            <NBButton block light style={{height: 100, width: 84}}>
-              <Icon name='step-forward' size={48}/>
-            </NBButton>
-          </Col>
-        </Grid>
-        <Text>{this.state.version}{__DEV__ ? "-Debug" : ""}</Text>
+        <InputSpinner
+          min={0}
+          step={this.state.milesStep}
+          type={"real"}
+          precision={1}
+          colorMax={"#f04048"}
+          colorMin={"#40c5f4"}
+          value={this.state.progress_miles}
+          onChange={(num) => this.updateProgressMiles(num)}
+          fontSize={48}
+          buttonFontSize={48}
+          height={100}
+          width={350}
+          rounded={false}
+          showBorder={true}
+        ><Text style={{fontSize: 20, marginTop: 48, marginRight: 10}}>{labels.distance}</Text>
+        </InputSpinner>
+        {this.showSkipAhead() && <View style={{
+          justifyContent: 'center',
+          alignItems: 'center',
+          position: 'absolute',
+          bottom: 20,
+          left: 0,
+        }}>
+          <NBButton block light style={{height: 100, width: 100}}>
+            <Icon name='step-forward' size={60}/>
+            <Text>{this.state.progress_miles + this.getSkipAheadRounded()}</Text>
+          </NBButton>
+        </View>}
+        <Text> {this.state.version}{__DEV__ ? "-Debug" : ""}</Text>
       </View>
     };
 
