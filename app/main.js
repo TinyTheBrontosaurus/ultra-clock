@@ -484,18 +484,14 @@ export default class MainPage extends Component {
               <Text style={styles.progressLabelMinor}> {labels.pace}</Text>
             </Text>
               <Text style={Object.assign({},
-                styles.progressLabelMinor)}
+                styles.progressLabelSmall)}
               >
-                <Icon style={styles.progressLabelMinor} name='bed'/>{" "}
+                <Icon style={styles.progressLabelSmall} name='bed'/>{" "}
                 {this.getRestTimeToPace() > 0 ? this.formatDuration(this.getRestTimeToPace()): "None"}
-              </Text>
-              <Text style={Object.assign({},
-                styles.progressLabelMinor)}
-              >
-                <Icon style={styles.progressLabelMinor} name='walking'/>{" "}
+                {"  "}
+                <Icon style={styles.progressLabelSmall} name='walking'/>{" "}
                 {this.getWalkTimeToPace() > 0 ? this.formatDuration(this.getWalkTimeToPace()): "None"}
               </Text>
-
             </View>
             <MilesSelector />
           </Tab>
@@ -632,6 +628,9 @@ const styles = StyleSheet.create({
   },
   progressLabelMinor: {
     fontSize: 36,
+  },
+  progressLabelSmall: {
+    fontSize: 30,
   },
   // Examples only below. Actually used above
   scrollView: {

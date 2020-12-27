@@ -48,6 +48,7 @@
 - [x] Add gauge for pace
 - [x] Add "demo mode" where user can disable live time
 - [x] Checkered flag for time prediction
+- [ ] NaN edge cases
 ---
 ## Backlog
 - [ ] Add miles auto-set
