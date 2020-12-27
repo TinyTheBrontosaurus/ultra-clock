@@ -247,6 +247,7 @@ export default class MainPage extends Component {
         position: 'absolute',
         bottom: 0,
       }}>
+        <Text style={{fontSize: 20}}>{this.state.now.fromNow()}</Text>
         <InputSpinner
         min={0}
         step={this.state.milesStep}
