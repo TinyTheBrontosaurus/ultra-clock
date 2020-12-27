@@ -49,6 +49,8 @@ export default class MainPage extends Component {
       milesStep: 0.5,
       wallClock: moment(),
       demoMode: false,
+      // Distance from far sides of the speedometer in min/mile
+      paceSpanMinutes: 5
     };
   }
 
@@ -124,16 +126,44 @@ export default class MainPage extends Component {
   }
 
   calculatePace(start, finish, miles) {
-    let minutes = finish.diff(start, 'm');
-    let pace = minutes / miles;
+    let pace = this.calculatePace2(start, finish, miles);
 
+    return this.formatPace(pace);
+  }
+
+  calculatePace2(start, finish, miles) {
+    let minutes = finish.diff(start, 'm');
+    return minutes / miles;
+  }
+
+
+  formatPace(pace) {
     let min = Math.floor(pace);
     let sec = (pace * 60) % 60;
     return `${min}:${sec.toFixed(0).padStart(2, '0')}`;
   }
 
-  getPacePercent() {
-    return 40;
+  getAveragePace() {
+    return this.calculatePace2(this.state.start, this.state.now, this.state.progress_miles);
+  }
+  getRequiredPace() {
+    return this.calculatePace2(this.state.start, this.state.finish, this.state.goal_miles);
+  }
+
+  getPacePercent(pace) {
+    let mid = this.getRequiredPace();
+    let fastest = mid - this.state.paceSpanMinutes / 2;
+    let slowest = mid + this.state.paceSpanMinutes / 2;
+
+    if(pace > slowest) {
+      return 100;
+    }
+    else if(pace < fastest) {
+      return 0;
+    }
+    else {
+      return (pace - fastest) / this.state.paceSpanMinutes * 100;
+    }
   }
 
   getProjectedMiles() {
@@ -398,10 +428,24 @@ export default class MainPage extends Component {
             <MilesSelector />
           </Tab>
           <Tab heading="Pace">
-            <RNSpeedometer value={this.getPacePercent()} size={200}/>
-            <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
-              <Rows data={this.paceTableData()} textStyle={{fontSize: 36}}/>
-            </Table>
+            <View style={{ justifyContent: 'center',
+              alignItems: 'center',}}>
+            <View style={{
+              transform: [
+                { scaleX: -1 }
+              ]
+            }}>
+            <RNSpeedometer value={this.getPacePercent(this.getAveragePace())} size={300} labelNoteStyle={{fontSize: 0}} labelStyle={{fontSize: 0}} />
+            </View>
+              <Text style={Object.assign({}, {color: colorsPace.average}, styles.progressLabelMain)}>
+                {this.isStarted() ? this.formatPace(this.getAveragePace()) : labels.na}
+                <Text style={styles.progressLabelMinor}> {labels.pace}</Text>
+              </Text>
+            <Text>Line 2</Text>
+            {/*<Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>*/}
+              {/*<Rows data={this.paceTableData()} textStyle={{fontSize: 36}}/>*/}
+            {/*</Table>*/}
+            </View>
             <MilesSelector />
           </Tab>
           <Tab heading="Time">
@@ -516,6 +560,12 @@ const colorsDistance = {
   deltaBehind: colors.red,
 };
 
+const colorsPace = {
+  average: colors.black,
+  deltaAhead: colors.black,
+  deltaBehind: colors.red,
+};
+
 const styles = StyleSheet.create({
   tableTitle: {
     fontSize: 24,
@@ -531,7 +581,6 @@ const styles = StyleSheet.create({
   },
   progressLabelMinor: {
     fontSize: 36,
-
   },
   // Examples only below. Actually used above
   scrollView: {
