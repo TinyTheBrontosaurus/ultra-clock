@@ -24,6 +24,8 @@ import {Container, Header, Content, Tab, Tabs} from 'native-base';
 
 import { AnimatedCircularProgress } from 'react-native-circular-progress';
 
+import Icon from 'react-native-vector-icons/FontAwesome5';
+
 /**
  * The full board for crickets, including all the targets, the control board, and the statistics
  */
@@ -261,15 +263,19 @@ export default class MainPage extends Component {
               (fill) => (
                 <>
                 <Text style={Object.assign({}, styles.progressLabelMinor, {color: deltaColor})}>
+                  <Icon style={styles.progressLabelMinor} name='share'/>{" "}
                   {prefix}{this.getExpectedMilesDelta().toFixed((1))} {labels.distance}
                 </Text>
                 <Text style={Object.assign({}, styles.progressLabelMain, {color: colorsDistance.progress})}>
+                  <Icon style={styles.progressLabelMain} name='check-circle'/>{" "}
                   {this.state.progress_miles.toFixed((1))} {labels.distance}
                 </Text>
                 <Text style={Object.assign({}, styles.progressLabelMid, {color: colorsDistance.remaining})}>
+                  <Icon style={styles.progressLabelMid} name='clipboard-list'/>{" "}
                   {this.getMilesRemaining().toFixed((2))} {labels.distance}
                 </Text>
                 <Text style={Object.assign({}, styles.progressLabelMinor, {color: deltaColor})}>
+                  <Icon style={styles.progressLabelMinor} name='chart-line'/> {" "}
                   {this.getProjectedMiles().toFixed((2))} {labels.distance}
                 </Text>
                 </>
