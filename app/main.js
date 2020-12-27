@@ -38,12 +38,35 @@ export default class MainPage extends Component {
       goal_miles: 52.42,
       start: moment("2020-12-26T07:13"),
       finish: moment("2020-12-27T16:22"),
-      now: moment(),
+      now: moment("2020-12-27T10:22"),
       showDatePicker: false,
       modeDatePicker: "date",
       version: VERSION_STRING,
       milesStep: 0.5,
     };
+  }
+
+  /// Convert a datetime (moment) to a percentage of the day
+  momentToPercent(datetime) {
+    let hours = parseInt(datetime.format("HH"));
+    let minutes = parseInt(datetime.format("mm"));
+
+    return ((hours + (minutes/60)) / 24) * 100;
+  }
+
+  baselineTimePercent() {
+    let start_pct = this.momentToPercent(this.state.start);
+    let finish_pct = this.momentToPercent(this.state.finish);
+    return (finish_pct - start_pct) * 100;
+  }
+
+  timeDeltaAsPercent(del_start, del_finish) {
+    let del_start_pct = this.momentToPercent(del_start);
+    let del_finish_pct = this.momentToPercent(del_finish);
+    let del_pct = del_finish_pct - del_start_pct;
+
+    return ((del_pct * 100) / this.baselineTimePercent()) * 100;
+
   }
 
   getMilesRemaining = () => this.state.goal_miles - this.state.progress_miles;
@@ -162,13 +185,13 @@ export default class MainPage extends Component {
     }
   }
 
-  componentDidMount() {
-    setInterval(() => {
-      this.setState({
-        now: moment()
-      })
-    }, 10000)
-  }
+  // componentDidMount() {
+  //   setInterval(() => {
+  //     this.setState({
+  //       now: moment()
+  //     })
+  //   }, 10000)
+  // }
 
   toggleMilesSteps() {
     let new_step = 0.1;
@@ -299,11 +322,11 @@ export default class MainPage extends Component {
           </Tab>
           <Tab heading="Time">
             <AnimatedCircularProgress
-              arcSweepAngle={135}
-              rotation={285}
+              arcSweepAngle={this.baselineTimePercent() * 3.6}
+              rotation={this.momentToPercent(this.state.start) * 3.6 + 180}
               size={360}
               width={15}
-              fill={45}
+              fill={this.timeDeltaAsPercent(this.state.start, this.state.now)}
               tintColor={colorsTime.progress}
               backgroundColor={colorsTime.remaining} />
             <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
@@ -311,7 +334,7 @@ export default class MainPage extends Component {
             </Table>
             <MilesSelector />
           </Tab>
-          <Tab heading="v0.1.0">
+          {false && <Tab heading="v0.1.0">
             <View style={styles.body}>
               <View style={styles.sectionContainer}>
                 <MilesSelector />
@@ -351,7 +374,7 @@ export default class MainPage extends Component {
                 />
               )}
             </View>
-          </Tab>
+          </Tab>}
         </Tabs>
       </Container>
     );
