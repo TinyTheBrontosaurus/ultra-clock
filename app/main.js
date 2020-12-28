@@ -40,12 +40,13 @@ export default class MainPage extends Component {
   constructor(props) {
     super(props);
     const {VERSION_STRING} = VersionModule.getConstants();
+    let start = () => moment("2020-12-28T07:13");
     this.state = {
       progress_miles: 0,
       goal_miles: 52.42,
-      start: moment("2020-12-28T07:13"),
+      start: start(),
       finish: moment("2020-12-28T16:22"),
-      now: moment(),
+      now: start(),
       showDatePicker: false,
       modeDatePicker: "date",
       version: VERSION_STRING,
@@ -324,7 +325,7 @@ export default class MainPage extends Component {
   }
 
   skipAhead() {
-    this.setState({progress_miles: this.getSkipAheadPostValue()});
+    this.updateProgressMiles(this.getSkipAheadPostValue());
   }
 
   componentDidMount() {
@@ -400,7 +401,7 @@ export default class MainPage extends Component {
               bottom: 20,
               left: 0,
             }}>
-              <Text style={{fontSize: 48, color: "#eeeeee"}}>{this.getSkipAheadPostValue()}</Text>
+              <Text style={{fontSize: 48, color: "#eeeeee"}}>{this.getSkipAheadPostValue().toFixed(1)}</Text>
             </View>
           </NBButton>
         </View>}

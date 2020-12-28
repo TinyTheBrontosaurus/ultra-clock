@@ -16,7 +16,6 @@
 - [x] fancify frontend
 - [x] Add input time test
 - [x] Add large/small miles steps
-- [ ] Save state to DB
 - [x] Add version
 - [x] Add readme
 ---
@@ -50,13 +49,20 @@
 - [x] Checkered flag for time prediction
 - [x] NaN edge cases
 ---
+## Post v0.4.0 user testing
+- [ ] ->| doesn't go away after press
+- [ ] ->| text is non centered
+- [ ] Initial "now" should be start of race so that ->| is setup right
+- [ ] App reset at one point and returned to defaults. ^^ will help that
+- [ ] Save state to DB
+---
 ## Backlog
 - [ ] Add miles auto-set
 - [ ] Remove hardcoded dates & distances
 - [ ] About page
 - [x] Split up tables (Parameters, distance, time)
 - [ ] Dark mode
-- [ ] Redesign front end
+- [x] Redesign front end
 - [x] Add auto-version
 - [ ] Post on app store
 - [ ] Integrate with CI (Travis or whatever)
