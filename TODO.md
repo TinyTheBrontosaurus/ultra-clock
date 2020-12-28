@@ -50,11 +50,14 @@
 - [x] NaN edge cases
 ---
 ## Post v0.4.0 user testing
-- [ ] ->| doesn't go away after press
-- [ ] ->| text is non centered
-- [ ] Initial "now" should be start of race so that ->| is setup right
+- [x] ->| doesn't go away after press
+- [x] ->| text is non centered
+- [x] Initial "now" should be start of race so that ->| is setup right
 - [ ] App reset at one point and returned to defaults. ^^ will help that
 - [ ] Save state to DB
+- [ ] Hardcode to Wednesday
+- [x] Miles editor interrupted every 10s
+- [x] Miles editor interrupted by self-edit
 ---
 ## Backlog
 - [ ] Add miles auto-set from RunKeeper

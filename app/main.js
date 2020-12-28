@@ -57,8 +57,10 @@ export default class MainPage extends Component {
       paceSpanMinutes: 5,
       // Walking pace, in minutes per mile
       paceWalkingMinutes: 20,
-
     };
+    this.inputSpinnerInFocus = false;
+    this.inputSpinnerSave = 0;
+    this.inputSpinnerSaveValid = false;
   }
 
   closeDrawer = () => {
@@ -334,9 +336,11 @@ export default class MainPage extends Component {
 
   componentDidMount() {
     setInterval(() => {
-      this.setState({
-        wallClock: moment()
-      })
+      if(!this.inputSpinnerInFocus) {
+        this.setState({
+          wallClock: moment()
+        });
+      }
     }, 10000)
   }
 
@@ -363,6 +367,25 @@ export default class MainPage extends Component {
     }
   }
 
+  inputSpinnerFocus(focus) {
+    console.log(`focus: ${focus}`);
+    this.inputSpinnerInFocus = focus;
+    if(!focus && this.inputSpinnerSaveValid) {
+      this.inputSpinnerChange(this.inputSpinnerSave);
+      this.inputSpinnerSaveValid = false;
+    }
+  }
+
+  inputSpinnerChange(num) {
+    if(!this.inputSpinnerInFocus) {
+      this.updateProgressMiles(num);
+    }
+    else {
+      this.inputSpinnerSave = num;
+      this.inputSpinnerSaveValid = true;
+    }
+  }
+
   render() {
     let MilesSelector = (props) => {
       return <View style={{
@@ -380,7 +403,9 @@ export default class MainPage extends Component {
           colorMax={"#f04048"}
           colorMin={"#40c5f4"}
           value={this.state.progress_miles}
-          onChange={(num) => this.updateProgressMiles(num)}
+          onChange={(num) => this.inputSpinnerChange(num)}
+          onFocus={() => this.inputSpinnerFocus(true)}
+          onBlur={() => this.inputSpinnerFocus(false)}
           fontSize={48}
           buttonFontSize={48}
           height={100}
