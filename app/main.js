@@ -185,6 +185,10 @@ export default class MainPage extends Component {
   }
 
   getAveragePace() {
+    // If no distance has been registered, return the required pace. Good for the initial setup
+    if(this.state.progress_miles <= 0.1) {
+      return this.getRequiredPace();
+    }
     return this.calculatePace2(this.state.start, this.state.now, this.state.progress_miles);
   }
 
@@ -393,7 +397,7 @@ export default class MainPage extends Component {
           left: 0,
         }}>
           <NBButton block light style={{height: 100, width: 100}} onPress={() => this.skipAhead()}>
-            <Icon name='step-forward' size={60}/>
+            <Icon name='step-forward' size={60} color="#eeeeee"/>
             <View style={{
               justifyContent: 'center',
               alignItems: 'center',
@@ -401,7 +405,7 @@ export default class MainPage extends Component {
               bottom: 20,
               left: 0,
             }}>
-              <Text style={{fontSize: 48, color: "#eeeeee"}}>{this.getSkipAheadPostValue().toFixed(1)}</Text>
+              <Text style={{fontSize: 48, color: colorsDistance.progress}}>{this.getSkipAheadPostValue().toFixed(1)}</Text>
             </View>
           </NBButton>
         </View>}

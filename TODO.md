@@ -57,12 +57,16 @@
 - [ ] Save state to DB
 ---
 ## Backlog
-- [ ] Add miles auto-set
+- [ ] Add miles auto-set from RunKeeper
 - [ ] Remove hardcoded dates & distances
 - [ ] About page
+- [ ] Add Bryan's quote
 - [x] Split up tables (Parameters, distance, time)
 - [ ] Dark mode
 - [x] Redesign front end
 - [x] Add auto-version
 - [ ] Post on app store
 - [ ] Integrate with CI (Travis or whatever)
+- [ ] Long press on icons to show wtf they mean
+- [ ] App icon
+- [ ] Add short version string (tag only)
