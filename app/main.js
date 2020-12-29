@@ -40,12 +40,12 @@ export default class MainPage extends Component {
   constructor(props) {
     super(props);
     const {VERSION_STRING} = VersionModule.getConstants();
-    let start = () => moment("2020-12-29T07:13");
+    let start = () => moment("2020-12-30T07:13");
     this.state = {
       progress_miles: 0,
       goal_miles: 52.42,
       start: start(),
-      finish: moment("2020-12-29T16:22"),
+      finish: moment("2020-12-30T16:20"),
       now: start(),
       showDatePicker: false,
       modeDatePicker: "date",
