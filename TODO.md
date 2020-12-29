@@ -73,3 +73,4 @@
 - [ ] Long press on icons to show wtf they mean
 - [ ] App icon
 - [ ] Add short version string (tag only)
+- [ ] Use almanac & location to grab sunrise/sunset
