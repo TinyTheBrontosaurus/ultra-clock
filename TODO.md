@@ -53,24 +53,36 @@
 - [x] ->| doesn't go away after press
 - [x] ->| text is non centered
 - [x] Initial "now" should be start of race so that ->| is setup right
-- [ ] App reset at one point and returned to defaults. ^^ will help that
-- [ ] Save state to DB
-- [ ] Hardcode to Wednesday
+- [x] App reset at one point and returned to defaults. ^^ will help that
+- [x] Hardcode to Wednesday
 - [x] Miles editor interrupted every 10s
 - [x] Miles editor interrupted by self-edit
 ---
-## Backlog
-- [ ] Add miles auto-set from RunKeeper
+## Release MVP
+- [ ] Lay out save object
+- [ ] Save state to DB
 - [ ] Remove hardcoded dates & distances
+- [ ] Add way to set start, stop, and distance
+- [ ] App icon
+- [ ] Post on app store
+
+---
+## Backlog
+- [ ] Add ways to change start/stop/distance using presets
+- [ ] Add way to set width of target pace
+- [ ] Add miles auto-set from RunKeeper
 - [ ] About page
 - [ ] Add Bryan's quote
 - [x] Split up tables (Parameters, distance, time)
 - [ ] Dark mode
 - [x] Redesign front end
 - [x] Add auto-version
-- [ ] Post on app store
 - [ ] Integrate with CI (Travis or whatever)
 - [ ] Long press on icons to show wtf they mean
-- [ ] App icon
 - [ ] Add short version string (tag only)
 - [ ] Use almanac & location to grab sunrise/sunset
+- [ ] Fix sluggishness
+- [ ] Show percentages of completion
+- [ ] Show "repeat what you did X more times"
+- [ ] Keep the phone unlocked
+- [ ] Add testing for math and string formatting

@@ -23,7 +23,6 @@ const {VersionModule} = NativeModules;
 import {
   Container, Header, Left, Right, Body, Title, Tab, Tabs,
   Button as NBButton, Drawer, Content, ListItem, Switch,
-  Grid, Col,
   Icon as NBIcon
 } from 'native-base';
 
@@ -268,24 +267,6 @@ export default class MainPage extends Component {
     ['expected', `${this.isStarted() ? this.getExpectedMiles().toFixed(2) : labels.na} mi`],
   ];
 
-  timeTableData = () => [
-    ['now', this.formatTime(this.state.now)],
-    ['elapsed', `${this.isStarted() ? this.convertDuration(this.state.start, this.state.now) : "Not started"}`],
-    ['remaining', `${this.convertDuration(this.state.now, this.state.finish)}`],
-  ];
-
-  distTableData = () => [
-    ['ran', `${this.state.progress_miles.toFixed(1)} ${labels.distance}`],
-    ['left', `${this.getMilesRemaining().toFixed(2)} ${labels.distance}`],
-    ['projected', `${this.isStarted() ? this.getProjectedMiles().toFixed(2) : labels.na} mi`],
-    ['expected', `${this.isStarted() ? this.getExpectedMiles().toFixed(2) : labels.na} mi`],
-  ];
-
-  paceTableData = () => [
-    ['avg pace', `${this.isStarted() ? this.calculatePace(this.state.start, this.state.now, this.state.progress_miles) : labels.na} ${labels.pace}`],
-    ['req pace', `${this.isStarted() ? this.calculatePace(this.state.now, this.state.finish, this.getMilesRemaining()) : labels.na} ${labels.pace}`],
-  ];
-
   updateTime() {
     this.setState({now: moment()});
   }
@@ -342,20 +323,6 @@ export default class MainPage extends Component {
         });
       }
     }, 10000)
-  }
-
-  toggleMilesSteps() {
-    let new_step = 0.1;
-    if (this.state.milesStep === 0.1) {
-      new_step = 0.5;
-    }
-    else if (this.state.milesStep === 0.5) {
-      new_step = 1;
-    }
-    else if (this.state.milesStep === 1) {
-      new_step = 10;
-    }
-    this.setState({milesStep: new_step});
   }
 
   updateProgressMiles(num) {
@@ -729,37 +696,5 @@ const styles = StyleSheet.create({
   },
   progressLabelSmall: {
     fontSize: 30,
-  },
-  // Examples only below. Actually used above
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
   },
 });
