@@ -75,7 +75,7 @@ export default class UltraClockState {
    * Get how much time is remaining
    * @returns {number} milliseconds
    */
-  get durationRemaining() {
+  get durationMsRemaining() {
     return this.dateTimeFinish - this.dateTimeNowProgress;
   }
 
@@ -139,7 +139,7 @@ export default class UltraClockState {
       return this.distanceGoal;
     }
 
-    return total / elapsed * this.distanceProgress;
+    return (total / elapsed) * this.distanceProgress;
   }
 
   /**
@@ -205,12 +205,10 @@ export default class UltraClockState {
     let elapsed_ms = this.dateTimeNowProgress.diff(this.dateTimeStart);
 
     if((elapsed_ms < 1) || (this.distanceProgress <= 0)) {
-      return this.durationRemaining;
+      return this.durationMsRemaining;
     }
-    let remaining_ratio = 1 / (this.cvtDistanceToPercent(this.distanceProgress) / 100);
-    console.log(remaining_ratio);
-    console.log(elapsed_ms);
-    return elapsed_ms * remaining_ratio;
+    let remaining_proportion = 1 - (this.cvtDistanceToPercent(this.distanceProgress) / 100);
+    return elapsed_ms * remaining_proportion;
   }
 
   /**
@@ -251,6 +249,18 @@ export default class UltraClockState {
    */
   get distanceSkipAheadRounded() {
     return this.skipAheadSteps * this.distanceStep;
+  }
+
+  get durationTotal() {
+    return this.dateTimeFinish.diff(this.dateTimeStart);
+  }
+
+  cvtDurationToPercent(duration) {
+    return this.cvtDurationMsToPercent(duration.asMilliseconds());
+  }
+
+  cvtDurationMsToPercent(duration) {
+    return (duration / this.durationTotal) * 100;
   }
 
   /**
@@ -336,7 +346,7 @@ export default class UltraClockState {
    * @returns {number} The percentage in [0, 100]
    */
   cvtDistanceToPercent(distance) {
-    let pct = distance / this.distanceGoal * 100;
+    let pct = (distance / this.distanceGoal) * 100;
     if(pct < 0) {
       return 0;
     }
@@ -367,6 +377,10 @@ export default class UltraClockState {
    */
   cvtDateTimeToTimeString(datetime) {
     return dateTime.format("h:mma").slice(0, -1);
+  }
+
+  static cvtDurationMsToString(durationMs) {
+    return UltraClockState.cvtDurationToString(moment.duration(durationMs));
   }
 
   /**
@@ -432,5 +446,14 @@ export default class UltraClockState {
       return (pace - fastest) / this.paceSpanMinutes * 100;
     }
   }
+
+  // cvtDurationToPercent(duration) {
+  //
+  //   let del_start_pct = this.momentToPercent(del_start);
+  //   let del_finish_pct = this.momentToPercent(del_finish);
+  //   let del_pct = del_finish_pct - del_start_pct;
+  //
+  //   return (del_pct / this.baselineTimePercent()) * 100;
+  // }
 
 };
