@@ -202,13 +202,7 @@ export default class UltraClockState {
    * @returns {number} Milliseconds
    */
   get durationToDistanceGoalMs() {
-    let elapsed_ms = this.dateTimeNowProgress.diff(this.dateTimeStart);
-
-    if((elapsed_ms < 1) || (this.distanceProgress <= 0)) {
-      return this.durationMsRemaining;
-    }
-    let remaining_proportion = 1 - (this.cvtDistanceToPercent(this.distanceProgress) / 100);
-    return elapsed_ms * remaining_proportion;
+    return this.paceActual * this.distanceRemaining * 60 * 1000;
   }
 
   /**

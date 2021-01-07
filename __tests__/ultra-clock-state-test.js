@@ -143,8 +143,8 @@ describe('Accessors', () => {
     expect(out.isStarted).toBe(true);
     expect(UltraClockState.cvtDurationToString(out.durationRestTimeToPace)).toBe("2m");
     expect(UltraClockState.cvtDurationToString(out.durationWalkTimeToPace)).toBe("4m");
-    expect(UltraClockState.cvtDurationToString(out.durationToDistanceGoal)).toBe("8h 42m");
-    expect(out.dateTimeToDistanceGoal.format()).toBe("2020-12-30T15:55:13Z");
+    expect(UltraClockState.cvtDurationToString(out.durationToDistanceGoal)).toBe("7h 55m");
+    expect(out.dateTimeToDistanceGoal.format()).toBe("2020-12-30T15:08:13Z");
     expect(out.paceAheadOfGoal).toBeCloseTo(0.50, 2);
     expect(out.paceSpanMinutes).toBe(5);
     expect(out.distanceSkipAheadRaw).toBeCloseTo(0, 2);
