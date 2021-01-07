@@ -11,22 +11,50 @@ export default class UltraClockState {
     this.state = state;
   }
 
+  /**
+   * The number of miles completed
+   * @returns {number}
+   */
   get distanceProgress() {
-    return this.state.progressMiles;
+    return this.state.distanceProgress;
   }
 
+  /**
+   * The number of total miles as teh goal
+   * @returns {number} miles
+   */
   get distanceGoal() {
-    return this.state.goalMiles;
+    return this.state.distanceGoal;
   }
 
+  /**
+   * How far a single increment of the "next" button should proceed
+   * @returns {number} miles
+   */
+  get distanceStep() {
+    return this.state.distanceStep;
+  }
+
+  /**
+   * The number of miles remaining
+   * @returns {number} miles
+   */
   get distanceRemaining() {
     return this.distanceGoal - this.distanceProgress;
   }
 
+  /**
+   * Get the planned start time (sunrise)
+   * @returns {moment}
+   */
   get dateTimeStart() {
     return this.state.start;
   }
 
+  /**
+   * Get the planned finish time (sunset)
+   * @returns {moment}
+   */
   get dateTimeFinish() {
     return this.state.finish;
   }
@@ -35,16 +63,28 @@ export default class UltraClockState {
     return this.state.now_progress;
   }
 
+  /**
+   * Get the time
+   * @returns {moment}
+   */
   get dateTimeWallClock() {
     return this.state.wallClock;
   }
 
+  /**
+   * Get how much time is remaining
+   * @returns {number} milliseconds
+   */
   get durationRemaining() {
-    return this.finish - this.nowProgress;
+    return this.dateTimeFinish - this.dateTimeNowProgress;
   }
 
+  /**
+   * Get how much time has elapsed, from start to last update
+   * @returns {number} milliseconds
+   */
   get durationProgress() {
-    return this.nowProgress - this.start;
+    return this.dateTimeNowProgress - this.dateTimeStart;
   }
 
   /**
@@ -75,6 +115,11 @@ export default class UltraClockState {
     return 20;
   }
 
+  /**
+   * Get the distance that is expected as of the latest progress update, assuming the
+   * a priori pace prediction
+   * @returns {number} milliseconds
+   */
   get distanceExpectedNow() {
     let total = this.dateTimeFinish.diff(this.dateTimeStart, 'm');
     let elapsed = this.dateTimeNowProgress.diff(this.dateTimeStart, 'm');
@@ -97,17 +142,8 @@ export default class UltraClockState {
    * How many miles ahead (+) or behind (-) the goal pace
    * @returns {number} mile
    */
-
   get distanceAhead() {
     return this.distanceProgress - this.distanceExpectedNow;
-  }
-
-  get durationToDistanceCompletion() {
-
-  }
-
-  get timeDistanceCompletion() {
-
   }
 
   /**
@@ -332,7 +368,7 @@ export default class UltraClockState {
    * @returns {number} minutes/mile
    */
   get paceSpanMinutes() {
-    return 5;
+    return this.state.paceSpanMinutes;
   }
 
   /**
@@ -354,8 +390,33 @@ export default class UltraClockState {
     else {
       return (pace - fastest) / this.paceSpanMinutes * 100;
     }
-
   }
 
+  /**
+   * Calculate how many miles are expected to have been run between the last progress update and
+   * the wall clock, assuming the actual pace
+   * @returns {number} miles
+   */
+  get distanceSkipAheadRaw() {
+    let pace_min = this.paceActual;
+    let skip_time_ms = this.dateTimeWallClock.diff(this.dateTimeNowProgress);
+    return (skip_time_ms / 60 / 1000) / pace_min;
+  }
 
+  /**
+   * Calculate how many miles are expected to have been run between the last progress update and
+   * the wall clock, assuming the actual pace. ROounded down to the step size
+   * @returns {number} miles
+   */
+  get distanceSkipAheadRounded() {
+    return this.skipAheadSteps * this.distanceStep;
+  }
+
+  /**
+   * The integer number of steps to reach the skips ahead distance. Closest without going over
+   * @returns {int} Number of steps
+   */
+  get skipAheadSteps() {
+    return Math.floor(this.distanceSkipAheadRaw / this.distanceStep);
+  }
 };
