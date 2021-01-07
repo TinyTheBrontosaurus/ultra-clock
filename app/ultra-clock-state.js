@@ -83,7 +83,7 @@ export default class UltraClockState {
    * Get how much time has elapsed, from start to last update
    * @returns {number} milliseconds
    */
-  get durationProgress() {
+  get durationMsProgress() {
     return this.dateTimeNowProgress - this.dateTimeStart;
   }
 
@@ -245,7 +245,7 @@ export default class UltraClockState {
     return this.skipAheadSteps * this.distanceStep;
   }
 
-  get durationTotal() {
+  get durationMsTotal() {
     return this.dateTimeFinish.diff(this.dateTimeStart);
   }
 
@@ -254,7 +254,7 @@ export default class UltraClockState {
   }
 
   cvtDurationMsToPercent(duration) {
-    return (duration / this.durationTotal) * 100;
+    return (duration / this.durationMsTotal) * 100;
   }
 
   /**
@@ -279,38 +279,6 @@ export default class UltraClockState {
     let minutes = parseInt(datetime.format("mm"));
 
     return ((hours + (minutes / 60)) / 24) * 100;
-  }
-
-  /**
-   * Return the percentage of the day between start and finish. That is, the percentage of the
-   * day planned to be taken up by the race.
-   * Does not consider date, only time
-   * Examples
-   *   start (%%)  finish (%%)   result
-   *    0600 (25)    1800 (75)       50
-   *    1200 (50)    1800 (75)       25
-   *    1800 (75)    0600 (25)      -25
-   * @private
-   */
-  get percentageOfDay() {
-    let start_pct = this.cvtDateTimeToPercentOfDay(this.dateTimeStart);
-    let finish_pct = this.cvtDateTimeToPercentOfDay(this.dateTimeFinish);
-    return (finish_pct - start_pct);
-  }
-
-  /**
-   * Calculate what how much time this is compared to the length of the race
-   * @param dateTimeEarly The early time to compare (minuend)
-   * @param dateTimeLate THe late time to compare (subtrahend)
-   * @returns {number} THe percentage of the race
-   */
-  cvtDateDurationToPercent(dateTimeEarly, dateTimeLate) {
-    // TODO: Make this work across days
-    let del_start_pct = this.cvtDateTimeToPercentOfDay(dateTimeEarly);
-    let del_finish_pct = this.cvtDateTimeToPercentOfDay(dateTimeLate);
-    let del_pct = del_finish_pct - del_start_pct;
-
-    return (del_pct / this.percentageOfDay) * 100;
   }
 
   /**

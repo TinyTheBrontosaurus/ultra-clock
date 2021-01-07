@@ -33,7 +33,7 @@ describe('Accessors', () => {
     expect(out.dateTimeNowProgress.format()).toBe("2020-12-30T07:13:00Z");
     expect(out.dateTimeWallClock.format()).toBe("2020-12-29T20:00:00Z");
     expect(out.durationMsRemaining).toBe(hmToMilliseconds(9, 7));
-    expect(out.durationProgress).toBe(hmToMilliseconds(0, 0));
+    expect(out.durationMsProgress).toBe(hmToMilliseconds(0, 0));
     expect(out.paceGoal).toBeCloseTo(10.94, 2);
     expect(out.paceActual).toBeCloseTo(10.94, 2);
     expect(out.paceStandardWalking).toBeCloseTo(20, 2);
@@ -81,7 +81,7 @@ describe('Accessors', () => {
     expect(out.dateTimeNowProgress.format()).toBe("2020-12-30T07:13:00Z");
     expect(out.dateTimeWallClock.format()).toBe("2020-12-30T08:00:00Z");
     expect(out.durationMsRemaining).toBe(hmToMilliseconds(9, 7));
-    expect(out.durationProgress).toBe(hmToMilliseconds(0, 0));
+    expect(out.durationMsProgress).toBe(hmToMilliseconds(0, 0));
     expect(out.paceGoal).toBeCloseTo(10.94, 2);
     expect(out.paceActual).toBeCloseTo(10.94, 2);
     expect(out.paceStandardWalking).toBeCloseTo(20, 2);
@@ -101,7 +101,7 @@ describe('Accessors', () => {
     expect(out.skipAheadSteps).toBe(8);
   });
 
-  test("During just pressed progress", () => {
+  test("During just pressed progress--fast", () => {
     // Arrange
     let start = moment.utc("2020-12-30T07:13");
     let state = {
@@ -130,11 +130,11 @@ describe('Accessors', () => {
     expect(out.dateTimeNowProgress.format()).toBe("2020-12-30T08:00:00Z");
     expect(out.dateTimeWallClock.format()).toBe("2020-12-30T08:00:00Z");
     expect(UltraClockState.cvtDurationMsToString(out.durationMsRemaining)).toBe("8h 20m");
-    expect(UltraClockState.cvtDurationMsToString(out.durationProgress)).toBe("47m");
-    expect(UltraClockState.cvtDurationMsToString(out.durationTotal)).toBe("9h 7m");
-    expect(out.cvtDurationMsToPercent(out.durationProgress)).toBeCloseTo(8.59, 2);
+    expect(UltraClockState.cvtDurationMsToString(out.durationMsProgress)).toBe("47m");
+    expect(UltraClockState.cvtDurationMsToString(out.durationMsTotal)).toBe("9h 7m");
+    expect(out.cvtDurationMsToPercent(out.durationMsProgress)).toBeCloseTo(8.59, 2);
     expect(out.cvtDurationMsToPercent(out.durationMsRemaining)).toBeCloseTo(91.41, 2);
-    expect(out.paceGoal).toBeCloseTo(10.94, 2);
+    expect(out.cvtPaceToString(out.paceGoal)).toBe("10:56");
     expect(out.paceActual).toBeCloseTo(10.44, 2);
     expect(out.paceStandardWalking).toBeCloseTo(20, 2);
     expect(out.distanceExpectedNow).toBeCloseTo(4.3, 2);
@@ -145,10 +145,112 @@ describe('Accessors', () => {
     expect(UltraClockState.cvtDurationToString(out.durationWalkTimeToPace)).toBe("4m");
     expect(UltraClockState.cvtDurationToString(out.durationToDistanceGoal)).toBe("7h 55m");
     expect(out.dateTimeToDistanceGoal.format()).toBe("2020-12-30T15:08:13Z");
-    expect(out.paceAheadOfGoal).toBeCloseTo(0.50, 2);
+    expect(out.cvtPaceToString(out.paceAheadOfGoal)).toBe("0:30");
     expect(out.paceSpanMinutes).toBe(5);
     expect(out.distanceSkipAheadRaw).toBeCloseTo(0, 2);
     expect(out.distanceSkipAheadRounded).toBeCloseTo(0, 2);
     expect(out.skipAheadSteps).toBe(0);
+  });
+
+  test("During not pressed progress in a while--fast", () => {
+    // Arrange
+    let start = moment.utc("2020-12-30T07:13");
+    let state = {
+      distanceProgress: 4.5,
+      distanceGoal: 50,
+      distanceStep: 0.5,
+      start: start,
+      finish: moment.utc("2020-12-30T16:20"),
+      nowProgress: moment.utc("2020-12-30T08:00"),
+      wallClock: moment.utc("2020-12-30T09:00"),
+      paceSpanMinutes: 5,
+      paceStandardWalking: 20,
+    };
+
+    // Act
+    let out = new UltraClockState(state);
+
+    // Assert
+    expect(out.distanceProgress).toBe(4.5);
+    expect(out.distanceGoal).toBe(50);
+    expect(out.distanceStep).toBe(0.5);
+    expect(out.distanceRemaining).toBe(45.5);
+    expect(out.cvtDistanceToPercent(out.distanceProgress)).toBeCloseTo(9, 2);
+    expect(out.dateTimeStart.format()).toBe("2020-12-30T07:13:00Z");
+    expect(out.dateTimeFinish.format()).toBe("2020-12-30T16:20:00Z");
+    expect(out.dateTimeNowProgress.format()).toBe("2020-12-30T08:00:00Z");
+    expect(out.dateTimeWallClock.format()).toBe("2020-12-30T09:00:00Z");
+    expect(UltraClockState.cvtDurationMsToString(out.durationMsRemaining)).toBe("8h 20m");
+    expect(UltraClockState.cvtDurationMsToString(out.durationMsProgress)).toBe("47m");
+    expect(UltraClockState.cvtDurationMsToString(out.durationMsTotal)).toBe("9h 7m");
+    expect(out.cvtDurationMsToPercent(out.durationMsProgress)).toBeCloseTo(8.59, 2);
+    expect(out.cvtDurationMsToPercent(out.durationMsRemaining)).toBeCloseTo(91.41, 2);
+    expect(out.cvtPaceToString(out.paceGoal)).toBe("10:56");
+    expect(out.paceActual).toBeCloseTo(10.44, 2);
+    expect(out.paceStandardWalking).toBeCloseTo(20, 2);
+    expect(out.distanceExpectedNow).toBeCloseTo(4.3, 2);
+    expect(out.distanceProjected).toBeCloseTo(52.37, 2);
+    expect(out.distanceAhead).toBeCloseTo(0.2, 2);
+    expect(out.isStarted).toBe(true);
+    expect(UltraClockState.cvtDurationToString(out.durationRestTimeToPace)).toBe("2m");
+    expect(UltraClockState.cvtDurationToString(out.durationWalkTimeToPace)).toBe("4m");
+    expect(UltraClockState.cvtDurationToString(out.durationToDistanceGoal)).toBe("7h 55m");
+    expect(out.dateTimeToDistanceGoal.format()).toBe("2020-12-30T15:08:13Z");
+    expect(out.cvtPaceToString(out.paceAheadOfGoal)).toBe("0:30");
+    expect(out.paceSpanMinutes).toBe(5);
+    expect(out.distanceSkipAheadRaw).toBeCloseTo(5.74, 2);
+    expect(out.distanceSkipAheadRounded).toBeCloseTo(5.5, 2);
+    expect(out.skipAheadSteps).toBe(11);
+  });
+
+  test("During just pressed progress after a while--fast", () => {
+    // Arrange
+    let start = moment.utc("2020-12-30T07:13");
+    let state = {
+      distanceProgress: 14.5,
+      distanceGoal: 50,
+      distanceStep: 0.5,
+      start: start,
+      finish: moment.utc("2020-12-30T16:20"),
+      nowProgress: moment.utc("2020-12-30T09:00"),
+      wallClock: moment.utc("2020-12-30T09:04"),
+      paceSpanMinutes: 5,
+      paceStandardWalking: 20,
+    };
+
+    // Act
+    let out = new UltraClockState(state);
+
+    // Assert
+    expect(out.distanceProgress).toBe(14.5);
+    expect(out.distanceGoal).toBe(50);
+    expect(out.distanceStep).toBe(0.5);
+    expect(out.distanceRemaining).toBe(35.5);
+    expect(out.cvtDistanceToPercent(out.distanceProgress)).toBeCloseTo(29, 2);
+    expect(out.dateTimeStart.format()).toBe("2020-12-30T07:13:00Z");
+    expect(out.dateTimeFinish.format()).toBe("2020-12-30T16:20:00Z");
+    expect(out.dateTimeNowProgress.format()).toBe("2020-12-30T09:00:00Z");
+    expect(out.dateTimeWallClock.format()).toBe("2020-12-30T09:04:00Z");
+    expect(UltraClockState.cvtDurationMsToString(out.durationMsRemaining)).toBe("7h 20m");
+    expect(UltraClockState.cvtDurationMsToString(out.durationMsProgress)).toBe("1h 47m");
+    expect(UltraClockState.cvtDurationMsToString(out.durationMsTotal)).toBe("9h 7m");
+    expect(out.cvtDurationMsToPercent(out.durationMsProgress)).toBeCloseTo(19.56, 2);
+    expect(out.cvtDurationMsToPercent(out.durationMsRemaining)).toBeCloseTo(80.44, 2);
+    expect(out.cvtPaceToString(out.paceGoal)).toBe("10:56");
+    expect(out.cvtPaceToString(out.paceActual)).toBe("7:23");
+    expect(out.paceStandardWalking).toBeCloseTo(20, 2);
+    expect(out.distanceExpectedNow).toBeCloseTo(9.78, 2);
+    expect(out.distanceProjected).toBeCloseTo(74.13, 2);
+    expect(out.distanceAhead).toBeCloseTo(4.72, 2);
+    expect(out.isStarted).toBe(true);
+    expect(UltraClockState.cvtDurationToString(out.durationRestTimeToPace)).toBe("51m");
+    expect(UltraClockState.cvtDurationToString(out.durationWalkTimeToPace)).toBe("1h 53m");
+    expect(UltraClockState.cvtDurationToString(out.durationToDistanceGoal)).toBe("4h 21m");
+    expect(out.dateTimeToDistanceGoal.format()).toBe("2020-12-30T11:34:57Z");
+    expect(out.cvtPaceToString(out.paceAheadOfGoal)).toBe("3:34");
+    expect(out.paceSpanMinutes).toBe(5);
+    expect(out.distanceSkipAheadRaw).toBeCloseTo(0.54, 2);
+    expect(out.distanceSkipAheadRounded).toBeCloseTo(0.5, 2);
+    expect(out.skipAheadSteps).toBe(1);
   });
 });
