@@ -101,7 +101,7 @@ export default class UltraClockState {
    */
   get paceActual() {
     // If no distance has been registered, return the required pace. Good for the initial setup
-    if(this.state.progress_miles <= 0.1) {
+    if(this.distanceProgress <= 0.1) {
       return this.paceGoal;
     }
     return this.calculatePace(this.dateTimeStart, this.dateTimeNowProgress, this.distanceProgress);
@@ -159,7 +159,7 @@ export default class UltraClockState {
    * @returns {moment.Duration}
    */
   get durationRestTimeToPace() {
-    let ms_whole_race = (this.paceGoal() * this.state.progress_miles * 60 * 1000);
+    let ms_whole_race = (this.paceGoal() * this.distanceProgress * 60 * 1000);
     let ms_so_far =  this.dateTimeNowProgress.diff(this.dateTimeStart);
     return moment.duration(ms_whole_race - ms_so_far);
   }
