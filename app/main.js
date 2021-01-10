@@ -365,11 +365,11 @@ export default class MainPage extends Component {
             </Tab>
             <Tab heading="Time">
               <AnimatedCircularProgress
-                arcSweepAngle={this.baselineTimePercent() * 3.6}
-                rotation={this.momentToPercent(this.state.start) * 3.6 + 180}
+                arcSweepAngle={UltraClockState.cvtDurationMsToPercentOfDay(this.ultraState.durationMsTotal) * 3.6}
+                rotation={UltraClockState.cvtDateTimeToPercentOfDay(this.ultraState.dateTimeStart) * 3.6 + 180}
                 size={360}
                 width={15}
-                fill={this.timeDeltaAsPercent(this.state.start, this.state.now)}
+                fill={this.ultraState.cvtDurationMsToPercentOfRace(this.ultraState.durationMsProgress)}
                 tintColor={colorsTime.progress}
                 backgroundColor={colorsTime.remaining}>
                 {
@@ -377,25 +377,25 @@ export default class MainPage extends Component {
                     <>
                     <Text style={Object.assign({}, styles.progressLabelMinor, {color: colorsTime.now})}>
                       <Icon style={styles.progressLabelMinor} name='clock'/>{" "}
-                      {this.formatTime(this.state.now)}
+                      {this.ultraState.cvtDateTimeToTimeString(this.ultraState.nowProgress)}
                     </Text>
                     <Text style={Object.assign({}, styles.progressLabelMain, {color: colorsTime.progress})}>
                       <Icon style={styles.progressLabelMain} name='check-circle'/>{" "}
-                      {this.ultraState.isStarted ? this.convertDuration(this.state.start, this.state.now) : "---"}
+                      {this.ultraState.isStarted ? UltraClockState.cvtDurationMsToString(this.ultraState.durationMsProgress) : "---"}
                     </Text>
                     <Text style={Object.assign({}, styles.progressLabelMid, {color: colorsTime.remaining})}>
                       <Icon style={styles.progressLabelMid} name='stopwatch'/>{" "}
-                      {this.convertDuration(this.state.now, this.state.finish)}
+                      {UltraClockState.cvtDurationMsToString(this.ultraState.durationMsRemaining)}
                     </Text>
                     <Text style={Object.assign({}, styles.progressLabelMinor, {color: colorsTime.now})}>
                       <Icon style={styles.progressLabelMinor} name='flag-checkered'/>{" "}
                       <Icon style={styles.progressLabelMinor} name='clock'/>{" "}
-                      {this.ultraState.isStarted ? this.formatTime(this.getPredictedDoneTime()) : "---"}
+                      {this.ultraState.isStarted ? this.ultraState.cvtDateTimeToTimeString(this.ultraState.dateTimeToDistanceGoal) : "---"}
                     </Text>
                     <Text style={Object.assign({}, styles.progressLabelMinor, {color: colorsTime.now})}>
                       <Icon style={styles.progressLabelMinor} name='flag-checkered'/>{" "}
                       <Icon style={styles.progressLabelMinor} name='stopwatch'/>{" "}
-                      {this.ultraState.isStarted ? this.formatDuration(this.getPredictedTimeRemaining()) : "---"}
+                      {this.ultraState.isStarted ? UltraClockState.cvtDurationMsToString(this.ultraState.durationMsRemaining) : "---"}
                     </Text>
                     </>
                   )
@@ -407,13 +407,8 @@ export default class MainPage extends Component {
               <View style={styles.body}>
                 <View style={styles.sectionContainer}>
                   <Button
-                    onPress={() => this.updateTime()}
-                    title={`Update Time to now`}
-                    color="#40c5f4"
-                  />
-                  <Button
                     onPress={() => this.pressDateTime()}
-                    title={`Set Time`}
+                    title={`Set wall time`}
                     color="#40c5f4"
                   />
                 </View>

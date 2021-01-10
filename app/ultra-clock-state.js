@@ -409,6 +409,15 @@ export default class UltraClockState {
     }
   }
 
+  static cvtDurationMsToPercentOfDay(duration) {
+    const full_day = 24 * 60 * 60 * 1000;
+    return duration / full_day;
+  }
+
+  cvtDurationMsToPercentOfRace(duration) {
+    return duration / this.durationMsTotal;
+  }
+
   // cvtDurationToPercent(duration) {
   //
   //   let del_start_pct = this.momentToPercent(del_start);
