@@ -306,3 +306,109 @@ describe('Accessors', () => {
     expect(out.skipAheadSteps).toBe(0);
   });
 });
+
+
+describe('Walk/rest', () => {
+  test("Ahead", () => {
+    // Arrange
+    let start = moment.utc("2020-12-30T07:00");
+    let now = moment.utc("2020-12-30T08:30");
+    let state = {
+      distanceProgress: 12,
+      distanceGoal: 60,
+      distanceStep: 0.5,
+      start: start,
+      finish: moment.utc("2020-12-30T17:00"),
+      nowProgress: now,
+      wallClock: now,
+      paceSpanMinutes: 5,
+      paceStandardWalking: 20,
+    };
+
+    // Act
+    let out = new UltraClockState(state);
+
+    // Assert
+    expect(out.distanceProgress).toBe(12);
+    expect(out.cvtPaceToString(out.paceGoal)).toBe("10:00");
+    expect(out.cvtPaceToString(out.paceActual)).toBe("7:30");
+    expect(out.cvtPaceToString(out.paceStandardWalking)).toBe("20:00");
+    expect(out.distanceExpectedNow).toBeCloseTo(9, 2);
+    expect(out.distanceProjected).toBeCloseTo(80, 2);
+    expect(out.distanceAhead).toBeCloseTo(3, 2);
+    expect(out.isStarted).toBe(true);
+    expect(UltraClockState.cvtDurationToString(out.durationRestTimeToPace)).toBe("30m");
+    expect(UltraClockState.cvtDurationToString(out.durationWalkTimeToPace)).toBe("1h 0m");
+    expect(UltraClockState.cvtDurationToString(out.durationToDistanceGoal)).toBe("6h 0m");
+    expect(out.cvtPaceToString(out.paceAheadOfGoal)).toBe("2:30");
+  });
+
+  test("Rest waiting", () => {
+    // Arrange
+    let start = moment.utc("2020-12-30T07:00");
+    let now = moment.utc("2020-12-30T09:00");
+    let state = {
+      distanceProgress: 12,
+      distanceGoal: 60,
+      distanceStep: 0.5,
+      start: start,
+      finish: moment.utc("2020-12-30T17:00"),
+      nowProgress: now,
+      wallClock: now,
+      paceSpanMinutes: 5,
+      paceStandardWalking: 20,
+    };
+
+    // Act
+    let out = new UltraClockState(state);
+
+    // Assert
+    expect(out.distanceProgress).toBe(12);
+    expect(out.cvtPaceToString(out.paceGoal)).toBe("10:00");
+    expect(out.cvtPaceToString(out.paceActual)).toBe("10:00");
+    expect(out.cvtPaceToString(out.paceStandardWalking)).toBe("20:00");
+    expect(out.distanceExpectedNow).toBeCloseTo(12, 2);
+    expect(out.distanceProjected).toBeCloseTo(60, 2);
+    expect(out.distanceAhead).toBeCloseTo(0, 2);
+    expect(out.isStarted).toBe(true);
+    expect(UltraClockState.cvtDurationToString(out.durationRestTimeToPace)).toBe("0m");
+    expect(UltraClockState.cvtDurationToString(out.durationWalkTimeToPace)).toBe("0m");
+    expect(UltraClockState.cvtDurationToString(out.durationToDistanceGoal)).toBe("8h 0m");
+    expect(out.cvtPaceToString(out.paceAheadOfGoal)).toBe("0:00");
+  });
+
+  test("Rest waiting", () => {
+    // Arrange
+    let start = moment.utc("2020-12-30T07:00");
+    let now = moment.utc("2020-12-30T09:30");
+    let state = {
+      distanceProgress: 15,
+      distanceGoal: 60,
+      distanceStep: 0.5,
+      start: start,
+      finish: moment.utc("2020-12-30T17:00"),
+      nowProgress: now,
+      wallClock: now,
+      paceSpanMinutes: 5,
+      paceStandardWalking: 20,
+    };
+
+    // Act
+    let out = new UltraClockState(state);
+
+    // Assert
+    expect(out.distanceProgress).toBe(15);
+    expect(out.cvtPaceToString(out.paceGoal)).toBe("10:00");
+    expect(out.cvtPaceToString(out.paceActual)).toBe("10:00");
+    expect(out.cvtPaceToString(out.paceStandardWalking)).toBe("20:00");
+    expect(out.distanceExpectedNow).toBeCloseTo(15, 2);
+    expect(out.distanceProjected).toBeCloseTo(60, 2);
+    expect(out.distanceAhead).toBeCloseTo(0, 2);
+    expect(out.isStarted).toBe(true);
+    expect(UltraClockState.cvtDurationToString(out.durationRestTimeToPace)).toBe("0m");
+    expect(UltraClockState.cvtDurationToString(out.durationWalkTimeToPace)).toBe("0m");
+    expect(UltraClockState.cvtDurationToString(out.durationToDistanceGoal)).toBe("7h 30m");
+    expect(out.cvtPaceToString(out.paceAheadOfGoal)).toBe("0:00");
+  });
+
+});
