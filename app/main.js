@@ -42,21 +42,22 @@ export default class MainPage extends Component {
     const {VERSION_STRING} = VersionModule.getConstants();
     let start = () => moment("2020-12-30T07:13");
     this.state = {
-      progress_miles: 0,
-      goal_miles: 52.42,
+      distanceProgress: 0,
+      distanceGoal: 52.42,
+      distanceStep: 0.5,
       start: start(),
       finish: moment("2020-12-30T16:20"),
-      now: start(),
-      showDatePicker: false,
-      modeDatePicker: "date",
-      version: VERSION_STRING,
-      milesStep: 0.5,
+      nowProgress: start(),
       wallClock: moment(),
-      demoMode: false,
       // Distance from far sides of the speedometer in min/mile
       paceSpanMinutes: 5,
       // Walking pace, in minutes per mile
       paceWalkingMinutes: 20,
+
+      showDatePicker: false,
+      modeDatePicker: "date",
+      version: VERSION_STRING,
+      demoMode: false,
     };
     this.ultraState = UltraClockState(this.state);
     this.inputSpinnerInFocus = false;
@@ -223,7 +224,7 @@ export default class MainPage extends Component {
     }
     else {
       // Actual is first
-      rotation_deg = this.ultraState.cvtDistanceToPercent((this.ultraState.distanceProgress) * 3.6;
+      rotation_deg = this.ultraState.cvtDistanceToPercent(this.ultraState.distanceProgress) * 3.6;
       fill_pct = this.ultraState.cvtDistanceToPercent(-this.ultraState.distanceAhead);
       deltaColor = colorsDistance.deltaBehind;
     }
