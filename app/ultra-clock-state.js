@@ -193,7 +193,7 @@ export default class UltraClockState {
    * @returns {moment.Moment} The datetime
    */
   get dateTimeToDistanceGoal() {
-    return moment.utc(this.dateTimeStart.format()).add(this.durationToDistanceGoal);
+    return moment.utc(this.dateTimeNowProgress.format()).add(this.durationToDistanceGoal);
   }
 
   /**
