@@ -29,7 +29,8 @@ import {
 import {AnimatedCircularProgress} from 'react-native-circular-progress';
 
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import RNSpeedometer from 'react-native-speedometer'
+import RNSpeedometer from 'react-native-speedometer';
+import UltraClockState from "./ultra-clock-state";
 
 
 /**
@@ -57,6 +58,7 @@ export default class MainPage extends Component {
       // Walking pace, in minutes per mile
       paceWalkingMinutes: 20,
     };
+    this.ultraState = UltraClockState(this.state);
     this.inputSpinnerInFocus = false;
     this.inputSpinnerSave = 0;
     this.inputSpinnerSaveValid = false;
@@ -69,207 +71,27 @@ export default class MainPage extends Component {
     this._drawer._root.open();
   };
 
-  /// Convert a datetime (moment) to a percentage of the day
-  momentToPercent(datetime) {
-    let hours = parseInt(datetime.format("HH"));
-    let minutes = parseInt(datetime.format("mm"));
-
-    return ((hours + (minutes / 60)) / 24) * 100;
-  }
-
-  baselineTimePercent() {
-    let start_pct = this.momentToPercent(this.state.start);
-    let finish_pct = this.momentToPercent(this.state.finish);
-    return (finish_pct - start_pct);
-  }
-
-  /// Calculate a time delta as a percentage of the total time of this race
-  timeDeltaAsPercent(del_start, del_finish) {
-    let del_start_pct = this.momentToPercent(del_start);
-    let del_finish_pct = this.momentToPercent(del_finish);
-    let del_pct = del_finish_pct - del_start_pct;
-
-    return (del_pct / this.baselineTimePercent()) * 100;
-
-  }
-
-  getPredictedDoneTime() {
-    let remaining_ratio = 1 / (this.milesToPercent(this.state.progress_miles) / 100);
-    let elapsed_ms = this.state.now.diff(this.state.start);
-    let total_ms = elapsed_ms * remaining_ratio;
-    return moment(this.state.start.format()).add(moment.duration(total_ms));
-  }
-
-  getPredictedTimeRemaining() {
-    let remaining_ratio = 1 / (this.milesToPercent(this.state.progress_miles) / 100);
-    let elapsed_ms = this.state.now.diff(this.state.start);
-    let total_ms = elapsed_ms * remaining_ratio - elapsed_ms;
-    return moment.duration(total_ms);
-  }
-
-  getMilesRemaining = () => this.state.goal_miles - this.state.progress_miles;
-
-  isStarted = () => this.state.now.diff(this.state.start) > 0;
-
-  convertDuration(start, end) {
-    // calculate total duration
-    let duration = moment.duration(end.diff(start));
-    return this.formatDuration(duration);
-  }
-
-  formatDuration(duration) {
-    let prefix = "";
-    if (duration.asMilliseconds() < 0) {
-      duration = moment.duration(-duration.asMilliseconds());
-      prefix = "-";
-    }
-    let days = parseInt(duration.asDays());
-    let hours = parseInt(duration.asHours()) % 24;
-    let minutes = parseInt(duration.asMinutes()) % 60;
-
-    if (days > 0) {
-      return `> ${prefix}1 day`;
-      return `${days.toFixed(0)}d ${hours.toFixed(0)}h ${minutes.toFixed(0)}m`
-    }
-    else if (hours > 0) {
-      return `${prefix}${hours.toFixed(0)}h ${minutes.toFixed(0)}m`
-    }
-    else {
-      return `${prefix}${minutes.toFixed(0)}m`
-    }
-  }
-
-  // How much time can we rest to hit the goal pace
-  getRestTimeToPace() {
-    let ms = (this.getRequiredPace() * this.state.progress_miles * 60 * 1000) - (this.state.now.diff(this.state.start));
-    return moment.duration(ms);
-  }
-
-  // How much time can we rest to hit the goal pace
-  getWalkTimeToPace() {
-    let pace_ms = this.getRequiredPace() * 60 * 1000;
-    let a_ms = pace_ms * this.state.progress_miles;
-    let t_ms = this.state.now.diff(this.state.start);
-    let num = a_ms - t_ms;
-    let walk_pace_ms = this.state.paceWalkingMinutes * 60 * 1000;
-
-    if (pace_ms >= walk_pace_ms) {
-      return -1;
-    }
-    let den = 1 - (pace_ms / walk_pace_ms);
-
-    return moment.duration(num / den);
-
-  }
-
-  calculatePace(start, finish, miles) {
-    let pace = this.calculatePace2(start, finish, miles);
-
-    return this.formatPace(pace);
-  }
-
-  calculatePace2(start, finish, miles) {
-    let minutes = finish.diff(start, 'm');
-    return minutes / miles;
-  }
-
-
-  formatPace(pace) {
-    let prefix = "";
-    if (pace < 0) {
-      prefix = "-";
-      pace = -pace;
-    }
-    let min = Math.floor(pace);
-    let sec = (pace * 60) % 60;
-    return `${prefix}${min}:${sec.toFixed(0).padStart(2, '0')}`;
-  }
-
-  getAveragePace() {
-    // If no distance has been registered, return the required pace. Good for the initial setup
-    if(this.state.progress_miles <= 0.1) {
-      return this.getRequiredPace();
-    }
-    return this.calculatePace2(this.state.start, this.state.now, this.state.progress_miles);
-  }
-
-  getRequiredPace() {
-    return this.calculatePace2(this.state.start, this.state.finish, this.state.goal_miles);
-  }
-
-  // Positive is faster; negative is slower. Minutes/mile
-  getAheadOfPace() {
-    return this.getRequiredPace() - this.getAveragePace();
-  }
-
-  getPacePercent(pace) {
-    let mid = this.getRequiredPace();
-    let fastest = mid - this.state.paceSpanMinutes / 2;
-    let slowest = mid + this.state.paceSpanMinutes / 2;
-
-    if (pace > slowest) {
-      return 100;
-    }
-    else if (pace < fastest) {
-      return 0;
-    }
-    else {
-      return (pace - fastest) / this.state.paceSpanMinutes * 100;
-    }
-  }
-
-  getProjectedMiles() {
-    let total = this.state.finish.diff(this.state.start, 'm');
-    let elapsed = this.state.now.diff(this.state.start, 'm');
-
-    return total / elapsed * this.state.progress_miles;
-  }
-
-  getExpectedMiles() {
-    let total = this.state.finish.diff(this.state.start, 'm');
-    let elapsed = this.state.now.diff(this.state.start, 'm');
-
-    return elapsed / total * this.state.goal_miles;
-  }
-
-  getExpectedMilesDelta = () => this.state.progress_miles - this.getExpectedMiles();
-
-  milesToPercent(miles) {
-    let pct = miles / this.state.goal_miles * 100;
-    if(pct < 0) {
-      return 0;
-    }
-    else if(pct > 100) {
-      return 100;
-    }
-    return pct;
-  }
-
-  formatTime = (momentTime) => momentTime.format("h:mma").slice(0, -1);
-
   leftTableData = () => [
-    ['start', this.formatTime(this.state.start)],
-    ['finish', this.formatTime(this.state.finish)],
-    ['duration', `${this.convertDuration(this.state.start, this.state.finish)}`],
-    ['distance', `${this.state.goal_miles.toFixed(2)} ${labels.distance}`],
-    ['min pace', `${this.calculatePace(this.state.start, this.state.finish, this.state.goal_miles)} ${labels.pace}`],
+    ['start', this.ultraState.cvtDateTimeToTimeString(this.ultraState.dateTimeStart)],
+    ['finish', this.ultraState.cvtDateTimeToTimeString(this.ultraState.dateTimeFinish)],
+    ['duration', `${UltraClockState.cvtDurationMsToString(this.ultraState.durationMsTotal)}`],
+    ['distance', `${this.ultraState.distanceGoal.toFixed(2)} ${labels.distance}`],
+    ['min pace', `${this.ultraState.cvtPaceToString(this.ultraState.paceGoal)} ${labels.pace}`],
   ];
 
   rightTableData = () => [
-    ['now', this.formatTime(this.state.now)],
-    ['ran', `${this.state.progress_miles.toFixed(1)} ${labels.distance}`],
-    ['left', `${this.getMilesRemaining().toFixed(2)} ${labels.distance}`],
-    ['elapsed', `${this.isStarted() ? this.convertDuration(this.state.start, this.state.now) : "Not started"}`],
-    ['remaining', `${this.convertDuration(this.state.now, this.state.finish)}`],
-    ['avg pace', `${this.isStarted() ? this.calculatePace(this.state.start, this.state.now, this.state.progress_miles) : labels.na} ${labels.pace}`],
-    ['req pace', `${this.isStarted() ? this.calculatePace(this.state.now, this.state.finish, this.getMilesRemaining()) : labels.na} ${labels.pace}`],
-    ['projected', `${this.isStarted() ? this.getProjectedMiles().toFixed(2) : labels.na} mi`],
-    ['expected', `${this.isStarted() ? this.getExpectedMiles().toFixed(2) : labels.na} mi`],
+    ['now', this.ultraState.cvtDateTimeToTimeString(this.ultraState.nowProgress)],
+    ['ran', `${this.ultraState.distanceProgress.toFixed(1)} ${labels.distance}`],
+    ['left', `${this.ultraState.distanceRemaining.toFixed(2)} ${labels.distance}`],
+    ['elapsed', `${this.ultraState.isStarted ? this.ultraState.cvtDurationMsToString(this.ultraState.durationMsProgress) : "Not started"}`],
+    ['remaining', `${this.ultraState.cvtDurationMsToString(this.ultraState.durationMsRemaining)}`],
+    ['avg pace', `${this.ultraState.isStarted ? this.ultraState.cvtPaceToString(this.ultraState.paceActual) : labels.na} ${labels.pace}`],
+    // req pace broken
+    ['req pace', `${this.ultraState.isStarted ? this.ultraState.cvtPaceToString(this.ultraState.paceGoal) : labels.na} ${labels.pace}`],
+    ['projected', `${this.ultraState.isStarted ? this.ultraState.distanceProjected.toFixed(2) : labels.na} mi`],
+    ['expected', `${this.ultraState.isStarted ? this.ultraState.distanceExpectedNow.toFixed(2) : labels.na} mi`],
   ];
 
-  updateTime() {
-    this.setState({now: moment()});
-  }
 
   pressDateTime(date) {
     if (!this.state.showDatePicker) {
@@ -284,40 +106,26 @@ export default class MainPage extends Component {
     }
     else if (this.state.modeDatePicker === "date") {
       // Date was set. now select time
-      this.setState({showDatePicker: true, modeDatePicker: 'time', now: moment(date)});
+      this.setState({showDatePicker: true, modeDatePicker: 'time', wallClock: moment(date)});
     }
     else {
       // Time was set. done now.
-      this.setState({showDatePicker: false, modeDatePicker: 'date', now: moment(date)});
+      this.setState({showDatePicker: false, modeDatePicker: 'date', wallClock: moment(date)});
     }
   }
 
   showSkipAhead() {
     // Only worth skipping if it'll add at least a copule presses
-    return (this.getSkipAheadRaw() / this.state.milesStep) > 2.5;
-  }
-
-  getSkipAheadRaw() {
-    let pace_min = this.getAveragePace();
-    let skip_time_ms = this.state.wallClock.diff(this.state.now);
-    return (skip_time_ms / 60 / 1000) / pace_min;
-  }
-
-  getSkipAheadRounded() {
-    return Math.floor(this.getSkipAheadRaw() / this.state.milesStep) * this.state.milesStep;
-  }
-
-  getSkipAheadPostValue() {
-    return this.state.progress_miles + this.getSkipAheadRounded();
+    return this.ultraState.skipAheadSteps > 2.5;
   }
 
   skipAhead() {
-    this.updateProgressMiles(this.getSkipAheadPostValue());
+    this.updateProgressMiles(this.ultraState.distanceSkipAheadRounded);
   }
 
   componentDidMount() {
     setInterval(() => {
-      if(!this.inputSpinnerInFocus) {
+      if(!this.inputSpinnerInFocus && !this.state.demoMode) {
         this.setState({
           wallClock: moment()
         });
@@ -328,10 +136,7 @@ export default class MainPage extends Component {
   updateProgressMiles(num) {
     // Time quickly gets stale, which makes the stats deteriorate. Instead only show the time
     // for when the stats were updated
-    this.setState({progress_miles: num});
-    if (!this.state.demoMode) {
-      this.setState({now: this.state.wallClock});
-    }
+    this.setState({progress_miles: num, now: this.state.wallClock});
   }
 
   inputSpinnerFocus(focus) {
@@ -397,7 +202,7 @@ export default class MainPage extends Component {
               bottom: 20,
               left: 0,
             }}>
-              <Text style={{fontSize: 48, color: colorsDistance.progress}}>{this.getSkipAheadPostValue().toFixed(1)}</Text>
+              <Text style={{fontSize: 48, color: colorsDistance.progress}}>{this.ultraState.distanceSkipAheadRounded.toFixed(1)}</Text>
             </View>
           </NBButton>
         </View>}
@@ -409,17 +214,17 @@ export default class MainPage extends Component {
     let fill_pct;
     let deltaColor;
     let prefix = "";
-    if (this.getExpectedMilesDelta() > 0) {
+    if (this.ultraState.distanceAhead > 0) {
       // Expected is first
-      rotation_deg = this.milesToPercent(this.getExpectedMiles()) * 3.6;
-      fill_pct = this.milesToPercent(this.getExpectedMilesDelta());
+      rotation_deg = this.ultraState.cvtDistanceToPercent(this.ultraState.distanceExpectedNow) * 3.6;
+      fill_pct = this.ultraState.cvtDistanceToPercent(this.ultraState.distanceAhead);
       deltaColor = colorsDistance.deltaAhead;
       prefix = "+";
     }
     else {
       // Actual is first
-      rotation_deg = this.milesToPercent(this.state.progress_miles) * 3.6;
-      fill_pct = this.milesToPercent(-this.getExpectedMilesDelta());
+      rotation_deg = this.ultraState.cvtDistanceToPercent((this.ultraState.distanceProgress) * 3.6;
+      fill_pct = this.ultraState.cvtDistanceToPercent(-this.ultraState.distanceAhead);
       deltaColor = colorsDistance.deltaBehind;
     }
 
@@ -493,7 +298,7 @@ export default class MainPage extends Component {
                   rotation={0}
                   size={360}
                   width={15}
-                  fill={this.milesToPercent(this.state.progress_miles)}
+                  fill={this.ultraState.cvtDistanceToPercent(this.ultraState.distanceProgress)}
                   tintColor={colorsDistance.progress}
                   backgroundColor={colorsDistance.remaining}
                 >{
@@ -501,19 +306,19 @@ export default class MainPage extends Component {
                     <>
                     <Text style={Object.assign({}, styles.progressLabelMinor, {color: deltaColor})}>
                       <Icon style={styles.progressLabelMinor} name='share'/>{" "}
-                      {prefix}{this.isStarted() ? this.getExpectedMilesDelta().toFixed((1)) : "---"} {labels.distance}
+                      {prefix}{this.ultraState.isStarted ? this.ultraState.distanceAhead.toFixed((1)) : "---"} {labels.distance}
                     </Text>
                     <Text style={Object.assign({}, styles.progressLabelMain, {color: colorsDistance.progress})}>
                       <Icon style={styles.progressLabelMain} name='running'/>{" "}
-                      {this.state.progress_miles.toFixed((1))} {labels.distance}
+                      {this.ultraState.distanceProgress.toFixed((1))} {labels.distance}
                     </Text>
                     <Text style={Object.assign({}, styles.progressLabelMid, {color: colorsDistance.remaining})}>
                       <Icon style={styles.progressLabelMid} name='road'/>{" "}
-                      {this.getMilesRemaining().toFixed((2))} {labels.distance}
+                      {this.ultraState.distanceRemaining.toFixed((2))} {labels.distance}
                     </Text>
                     <Text style={Object.assign({}, styles.progressLabelMinor, {color: deltaColor})}>
                       <Icon style={styles.progressLabelMinor} name='chart-line'/> {" "}
-                      {this.getProjectedMiles().toFixed((2))} {labels.distance}
+                      {this.ultraState.distanceProjected.toFixed((2))} {labels.distance}
                     </Text>
                     </>
                   )
@@ -532,28 +337,28 @@ export default class MainPage extends Component {
                     {scaleX: -1}
                   ]
                 }}>
-                  <RNSpeedometer value={this.getPacePercent(this.getAveragePace())} size={300}
+                  <RNSpeedometer value={this.ultraState.cvtPaceToPercent(this.ultraState.paceActual)} size={300}
                                  labelNoteStyle={{fontSize: 0}} labelStyle={{fontSize: 0}}/>
                 </View>
                 <Text style={Object.assign({}, {color: colorsPace.average}, styles.progressLabelMain)}>
-                  {this.isStarted() ? this.formatPace(this.getAveragePace()) : labels.na}
+                  {this.ultraState.isStarted ? this.ultraState.cvtPaceToString(this.ultraState.paceActual) : labels.na}
                   <Text style={styles.progressLabelMinor}> {labels.pace}</Text>
                 </Text>
                 <Text style={Object.assign({},
                   styles.progressLabelMinor,
-                  {color: (this.getAheadOfPace() > 0) ? colorsPace.deltaAhead : colorsPace.deltaBehind})}
-                >{this.getAheadOfPace() > 0 ? "+" : ""}{
-                  this.isStarted() ? this.formatPace(this.getAheadOfPace()) : "---"}
+                  {color: (this.ultraState.paceAheadOfGoal > 0) ? colorsPace.deltaAhead : colorsPace.deltaBehind})}
+                >{this.ultraState.paceAheadOfGoal > 0 ? "+" : ""}{
+                  this.ultraState.isStarted ? this.ultraState.cvtPaceToString(this.ultraState.paceAheadOfGoal) : "---"}
                   <Text style={styles.progressLabelMinor}> {labels.pace}</Text>
                 </Text>
                 <Text style={Object.assign({},
                   styles.progressLabelSmall)}
                 >
                   <Icon style={styles.progressLabelSmall} name='bed'/>{" "}
-                  {this.getRestTimeToPace() > 0 && this.isStarted() ? this.formatDuration(this.getRestTimeToPace()) : "---"}
+                  {this.ultraState.durationRestTimeToPace > 0 && this.ultraState.isStarted ? UltraClockState.cvtDurationToString(this.ultraState.durationRestTimeToPace) : "---"}
                   {"  "}
                   <Icon style={styles.progressLabelSmall} name='walking'/>{" "}
-                  {this.getWalkTimeToPace() > 0 && this.isStarted() ? this.formatDuration(this.getWalkTimeToPace()) : "---"}
+                  {this.ultraState.durationWalkTimeToPace > 0 && this.ultraState.isStarted ? UltraClockState.cvtDurationToString(this.ultraState.durationWalkTimeToPace) : "---"}
                 </Text>
               </View>
               <MilesSelector/>
@@ -576,7 +381,7 @@ export default class MainPage extends Component {
                     </Text>
                     <Text style={Object.assign({}, styles.progressLabelMain, {color: colorsTime.progress})}>
                       <Icon style={styles.progressLabelMain} name='check-circle'/>{" "}
-                      {this.isStarted() ? this.convertDuration(this.state.start, this.state.now) : "---"}
+                      {this.ultraState.isStarted ? this.convertDuration(this.state.start, this.state.now) : "---"}
                     </Text>
                     <Text style={Object.assign({}, styles.progressLabelMid, {color: colorsTime.remaining})}>
                       <Icon style={styles.progressLabelMid} name='stopwatch'/>{" "}
@@ -585,12 +390,12 @@ export default class MainPage extends Component {
                     <Text style={Object.assign({}, styles.progressLabelMinor, {color: colorsTime.now})}>
                       <Icon style={styles.progressLabelMinor} name='flag-checkered'/>{" "}
                       <Icon style={styles.progressLabelMinor} name='clock'/>{" "}
-                      {this.isStarted() ? this.formatTime(this.getPredictedDoneTime()) : "---"}
+                      {this.ultraState.isStarted ? this.formatTime(this.getPredictedDoneTime()) : "---"}
                     </Text>
                     <Text style={Object.assign({}, styles.progressLabelMinor, {color: colorsTime.now})}>
                       <Icon style={styles.progressLabelMinor} name='flag-checkered'/>{" "}
                       <Icon style={styles.progressLabelMinor} name='stopwatch'/>{" "}
-                      {this.isStarted() ? this.formatDuration(this.getPredictedTimeRemaining()) : "---"}
+                      {this.ultraState.isStarted ? this.formatDuration(this.getPredictedTimeRemaining()) : "---"}
                     </Text>
                     </>
                   )
