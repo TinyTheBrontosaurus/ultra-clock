@@ -409,6 +409,39 @@ describe('Walk/rest', () => {
     expect(UltraClockState.cvtDurationToString(out.durationWalkTimeToPace)).toBe("0m");
     expect(UltraClockState.cvtDurationToString(out.durationToDistanceGoal)).toBe("7h 30m");
     expect(out.cvtPaceToString(out.paceAheadOfGoal)).toBe("0:00");
+    expect(out.cvtDateTimeToTimeString(out.dateTimeWallClock)).toBe("9:30a")
+
+  });
+});
+
+describe('cvtDateTimeToPercentOfDay', () => {
+  test("50", () => {
+    // Arrange
+    let dateTime = moment("2021-01-11T12:00");
+
+    // Act
+    let actual = UltraClockState.cvtDateTimeToPercentOfDay(dateTime);
+
+    expect(actual).toBe(50);
   });
 
+  test("25", () => {
+    // Arrange
+    let dateTime = moment("2021-01-11T06:00");
+
+    // Act
+    let actual = UltraClockState.cvtDateTimeToPercentOfDay(dateTime);
+
+    expect(actual).toBe(25);
+  });
+
+  test("75", () => {
+    // Arrange
+    let dateTime = moment("2021-01-11T18:00");
+
+    // Act
+    let actual = UltraClockState.cvtDateTimeToPercentOfDay(dateTime);
+
+    expect(actual).toBe(75);
+  });
 });

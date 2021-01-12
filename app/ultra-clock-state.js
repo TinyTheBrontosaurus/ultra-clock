@@ -334,7 +334,7 @@ export default class UltraClockState {
    * Convert a datetime to a string. The string only shows the time and omits the "m"
    * Example:
    *   1/4/2021 @ 10:56PM  ==> 10:56p
-   * @param datetime {moment}
+   * @param dateTime {moment}
    * @returns {string}
    */
   cvtDateTimeToTimeString(dateTime) {
@@ -411,11 +411,11 @@ export default class UltraClockState {
 
   static cvtDurationMsToPercentOfDay(duration) {
     const full_day = 24 * 60 * 60 * 1000;
-    return duration / full_day;
+    return (duration / full_day) * 100;
   }
 
   cvtDurationMsToPercentOfRace(duration) {
-    return duration / this.durationMsTotal;
+    return (duration / this.durationMsTotal) * 100;
   }
 
   // cvtDurationToPercent(duration) {

@@ -81,11 +81,11 @@ export default class MainPage extends Component {
   ];
 
   rightTableData = () => [
-    ['now', this.ultraState.cvtDateTimeToTimeString(this.ultraState.nowProgress)],
+    ['now', this.ultraState.cvtDateTimeToTimeString(this.ultraState.dateTimeNowProgress)],
     ['ran', `${this.ultraState.distanceProgress.toFixed(1)} ${labels.distance}`],
     ['left', `${this.ultraState.distanceRemaining.toFixed(2)} ${labels.distance}`],
-    ['elapsed', `${this.ultraState.isStarted ? this.ultraState.cvtDurationMsToString(this.ultraState.durationMsProgress) : "Not started"}`],
-    ['remaining', `${this.ultraState.cvtDurationMsToString(this.ultraState.durationMsRemaining)}`],
+    ['elapsed', `${this.ultraState.isStarted ? UltraClockState.cvtDurationMsToString(this.ultraState.durationMsProgress) : "Not started"}`],
+    ['remaining', `${UltraClockState.cvtDurationMsToString(this.ultraState.durationMsRemaining)}`],
     ['avg pace', `${this.ultraState.isStarted ? this.ultraState.cvtPaceToString(this.ultraState.paceActual) : labels.na} ${labels.pace}`],
     // req pace broken
     ['req pace', `${this.ultraState.isStarted ? this.ultraState.cvtPaceToString(this.ultraState.paceGoal) : labels.na} ${labels.pace}`],
@@ -137,7 +137,7 @@ export default class MainPage extends Component {
   updateProgressMiles(num) {
     // Time quickly gets stale, which makes the stats deteriorate. Instead only show the time
     // for when the stats were updated
-    this.setState({progress_miles: num, now: this.state.wallClock});
+    this.setState({distanceProgress: num, nowProgress: this.state.wallClock});
   }
 
   inputSpinnerFocus(focus) {
@@ -160,6 +160,8 @@ export default class MainPage extends Component {
   }
 
   render() {
+    this.ultraState.state = this.state;
+
     let MilesSelector = (props) => {
       return <View style={{
         justifyContent: 'center',
@@ -167,15 +169,15 @@ export default class MainPage extends Component {
         position: 'absolute',
         bottom: 0,
       }}>
-        <Text style={{fontSize: 20}}>{this.state.now.fromNow()}</Text>
+        <Text style={{fontSize: 20}}>{this.state.nowProgress.from(this.state.wallClock)}</Text>
         <InputSpinner
           min={0}
-          step={this.state.milesStep}
+          step={this.ultraState.distanceStep}
           type={"real"}
           precision={1}
           colorMax={"#f04048"}
           colorMin={"#40c5f4"}
-          value={this.state.progress_miles}
+          value={this.ultraState.distanceProgress}
           onChange={(num) => this.inputSpinnerChange(num)}
           onFocus={() => this.inputSpinnerFocus(true)}
           onBlur={() => this.inputSpinnerFocus(false)}
@@ -378,7 +380,7 @@ export default class MainPage extends Component {
                     <>
                     <Text style={Object.assign({}, styles.progressLabelMinor, {color: colorsTime.now})}>
                       <Icon style={styles.progressLabelMinor} name='clock'/>{" "}
-                      {this.ultraState.cvtDateTimeToTimeString(this.ultraState.nowProgress)}
+                      {this.ultraState.cvtDateTimeToTimeString(this.ultraState.dateTimeNowProgress)}
                     </Text>
                     <Text style={Object.assign({}, styles.progressLabelMain, {color: colorsTime.progress})}>
                       <Icon style={styles.progressLabelMain} name='check-circle'/>{" "}
@@ -396,7 +398,7 @@ export default class MainPage extends Component {
                     <Text style={Object.assign({}, styles.progressLabelMinor, {color: colorsTime.now})}>
                       <Icon style={styles.progressLabelMinor} name='flag-checkered'/>{" "}
                       <Icon style={styles.progressLabelMinor} name='stopwatch'/>{" "}
-                      {this.ultraState.isStarted ? UltraClockState.cvtDurationMsToString(this.ultraState.durationMsRemaining) : "---"}
+                      {this.ultraState.isStarted ? UltraClockState.cvtDurationMsToString(this.ultraState.durationToDistanceGoalMs) : "---"}
                     </Text>
                     </>
                   )
@@ -433,7 +435,7 @@ export default class MainPage extends Component {
                     mode={this.state.modeDatePicker}
                     is24Hour={false}
                     display="default"
-                    value={this.state.now.toDate()}
+                    value={this.state.nowProgress.toDate()}
                     onChange={(event, date) => this.pressDateTime(date)}
                   />
                 )}
