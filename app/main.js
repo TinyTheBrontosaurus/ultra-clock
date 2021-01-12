@@ -39,7 +39,7 @@ import UltraClockState from "./ultra-clock-state";
 export default class MainPage extends Component {
   constructor(props) {
     super(props);
-    const {VERSION_STRING} = VersionModule.getConstants();
+    const {VERSION_STRING} = VersionModule ? VersionModule.getConstants() : {VERSION_STRING: "mocked"};
     let start = () => moment("2020-12-30T07:13");
     this.state = {
       distanceProgress: 0,
@@ -59,7 +59,7 @@ export default class MainPage extends Component {
       version: VERSION_STRING,
       demoMode: false,
     };
-    this.ultraState = UltraClockState(this.state);
+    this.ultraState = new UltraClockState(this.state);
     this.inputSpinnerInFocus = false;
     this.inputSpinnerSave = 0;
     this.inputSpinnerSaveValid = false;
