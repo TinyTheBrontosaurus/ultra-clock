@@ -358,10 +358,10 @@ export default class MainPage extends Component {
                   styles.progressLabelSmall)}
                 >
                   <Icon style={styles.progressLabelSmall} name='bed'/>{" "}
-                  {this.ultraState.durationRestTimeToPace > 0 && this.ultraState.isStarted ? UltraClockState.cvtDurationToString(this.ultraState.durationRestTimeToPace) : "---"}
+                  {this.ultraState.durationMsRestTimeToPace > 0 && this.ultraState.isStarted ? UltraClockState.cvtDurationMsToString(this.ultraState.durationMsRestTimeToPace) : "---"}
                   {"  "}
                   <Icon style={styles.progressLabelSmall} name='walking'/>{" "}
-                  {this.ultraState.durationWalkTimeToPace > 0 && this.ultraState.isStarted ? UltraClockState.cvtDurationToString(this.ultraState.durationWalkTimeToPace) : "---"}
+                  {this.ultraState.durationMsWalkTimeToPace > 0 && this.ultraState.isStarted ? UltraClockState.cvtDurationMsToString(this.ultraState.durationMsWalkTimeToPace) : "---"}
                 </Text>
               </View>
               <MilesSelector/>

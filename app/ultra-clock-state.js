@@ -162,17 +162,17 @@ export default class UltraClockState {
    * How much time can we rest and still hit the goal; assumes the current pace when not resting
    * @returns {moment.duration}
    */
-  get durationRestTimeToPace() {
+  get durationMsRestTimeToPace() {
     let ms_whole_race = (this.paceGoal * this.distanceProgress * 60 * 1000);
     let ms_so_far =  this.dateTimeNowProgress.diff(this.dateTimeStart);
-    return moment.duration(ms_whole_race - ms_so_far);
+    return ms_whole_race - ms_so_far;
   }
 
   /**
    * How much time can we walk and still hit the goal; assumes the current pace when not walking
-   * @returns {moment.duration | int}
+   * @returns {number}
    */
-  get durationWalkTimeToPace() {
+  get durationMsWalkTimeToPace() {
     let pace_ms = this.paceGoal * 60 * 1000;
     let a_ms = pace_ms * this.distanceProgress;
     let t_ms = this.dateTimeNowProgress.diff(this.dateTimeStart);
@@ -184,7 +184,7 @@ export default class UltraClockState {
     }
     let den = 1 - (pace_ms / walk_pace_ms);
 
-    return moment.duration(num / den);
+    return num / den;
   }
 
   /**

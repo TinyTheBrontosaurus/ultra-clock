@@ -41,8 +41,8 @@ describe('Accessors', () => {
     expect(out.distanceProjected).toBeCloseTo(50, 2);
     expect(out.distanceAhead).toBeCloseTo(0, 2);
     expect(out.isStarted).toBe(false);
-    expect(out.durationRestTimeToPace.asMilliseconds()).toBeCloseTo(0, 2);
-    expect(out.durationWalkTimeToPace.asMilliseconds()).toBeCloseTo(0, 2);
+    expect(out.durationMsRestTimeToPace).toBeCloseTo(0, 2);
+    expect(out.durationMsWalkTimeToPace).toBeCloseTo(0, 2);
     expect(out.durationToDistanceGoalMs).toBe(hmToMilliseconds(9, 7));
     expect(out.durationToDistanceGoal.asMilliseconds()).toBe(hmToMilliseconds(9, 7));
     expect(out.dateTimeToDistanceGoal.format()).toBe("2020-12-30T16:20:00Z");
@@ -89,8 +89,8 @@ describe('Accessors', () => {
     expect(out.distanceProjected).toBeCloseTo(50, 2);
     expect(out.distanceAhead).toBeCloseTo(0, 2);
     expect(out.isStarted).toBe(false);
-    expect(out.durationRestTimeToPace.asMilliseconds()).toBeCloseTo(0, 2);
-    expect(out.durationWalkTimeToPace.asMilliseconds()).toBeCloseTo(0, 2);
+    expect(out.durationMsRestTimeToPace).toBeCloseTo(0, 2);
+    expect(out.durationMsWalkTimeToPace).toBeCloseTo(0, 2);
     expect(out.durationToDistanceGoalMs).toBe(hmToMilliseconds(9, 7));
     expect(out.durationToDistanceGoal.asMilliseconds()).toBe(hmToMilliseconds(9, 7));
     expect(out.dateTimeToDistanceGoal.format()).toBe("2020-12-30T16:20:00Z");
@@ -141,8 +141,8 @@ describe('Accessors', () => {
     expect(out.distanceProjected).toBeCloseTo(52.37, 2);
     expect(out.distanceAhead).toBeCloseTo(0.2, 2);
     expect(out.isStarted).toBe(true);
-    expect(UltraClockState.cvtDurationToString(out.durationRestTimeToPace)).toBe("2m");
-    expect(UltraClockState.cvtDurationToString(out.durationWalkTimeToPace)).toBe("4m");
+    expect(UltraClockState.cvtDurationMsToString(out.durationMsRestTimeToPace)).toBe("2m");
+    expect(UltraClockState.cvtDurationMsToString(out.durationMsWalkTimeToPace)).toBe("4m");
     expect(UltraClockState.cvtDurationToString(out.durationToDistanceGoal)).toBe("7h 55m");
     expect(out.dateTimeToDistanceGoal.format()).toBe("2020-12-30T15:55:13Z");
     expect(out.cvtPaceToString(out.paceAheadOfGoal)).toBe("0:30");
@@ -192,8 +192,8 @@ describe('Accessors', () => {
     expect(out.distanceProjected).toBeCloseTo(52.37, 2);
     expect(out.distanceAhead).toBeCloseTo(0.2, 2);
     expect(out.isStarted).toBe(true);
-    expect(UltraClockState.cvtDurationToString(out.durationRestTimeToPace)).toBe("2m");
-    expect(UltraClockState.cvtDurationToString(out.durationWalkTimeToPace)).toBe("4m");
+    expect(UltraClockState.cvtDurationMsToString(out.durationMsRestTimeToPace)).toBe("2m");
+    expect(UltraClockState.cvtDurationMsToString(out.durationMsWalkTimeToPace)).toBe("4m");
     expect(UltraClockState.cvtDurationToString(out.durationToDistanceGoal)).toBe("7h 55m");
     expect(out.dateTimeToDistanceGoal.format()).toBe("2020-12-30T15:55:13Z");
     expect(out.cvtPaceToString(out.paceAheadOfGoal)).toBe("0:30");
@@ -243,8 +243,8 @@ describe('Accessors', () => {
     expect(out.distanceProjected).toBeCloseTo(74.13, 2);
     expect(out.distanceAhead).toBeCloseTo(4.72, 2);
     expect(out.isStarted).toBe(true);
-    expect(UltraClockState.cvtDurationToString(out.durationRestTimeToPace)).toBe("51m");
-    expect(UltraClockState.cvtDurationToString(out.durationWalkTimeToPace)).toBe("1h 53m");
+    expect(UltraClockState.cvtDurationMsToString(out.durationMsRestTimeToPace)).toBe("51m");
+    expect(UltraClockState.cvtDurationMsToString(out.durationMsWalkTimeToPace)).toBe("1h 53m");
     expect(UltraClockState.cvtDurationToString(out.durationToDistanceGoal)).toBe("4h 21m");
     expect(out.dateTimeToDistanceGoal.format()).toBe("2020-12-30T13:21:57Z");
     expect(out.cvtPaceToString(out.paceAheadOfGoal)).toBe("3:34");
@@ -295,8 +295,8 @@ describe('Accessors', () => {
     expect(out.distanceProjected).toBeCloseTo(50.79, 2);
     expect(out.distanceAhead).toBeCloseTo(0.84, 2);
     expect(out.isStarted).toBe(true);
-    expect(UltraClockState.cvtDurationToString(out.durationRestTimeToPace)).toBe("9m");
-    expect(UltraClockState.cvtDurationToString(out.durationWalkTimeToPace)).toBe("20m");
+    expect(UltraClockState.cvtDurationMsToString(out.durationMsRestTimeToPace)).toBe("9m");
+    expect(UltraClockState.cvtDurationMsToString(out.durationMsWalkTimeToPace)).toBe("20m");
     expect(UltraClockState.cvtDurationToString(out.durationToDistanceGoal)).toBe("-48m");
     expect(out.dateTimeToDistanceGoal.format()).toBe("2020-12-30T16:11:31Z");
     expect(out.cvtPaceToString(out.paceAheadOfGoal)).toBe("0:10");
@@ -337,8 +337,8 @@ describe('Walk/rest', () => {
     expect(out.distanceProjected).toBeCloseTo(80, 2);
     expect(out.distanceAhead).toBeCloseTo(3, 2);
     expect(out.isStarted).toBe(true);
-    expect(UltraClockState.cvtDurationToString(out.durationRestTimeToPace)).toBe("30m");
-    expect(UltraClockState.cvtDurationToString(out.durationWalkTimeToPace)).toBe("1h 0m");
+    expect(UltraClockState.cvtDurationMsToString(out.durationMsRestTimeToPace)).toBe("30m");
+    expect(UltraClockState.cvtDurationMsToString(out.durationMsWalkTimeToPace)).toBe("1h 0m");
     expect(UltraClockState.cvtDurationToString(out.durationToDistanceGoal)).toBe("6h 0m");
     expect(out.cvtPaceToString(out.paceAheadOfGoal)).toBe("2:30");
   });
@@ -371,8 +371,8 @@ describe('Walk/rest', () => {
     expect(out.distanceProjected).toBeCloseTo(60, 2);
     expect(out.distanceAhead).toBeCloseTo(0, 2);
     expect(out.isStarted).toBe(true);
-    expect(UltraClockState.cvtDurationToString(out.durationRestTimeToPace)).toBe("0m");
-    expect(UltraClockState.cvtDurationToString(out.durationWalkTimeToPace)).toBe("0m");
+    expect(UltraClockState.cvtDurationMsToString(out.durationMsRestTimeToPace)).toBe("0m");
+    expect(UltraClockState.cvtDurationMsToString(out.durationMsWalkTimeToPace)).toBe("0m");
     expect(UltraClockState.cvtDurationToString(out.durationToDistanceGoal)).toBe("8h 0m");
     expect(out.cvtPaceToString(out.paceAheadOfGoal)).toBe("0:00");
   });
@@ -405,8 +405,8 @@ describe('Walk/rest', () => {
     expect(out.distanceProjected).toBeCloseTo(60, 2);
     expect(out.distanceAhead).toBeCloseTo(0, 2);
     expect(out.isStarted).toBe(true);
-    expect(UltraClockState.cvtDurationToString(out.durationRestTimeToPace)).toBe("0m");
-    expect(UltraClockState.cvtDurationToString(out.durationWalkTimeToPace)).toBe("0m");
+    expect(UltraClockState.cvtDurationMsToString(out.durationMsRestTimeToPace)).toBe("0m");
+    expect(UltraClockState.cvtDurationMsToString(out.durationMsWalkTimeToPace)).toBe("0m");
     expect(UltraClockState.cvtDurationToString(out.durationToDistanceGoal)).toBe("7h 30m");
     expect(out.cvtPaceToString(out.paceAheadOfGoal)).toBe("0:00");
     expect(out.cvtDateTimeToTimeString(out.dateTimeWallClock)).toBe("9:30a")
