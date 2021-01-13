@@ -52,7 +52,7 @@ export default class MainPage extends Component {
       // Distance from far sides of the speedometer in min/mile
       paceSpanMinutes: 5,
       // Walking pace, in minutes per mile
-      paceWalkingMinutes: 20,
+      paceStandardWalking: 20,
 
       showDatePicker: false,
       modeDatePicker: "date",
@@ -358,10 +358,10 @@ export default class MainPage extends Component {
                   styles.progressLabelSmall)}
                 >
                   <Icon style={styles.progressLabelSmall} name='bed'/>{" "}
-                  {this.ultraState.durationMsRestTimeToPace > 0 && this.ultraState.isStarted ? UltraClockState.cvtDurationMsToString(this.ultraState.durationMsRestTimeToPace) : "---"}
+                  {((this.ultraState.durationMsRestTimeToPace > 0) && this.ultraState.isStarted) ? UltraClockState.cvtDurationMsToString(this.ultraState.durationMsRestTimeToPace) : "---"}
                   {"  "}
                   <Icon style={styles.progressLabelSmall} name='walking'/>{" "}
-                  {this.ultraState.durationMsWalkTimeToPace > 0 && this.ultraState.isStarted ? UltraClockState.cvtDurationMsToString(this.ultraState.durationMsWalkTimeToPace) : "---"}
+                  {((this.ultraState.durationMsWalkTimeToPace > 0) && this.ultraState.isStarted) ? UltraClockState.cvtDurationMsToString(this.ultraState.durationMsWalkTimeToPace) : "---"}
                 </Text>
               </View>
               <MilesSelector/>
