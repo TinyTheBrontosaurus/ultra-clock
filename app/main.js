@@ -33,9 +33,10 @@ import RNSpeedometer from 'react-native-speedometer';
 import UltraClockState from "./ultra-clock-state";
 
 
-const DEMO_WALL_CLOCK = "demo-wall-clock";
-const SET_START = "set-start";
-const SET_FINISH = "set-finish";
+// The fields in `state` that will be updated by the date picker
+const DEMO_WALL_CLOCK = "wallClock";
+const SET_START = "start";
+const SET_FINISH = "finish";
 
 /**
  * The full board for crickets, including all the targets, the control board, and the statistics
@@ -63,6 +64,7 @@ export default class MainPage extends Component {
       version: VERSION_STRING,
       demoMode: false,
       editable: false,
+      targetDatePicker: SET_START,
     };
     this.ultraState = new UltraClockState(this.state);
     this.inputSpinnerInFocus = false;
@@ -99,7 +101,20 @@ export default class MainPage extends Component {
   ];
 
 
+  /**
+   *
+   * @param state
+   * @param mode
+   * @private
+   */
+  localSetState(mode, date, state) {
+    state[mode] = moment(date);
+    this.setState(state);
+  }
+
   pressDateTime(mode, date) {
+    this.state.targetDatePicker = mode;
+
     if (!this.state.showDatePicker) {
       // Button pressed
       this.setState({showDatePicker: true, modeDatePicker: 'date'});
@@ -112,21 +127,14 @@ export default class MainPage extends Component {
     }
     else if (this.state.modeDatePicker === "date") {
       // Date was set. now select time
-      this.setState({showDatePicker: true, modeDatePicker: 'time'});
+      let stateDelta = {showDatePicker: true, modeDatePicker: 'time'};
+      stateDelta[mode] = moment(date);
+      this.setState(stateDelta);
     }
     else {
-      // Time was set. done now.
-      let state_delta = {showDatePicker: false, modeDatePicker: 'date'};
-      if(mode === DEMO_WALL_CLOCK) {
-        state_delta["wallClock"] = moment(date);
-      }
-      else if(mode === SET_START) {
-        state_delta["start"] = moment(date);
-      } else {
-        state_delta["finish"] = moment(date);
-      }
-      this.setState(state_delta);
-
+      let stateDelta = {showDatePicker: false, modeDatePicker: 'date'};
+      stateDelta[mode] = moment(date);
+      this.setState(stateDelta);
     }
   }
 
@@ -141,7 +149,7 @@ export default class MainPage extends Component {
 
   componentDidMount() {
     setInterval(() => {
-      if(!this.inputSpinnerInFocus && !this.state.demoMode) {
+      if(!this.inputSpinnerInFocus && !this.state.demoMode && !this.state.showDatePicker) {
         this.setState({
           wallClock: moment()
         });
@@ -174,14 +182,14 @@ export default class MainPage extends Component {
     }
   }
 
-  dateTimePicker(mode) {
+  dateTimePicker() {
     return (<DateTimePicker
       testID="dateTimePicker"
       mode={this.state.modeDatePicker}
       is24Hour={false}
       display="default"
-      value={this.state.nowProgress.toDate()}
-      onChange={(event, date) => this.pressDateTime(mode, date)}
+      value={this.state[this.state.targetDatePicker].toDate()}
+      onChange={(event, date) => this.pressDateTime(this.state.targetDatePicker, date)}
     />);
   }
 
@@ -338,6 +346,7 @@ export default class MainPage extends Component {
                 color="#40c5f4"
               />
               </>}
+              {this.state.showDatePicker && this.dateTimePicker()}
               <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
                 <Rows data={this.leftTableData()} textStyle={{fontSize: 36}}/>
               </Table>

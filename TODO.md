@@ -69,6 +69,7 @@
 
 ---
 ## Backlog
+- [ ] Error states?
 - [ ] Add ways to change start/stop/distance using presets
 - [ ] Add way to set width of target pace
 - [ ] Add miles auto-set from RunKeeper
