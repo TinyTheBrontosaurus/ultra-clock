@@ -33,6 +33,10 @@ import RNSpeedometer from 'react-native-speedometer';
 import UltraClockState from "./ultra-clock-state";
 
 
+const DEMO_WALL_CLOCK = "demo-wall-clock";
+const SET_START = "set-start";
+const SET_FINISH = "set-finish";
+
 /**
  * The full board for crickets, including all the targets, the control board, and the statistics
  */
@@ -58,6 +62,7 @@ export default class MainPage extends Component {
       modeDatePicker: "date",
       version: VERSION_STRING,
       demoMode: false,
+      editable: false,
     };
     this.ultraState = new UltraClockState(this.state);
     this.inputSpinnerInFocus = false;
@@ -94,7 +99,7 @@ export default class MainPage extends Component {
   ];
 
 
-  pressDateTime(date) {
+  pressDateTime(mode, date) {
     if (!this.state.showDatePicker) {
       // Button pressed
       this.setState({showDatePicker: true, modeDatePicker: 'date'});
@@ -107,11 +112,21 @@ export default class MainPage extends Component {
     }
     else if (this.state.modeDatePicker === "date") {
       // Date was set. now select time
-      this.setState({showDatePicker: true, modeDatePicker: 'time', wallClock: moment(date)});
+      this.setState({showDatePicker: true, modeDatePicker: 'time'});
     }
     else {
       // Time was set. done now.
-      this.setState({showDatePicker: false, modeDatePicker: 'date', wallClock: moment(date)});
+      let state_delta = {showDatePicker: false, modeDatePicker: 'date'};
+      if(mode === DEMO_WALL_CLOCK) {
+        state_delta["wallClock"] = moment(date);
+      }
+      else if(mode === SET_START) {
+        state_delta["start"] = moment(date);
+      } else {
+        state_delta["finish"] = moment(date);
+      }
+      this.setState(state_delta);
+
     }
   }
 
@@ -157,6 +172,17 @@ export default class MainPage extends Component {
       this.inputSpinnerSave = num;
       this.inputSpinnerSaveValid = true;
     }
+  }
+
+  dateTimePicker(mode) {
+    return (<DateTimePicker
+      testID="dateTimePicker"
+      mode={this.state.modeDatePicker}
+      is24Hour={false}
+      display="default"
+      value={this.state.nowProgress.toDate()}
+      onChange={(event, date) => this.pressDateTime(mode, date)}
+    />);
   }
 
   render() {
@@ -237,6 +263,20 @@ export default class MainPage extends Component {
         <ListItem icon>
           <Left>
             <NBButton style={{backgroundColor: "#FF9501"}}>
+              <NBIcon active name="pencil"/>
+            </NBButton>
+          </Left>
+          <Body>
+          <Text>Edit Course</Text>
+          </Body>
+          <Right>
+            <Switch value={this.state.editable}
+                    onValueChange={(val) => this.setState({editable: val})}/>
+          </Right>
+        </ListItem>
+        <ListItem icon>
+          <Left>
+            <NBButton style={{backgroundColor: "#FF3503"}}>
               <NBIcon active name="airplane"/>
             </NBButton>
           </Left>
@@ -281,6 +321,23 @@ export default class MainPage extends Component {
           </Header>
           <Tabs>
             <Tab heading="Course">
+              {this.state.editable &&
+              <>
+              <Button
+                onPress={() => this.pressDateTime(SET_START)}
+                title={`Set start time (${this.state.start.format()})`}
+                color="#40c5f4"
+              />
+              <Button
+                onPress={() => this.pressDateTime(SET_FINISH)}
+                title={`Set finish time (${this.state.finish.format()})`}
+                color="#40c5f4"
+              />
+              <Button
+                title={`Set distance (${this.ultraState.distanceGoal})`}
+                color="#40c5f4"
+              />
+              </>}
               <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
                 <Rows data={this.leftTableData()} textStyle={{fontSize: 36}}/>
               </Table>
@@ -410,7 +467,7 @@ export default class MainPage extends Component {
               <View style={styles.body}>
                 <View style={styles.sectionContainer}>
                   <Button
-                    onPress={() => this.pressDateTime()}
+                    onPress={() => this.pressDateTime(DEMO_WALL_CLOCK)}
                     title={`Set wall time`}
                     color="#40c5f4"
                   />
@@ -429,16 +486,7 @@ export default class MainPage extends Component {
                     </Table>
                   </View>
                 </View>
-                {this.state.showDatePicker && (
-                  <DateTimePicker
-                    testID="dateTimePicker"
-                    mode={this.state.modeDatePicker}
-                    is24Hour={false}
-                    display="default"
-                    value={this.state.nowProgress.toDate()}
-                    onChange={(event, date) => this.pressDateTime(date)}
-                  />
-                )}
+                {this.state.showDatePicker && this.dateTimePicker(DEMO_WALL_CLOCK)}
               </View>
               <MilesSelector/>
             </Tab>}

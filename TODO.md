@@ -59,6 +59,7 @@
 - [x] Miles editor interrupted by self-edit
 ---
 ## Release MVP
+- [x] Add testing for math and string formatting
 - [ ] Lay out save object
 - [ ] Save state to DB
 - [ ] Remove hardcoded dates & distances
@@ -85,4 +86,3 @@
 - [ ] Show percentages of completion
 - [ ] Show "repeat what you did X more times"
 - [ ] Keep the phone unlocked
-- [ ] Add testing for math and string formatting
