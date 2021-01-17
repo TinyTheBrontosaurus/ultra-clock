@@ -62,8 +62,8 @@
 - [x] Add testing for math and string formatting
 - [ ] Lay out save object
 - [ ] Save state to DB
-- [ ] Remove hardcoded dates & distances
-- [ ] Add way to set start, stop, and distance
+- [x] Remove hardcoded dates & distances
+- [x] Add way to set start, stop, and distance
 - [ ] App icon
 - [ ] Post on app store
 - [ ] Fix time picker to use UTC

@@ -325,7 +325,7 @@ export default class MainPage extends Component {
                   color="#40c5f4"
                   height
                 />
-                <Text style={{minWidth: '10%'}}></Text>
+                <Text style={{minWidth: '10%'}}/>
                 <Button
                   onPress={() => this.pressDateTime(SET_FINISH)}
                   title={`Set finish time (${this.state.finish.format()})`}
