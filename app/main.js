@@ -101,17 +101,6 @@ export default class MainPage extends Component {
   ];
 
 
-  /**
-   *
-   * @param state
-   * @param mode
-   * @private
-   */
-  localSetState(mode, date, state) {
-    state[mode] = moment(date);
-    this.setState(state);
-  }
-
   pressDateTime(mode, date) {
     this.state.targetDatePicker = mode;
 
@@ -328,27 +317,53 @@ export default class MainPage extends Component {
             </Body>
           </Header>
           <Tabs>
-            <Tab heading="Course">
-              {this.state.editable &&
-              <>
-              <Button
-                onPress={() => this.pressDateTime(SET_START)}
-                title={`Set start time (${this.state.start.format()})`}
-                color="#40c5f4"
-              />
-              <Button
-                onPress={() => this.pressDateTime(SET_FINISH)}
-                title={`Set finish time (${this.state.finish.format()})`}
-                color="#40c5f4"
-              />
-              <Button
-                title={`Set distance (${this.ultraState.distanceGoal})`}
-                color="#40c5f4"
-              />
-              </>}
-              {this.state.showDatePicker && this.dateTimePicker()}
+            {this.state.editable && <Tab heading="Edit Course">
+              <View style={{width: '45%', flexDirection: "row"}}>
+                <Button
+                  onPress={() => this.pressDateTime(SET_START)}
+                  title={`Set start time \n(${this.state.start.format()})`}
+                  color="#40c5f4"
+                  height
+                />
+                <Text style={{minWidth: '10%'}}></Text>
+                <Button
+                  onPress={() => this.pressDateTime(SET_FINISH)}
+                  title={`Set finish time (${this.state.finish.format()})`}
+                  color="#40c5f4"
+                />
+              </View>
+              <Text style={{fontSize: 20}}>Goal ({labels.distance})</Text>
+              <InputSpinner
+                min={0}
+                step={1}
+                type={"real"}
+                precision={2}
+                colorMax={"#f04048"}
+                colorMin={"#40c5f4"}
+                value={this.ultraState.distanceGoal}
+                onChange={(num) => this.setState({distanceGoal: num})}
+                onFocus={() => this.inputSpinnerFocus(true)}
+                onBlur={() => this.inputSpinnerFocus(false)}
+                fontSize={48}
+                buttonFontSize={48}
+                height={100}
+                width={350}
+                rounded={false}
+                showBorder={true}
+              >
+              </InputSpinner>
               <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
-                <Rows data={this.leftTableData()} textStyle={{fontSize: 36}}/>
+                <Rows data={[
+                  ['duration', `${UltraClockState.cvtDurationMsToString(this.ultraState.durationMsTotal)}`],
+                  ['min pace', `${this.ultraState.cvtPaceToString(this.ultraState.paceGoal)} ${labels.pace}`],
+                  ]
+                } textStyle={{fontSize: 36}}/>
+              </Table>
+              {this.state.showDatePicker && this.dateTimePicker()}
+            </Tab>}
+            <Tab heading="Course">
+              <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+                  <Rows data={this.leftTableData()} textStyle={{fontSize: 36}}/>
               </Table>
               <MilesSelector/>
             </Tab>

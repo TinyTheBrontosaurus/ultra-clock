@@ -66,6 +66,7 @@
 - [ ] Add way to set start, stop, and distance
 - [ ] App icon
 - [ ] Post on app store
+- [ ] Fix time picker to use UTC
 
 ---
 ## Backlog
