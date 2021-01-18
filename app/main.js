@@ -74,16 +74,30 @@ export default class MainPage extends Component {
     this.inputSpinnerSave = 0;
     this.inputSpinnerSaveValid = false;
 
+    // Load persistent storage
     const getData = async () => {
       try {
         const jsonValue = await AsyncStorage.getItem('@activeCourse');
         return (jsonValue !== null) ? JSON.parse(jsonValue) : null;
       } catch(e) {
         // error reading value
-        // Empty -- Stick with defaults
+        // Stick with defaults but move the user towards the edit screen
+        this.setState({editable: true});
       }
     };
     getData().then((loadedState) => {
+      if(!loadedState) {
+        // Stick with defaults but move the user towards the edit screen
+        this.setState({editable: true});
+        return;
+      }
+      ["start", "finish", "nowProgress", "wallClock"].forEach(element => {
+        // In case wallClock is serialized, convert it. Otherwise ignore it
+        if(element in loadedState) {
+          loadedState[element] = moment(loadedState[element]);
+        }
+      });
+
       this.setState(loadedState);
     });
   }
@@ -93,10 +107,11 @@ export default class MainPage extends Component {
       // Mark all of the values not to save
       // https://stackoverflow.com/a/44144355/5360912
       const {showDatePicker, modeDatePicker, version, demoMode, editable, targetDatePicker,
+        wallClock,
         ...toSave} = this.state;
 
       const jsonValue = JSON.stringify(toSave);
-      await AsyncStorage.setItem('@activeCourse', jsonValue)
+      await AsyncStorage.setItem('@activeCourse', jsonValue);
     } catch (e) {
       // saving error
     }
@@ -104,6 +119,12 @@ export default class MainPage extends Component {
 
   componentDidUpdate() {
     this.saveState().then();
+    // Deal with the case when "now" is earlier than start; happens when changing
+    // the start time
+    if(this.state.nowProgress < this.state.start) {
+      this.setState({nowProgress: this.state.start});
+    }
+
   }
 
   closeDrawer = () => {
@@ -162,7 +183,7 @@ export default class MainPage extends Component {
   }
 
   showSkipAhead() {
-    // Only worth skipping if it'll add at least a copule presses
+    // Only worth skipping if it'll add at least a couple presses
     return this.ultraState.skipAheadSteps > 2.5;
   }
 

@@ -13,6 +13,9 @@ there's no celestial indication that we're getting later in the day"
 Podcast above at 23:45
 
 # History
+* v0.5.0 (01/18/2021) -- Add setting and saving of course information
+* v0.4.5 (01/12/2021) -- Fix walk/rest calculations; added tons of unit tests
+* v0.4.4 (12/29/2020) -- Hardcode to 12/30
 * v0.4.3 (12/28/2020) -- Hardcode to 12/29
 * v0.4.2 (12/28/2020) -- Fix skip-ahead bugs. Fix input spinner focus bugs. 
 * v0.4.1 (12/27/2020) -- Fix NaN edge cases when "Now" is outside the race window
