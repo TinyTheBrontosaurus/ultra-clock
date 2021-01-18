@@ -31,6 +31,7 @@ import {AnimatedCircularProgress} from 'react-native-circular-progress';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import RNSpeedometer from 'react-native-speedometer';
 import UltraClockState from "./ultra-clock-state";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 // The fields in `state` that will be updated by the date picker
@@ -58,7 +59,9 @@ export default class MainPage extends Component {
       paceSpanMinutes: 5,
       // Walking pace, in minutes per mile
       paceStandardWalking: 20,
+      courseName: "Soul-Searching Ultra Clock",
 
+      // Values not saved are below. Saved values are above
       showDatePicker: false,
       modeDatePicker: "date",
       version: VERSION_STRING,
@@ -70,6 +73,37 @@ export default class MainPage extends Component {
     this.inputSpinnerInFocus = false;
     this.inputSpinnerSave = 0;
     this.inputSpinnerSaveValid = false;
+
+    const getData = async () => {
+      try {
+        const jsonValue = await AsyncStorage.getItem('@activeCourse');
+        return (jsonValue !== null) ? JSON.parse(jsonValue) : null;
+      } catch(e) {
+        // error reading value
+        // Empty -- Stick with defaults
+      }
+    };
+    getData().then((loadedState) => {
+      this.setState(loadedState);
+    });
+  }
+
+  saveState = async() => {
+    try {
+      // Mark all of the values not to save
+      // https://stackoverflow.com/a/44144355/5360912
+      const {showDatePicker, modeDatePicker, version, demoMode, editable, targetDatePicker,
+        ...toSave} = this.state;
+
+      const jsonValue = JSON.stringify(toSave);
+      await AsyncStorage.setItem('@activeCourse', jsonValue)
+    } catch (e) {
+      // saving error
+    }
+  };
+
+  componentDidUpdate() {
+    this.saveState().then();
   }
 
   closeDrawer = () => {
@@ -313,7 +347,7 @@ export default class MainPage extends Component {
               </NBButton>
             </Left>
             <Body>
-            <Title>Soul-Searching Ultra Clock</Title>
+            <Title>{this.state.courseName}</Title>
             </Body>
           </Header>
           <Tabs>
