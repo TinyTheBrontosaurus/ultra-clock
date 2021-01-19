@@ -64,7 +64,7 @@
 - [x] Save state to DB
 - [x] Remove hardcoded dates & distances
 - [x] Add way to set start, stop, and distance
-- [ ] App icon
+- [x] App icon
 - [ ] Post on app store
 - [ ] Fix time picker to use UTC
 
