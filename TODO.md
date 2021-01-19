@@ -70,9 +70,9 @@
 
 ---
 ## Backlog
-- [ ] Error states?
+- [ ] Error states? Like if duration is negative
 - [ ] Add ways to change start/stop/distance using presets
-- [ ] Add way to set width of target pace
+- [ ] Add way to set width of target pace (in min/mi)
 - [ ] Add miles auto-set from RunKeeper
 - [ ] About page
 - [ ] Add Bryan's quote
