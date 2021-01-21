@@ -65,17 +65,20 @@
 - [x] Remove hardcoded dates & distances
 - [x] Add way to set start, stop, and distance
 - [x] App icon
-- [ ] Post on app store
-- [ ] Fix time picker to use UTC
+- [x] Post on app store
 
 ---
-## Backlog
-- [ ] Error states? Like if duration is negative
-- [ ] Add ways to change start/stop/distance using presets
-- [ ] Add way to set width of target pace (in min/mi)
-- [ ] Add miles auto-set from RunKeeper
+## Next release
 - [ ] About page
 - [ ] Add Bryan's quote
+- [ ] Help page
+
+
+## Backlog
+- [ ] Notify HWYRT
+- [ ] Fix time picker to use UTC
+- [ ] Error states? Like if duration is negative
+- [ ] Add way to set width of target pace (in min/mi)
 - [x] Split up tables (Parameters, distance, time)
 - [ ] Dark mode
 - [x] Redesign front end
@@ -88,3 +91,7 @@
 - [ ] Show percentages of completion
 - [ ] Show "repeat what you did X more times"
 - [ ] Keep the phone unlocked
+
+## Deferred
+- [ ] Add ways to change start/stop/distance using presets
+- [ ] Add miles auto-set from RunKeeper
