@@ -93,7 +93,7 @@ export default class MainPage extends Component {
         this.setState({editable: true, showAbout: true});
         return;
       }
-      ["start", "finish", "nowProgress", "wallClock", "showAbout"].forEach(element => {
+      ["start", "finish", "nowProgress", "wallClock"].forEach(element => {
         // In case wallClock is serialized, convert it. Otherwise ignore it
         if(element in loadedState) {
           loadedState[element] = moment(loadedState[element]);
@@ -356,8 +356,14 @@ export default class MainPage extends Component {
           <Text>{this.state.version}</Text>
           </Body>
         </ListItem>
-        <ListItem>
-          <Text>About / Help</Text>
+        <ListItem icon onPress={() => this.setState({showAbout: true})}>
+          <Left>
+            <NBButton style={{backgroundColor: "#7A00FF"}}>
+              <NBIcon active name="help"/>
+            </NBButton>
+          </Left>
+          <Body>
+              <Text>About / Help</Text>
           </Body>
         </ListItem>
       </Content>
