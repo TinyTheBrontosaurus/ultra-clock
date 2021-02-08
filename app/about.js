@@ -51,7 +51,7 @@ let About = <Text>
 
   Notes about using the app
   *  Test the app yourself before your big run! Test it both on the couch, to see how it works, and test it
-  on a shorter run to see how you like it.
+  on a shorter run to see how you like it. I don't recommend wrestling with it during an important run.
   * The calculated statistics only updates when the runner sets the distance; the app uses the time on the phone
   to calculate speeds.
   * When on the couch, use "Demo Mode" to set the time that the app will see.
