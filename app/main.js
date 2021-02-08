@@ -33,6 +33,7 @@ import RNSpeedometer from 'react-native-speedometer';
 import UltraClockState from "./ultra-clock-state";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import About from './about';
 
 // The fields in `state` that will be updated by the date picker
 const DEMO_WALL_CLOCK = "wallClock";
@@ -60,6 +61,7 @@ export default class MainPage extends Component {
       // Walking pace, in minutes per mile
       paceStandardWalking: 20,
       courseName: "Soul-Searching Ultra Clock",
+      showAbout: true,
 
       // Values not saved are below. Saved values are above
       showDatePicker: false,
@@ -88,10 +90,10 @@ export default class MainPage extends Component {
     getData().then((loadedState) => {
       if(!loadedState) {
         // Stick with defaults but move the user towards the edit screen
-        this.setState({editable: true});
+        this.setState({editable: true, showAbout: true});
         return;
       }
-      ["start", "finish", "nowProgress", "wallClock"].forEach(element => {
+      ["start", "finish", "nowProgress", "wallClock", "showAbout"].forEach(element => {
         // In case wallClock is serialized, convert it. Otherwise ignore it
         if(element in loadedState) {
           loadedState[element] = moment(loadedState[element]);
@@ -240,6 +242,10 @@ export default class MainPage extends Component {
   render() {
     this.ultraState.state = this.state;
 
+    if(this.state.showAbout) {
+      return <About onDone={() => this.setState({showAbout: false})} />;
+    }
+
     let MilesSelector = (props) => {
       return <View style={{
         justifyContent: 'center',
@@ -348,6 +354,10 @@ export default class MainPage extends Component {
           </Left>
           <Body>
           <Text>{this.state.version}</Text>
+          </Body>
+        </ListItem>
+        <ListItem>
+          <Text>About / Help</Text>
           </Body>
         </ListItem>
       </Content>
