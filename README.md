@@ -65,3 +65,7 @@ To send a release (for faster execution). Takes ~5 minutes
 ```
 npx react-native run-android --variant=release
 ```
+
+### PLay store release
+* Open Android Studio->Tools->Build->Generate Signed Bundle / APK->Press Next a lot
+
