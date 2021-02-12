@@ -389,20 +389,35 @@ export default class MainPage extends Component {
           </Header>
           <Tabs>
             {this.state.editable && <Tab heading="Edit Course">
-              <View style={{width: '45%', flexDirection: "row"}}>
-                <Button
-                  onPress={() => this.pressDateTime(SET_START)}
-                  title={`Set start time \n(${this.state.start.format()})`}
-                  color="#40c5f4"
-                  height
-                />
-                <Text style={{minWidth: '10%'}}/>
-                <Button
-                  onPress={() => this.pressDateTime(SET_FINISH)}
-                  title={`Set finish time (${this.state.finish.format()})`}
-                  color="#40c5f4"
-                />
-              </View>
+              <Content>
+                <ListItem icon>
+                  <Left>
+                    <NBButton style={{backgroundColor: "#FF9501"}} onPress={() => this.pressDateTime(SET_START)}>
+                      <NBIcon active name="pencil"/>
+                    </NBButton>
+                  </Left>
+                  <Body>
+                  <Text>Start Time</Text>
+                  </Body>
+                  <Right>
+                    <Text>{this.state.start.format()}</Text>
+                  </Right>
+                </ListItem>
+                <ListItem icon>
+                  <Left>
+                    <NBButton style={{backgroundColor: "#FF9501"}} onPress={() => this.pressDateTime(SET_FINISH)}>
+                      <NBIcon active name="pencil"/>
+                    </NBButton>
+                  </Left>
+                  <Body>
+                  <Text>Finish Time</Text>
+                  </Body>
+                  <Right>
+                    <Text>{this.state.finish.format()}</Text>
+                  </Right>
+                </ListItem>
+              </Content>
+
               <Text style={{fontSize: 20}}>Goal ({labels.distance})</Text>
               <InputSpinner
                 min={0}
