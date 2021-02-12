@@ -141,7 +141,7 @@ export default class MainPage extends Component {
     ['finish', this.ultraState.cvtDateTimeToTimeString(this.ultraState.dateTimeFinish)],
     ['duration', `${UltraClockState.cvtDurationMsToString(this.ultraState.durationMsTotal)}`],
     ['distance', `${this.ultraState.distanceGoal.toFixed(2)} ${labels.distance}`],
-    ['min pace', `${this.ultraState.cvtPaceToString(this.ultraState.paceGoal)} ${labels.pace}`],
+    ['goal pace', `${this.ultraState.cvtPaceToString(this.ultraState.paceGoal)} ${labels.pace}`],
   ];
 
   rightTableData = () => [
@@ -389,7 +389,7 @@ export default class MainPage extends Component {
           </Header>
           <Tabs>
             {this.state.editable && <Tab heading="Edit Course">
-              <Content>
+              <Content padder={false}>
                 <ListItem icon>
                   <Left>
                     <NBButton style={{backgroundColor: "#FF9501"}} onPress={() => this.pressDateTime(SET_START)}>
@@ -416,35 +416,43 @@ export default class MainPage extends Component {
                     <Text>{this.state.finish.format()}</Text>
                   </Right>
                 </ListItem>
+                <ListItem>
+                  <Body>
+                  <Text style={{fontSize: 20}}>Goal ({labels.distance})</Text>
+                  <InputSpinner
+                    min={0}
+                    step={1}
+                    type={"real"}
+                    precision={2}
+                    colorMax={"#f04048"}
+                    colorMin={"#40c5f4"}
+                    value={this.ultraState.distanceGoal}
+                    onChange={(num) => this.setState({distanceGoal: num})}
+                    onFocus={() => this.inputSpinnerFocus(true)}
+                    onBlur={() => this.inputSpinnerFocus(false)}
+                    fontSize={48}
+                    buttonFontSize={48}
+                    height={100}
+                    width={325}
+                    rounded={false}
+                    showBorder={true}
+                  >
+                  </InputSpinner>
+                  </Body>
+                </ListItem>
+                <ListItem>
+                  <Body>
+                    <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
+                      <Rows data={[
+                        ['duration', `${UltraClockState.cvtDurationMsToString(this.ultraState.durationMsTotal)}`],
+                        ['goal pace', `${this.ultraState.cvtPaceToString(this.ultraState.paceGoal)} ${labels.pace}`],
+                      ]
+                      } textStyle={{fontSize: 36}}/>
+                    </Table>
+                  </Body>
+                </ListItem>
               </Content>
 
-              <Text style={{fontSize: 20}}>Goal ({labels.distance})</Text>
-              <InputSpinner
-                min={0}
-                step={1}
-                type={"real"}
-                precision={2}
-                colorMax={"#f04048"}
-                colorMin={"#40c5f4"}
-                value={this.ultraState.distanceGoal}
-                onChange={(num) => this.setState({distanceGoal: num})}
-                onFocus={() => this.inputSpinnerFocus(true)}
-                onBlur={() => this.inputSpinnerFocus(false)}
-                fontSize={48}
-                buttonFontSize={48}
-                height={100}
-                width={350}
-                rounded={false}
-                showBorder={true}
-              >
-              </InputSpinner>
-              <Table borderStyle={{borderWidth: 2, borderColor: '#c8e1ff'}}>
-                <Rows data={[
-                  ['duration', `${UltraClockState.cvtDurationMsToString(this.ultraState.durationMsTotal)}`],
-                  ['min pace', `${this.ultraState.cvtPaceToString(this.ultraState.paceGoal)} ${labels.pace}`],
-                  ]
-                } textStyle={{fontSize: 36}}/>
-              </Table>
               {this.state.showDatePicker && this.dateTimePicker()}
             </Tab>}
             <Tab heading="Course">

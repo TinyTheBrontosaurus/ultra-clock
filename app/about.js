@@ -41,13 +41,14 @@ While running, the user inputs the number of miles run so far. Based upon the ti
   + How far ahead (or behind) the goal pace
   + How far the runner has gone
   + How far is left until the goal distance
-  + The project distance traveled at sunset, assuming average pace
+  + The projected distance traveled at sunset, assuming average pace
 + Pace tab
   + The average pace since sunrise
   + How far ahead (or behind) the goal pace
   + How much time the runner can walk and still be on the goal pace
   + How much time the runner can rest and still be on the goal pace
 + Time tab
+  + Captured time
   + Duration elapsed since sunrise
   + Duration remaining until sunset
   + The estimated time at which the goal distance will be reached
@@ -58,7 +59,7 @@ Tips for using the app
 +  Test the app yourself before your big run! Test it both on the couch, to see how it works, and test it on a shorter run to see how you like it. I don't recommend wrestling with it during an important run.
 + When testing on the couch, use "Demo Mode" to set the time that the app will see. Remember, the app does not capture that time until the distance value is changed
 * The time used for calculating statistics is that time on your phone as of the time when the distance value is changed
-+ The app wlil offer a ->| button to "fast forward" based upon expected pace. The intention there is to make it easy to set the completed distance.
++ The app will offer a ->| button to "fast forward" based upon expected pace. The intention there is to make it easy to set the completed distance.
 + The app is still useful if one runs after "sunset"; for my first run with this app, I was around 43 miles at sunset but had a goal of 52.5. The math it calculated was still helpful as I extended my run further.
 * This app is *not* a GPS app. It will not measure distances automatically.
 `,`
@@ -67,6 +68,8 @@ This app is available free of charge. If you would like to donate, please send [
 This app is also only available on Android. If you are an iOS developer or know an iOS developer, porting to iOS will be *very easy*. The entire codebase is in React and only needs to be re-compiled for iOS and posted on the App Store. [Code available on GitHub](https://github.com/TinyTheBrontosaurus/ultra-clock). 
 
 Same offer is available for anyone who wants to clean up the graphical design.
+
+Feel free to reach out for any help or suggestions: <enesimplicity@gmail.com>
 `];
 
 const backgroundColor = '#22bcb5';

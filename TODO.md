@@ -69,13 +69,13 @@
 
 ---
 ## Next release
-- [ ] About page
-- [ ] Add Bryan's quote
-- [ ] Help page
+- [x] About page
+- [x] Help page
 
 
 ## Backlog
 - [ ] Notify HWYRT
+- [ ] Add Bryan's quote
 - [ ] Fix time picker to use UTC
 - [ ] Error states? Like if duration is negative
 - [ ] Add way to set width of target pace (in min/mi)
