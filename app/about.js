@@ -27,7 +27,7 @@ Now imagine further and further into the run having to calculate at 17 miles, 29
 If only there was a machine that could do this math automatically...
 `;
 
-const aboutTxt = `
+const aboutTxt = [`
 The purpose of this app is to calculate stats for the runner and display it very easily.
 
 Before the run, the runner inputs
@@ -35,46 +35,48 @@ Before the run, the runner inputs
 + Target start time (e.g., sunrise)
 + Target completion time (e.g., sunset)
 + Goal distance in that time
+`,`
+While running, the user inputs the number of miles run so far. Based upon the time at which that time was entered, the app will then calculate the following
++ Distance tab
+  + How far ahead (or behind) the goal pace
+  + How far the runner has gone
+  + How far is left until the goal distance
+  + The project distance traveled at sunset, assuming average pace
++ Pace tab
+  + The average pace since sunrise
+  + How far ahead (or behind) the goal pace
+  + How much time the runner can walk and still be on the goal pace
+  + How much time the runner can rest and still be on the goal pace
++ Time tab
+  + Duration elapsed since sunrise
+  + Duration remaining until sunset
+  + The estimated time at which the goal distance will be reached
+  + The estimated duration until the goal distance will be reached
+`,`
 
-While running, the user can input the number of miles run so far. (Note: a separate solution is needed to calculate
-this distance, be that a GPS app or a GPS watch or mile markers). The app will then calculate the following
-+ Distance
-+ How far ahead (or behind) the goal pace
-+ How far the runner has gone
-+ How far is left until the goal distance
-+ The project distance traveled at sunset, assuming average pace
-+ Pace
-+ The average pace since sunrise
-+ How far ahead (or behind) the goal pace
-+ How much time the runner can walk and still be on the goal pace
-+ How much time the runner can rest and still be on the goal pace
-+ Time
-+ Duration elapsed since sunrise
-+ Duration remaining until sunset
-+ The estimated time at which the goal distance will be reached
-+ The estimated duration until the goal distance will be reached
+Tips for using the app
++  Test the app yourself before your big run! Test it both on the couch, to see how it works, and test it on a shorter run to see how you like it. I don't recommend wrestling with it during an important run.
++ When testing on the couch, use "Demo Mode" to set the time that the app will see. Remember, the app does not capture that time until the distance value is changed
+* The time used for calculating statistics is that time on your phone as of the time when the distance value is changed
++ The app wlil offer a ->| button to "fast forward" based upon expected pace. The intention there is to make it easy to set the completed distance.
++ The app is still useful if one runs after "sunset"; for my first run with this app, I was around 43 miles at sunset but had a goal of 52.5. The math it calculated was still helpful as I extended my run further.
+* This app is *not* a GPS app. It will not measure distances automatically.
+`,`
+This app is available free of charge. If you would like to donate, please send [$26.21 to the HWYRT podcast](https://howwasyourruntoday.com/donate').
 
+This app is also only available on Android. If you are an iOS developer or know an iOS developer, porting to iOS will be *very easy*. The entire codebase is in React and only needs to be re-compiled for iOS and posted on the App Store. [Code available on GitHub](https://github.com/TinyTheBrontosaurus/ultra-clock). 
 
-Notes about using the app
-+  Test the app yourself before your big run! Test it both on the couch, to see how it works, and test it
-on a shorter run to see how you like it. I don't recommend wrestling with it during an important run.
-+ The calculated statistics only updates when the runner sets the distance; the app uses the time on the phone
-to calculate speeds.
-+ When on the couch, use "Demo Mode" to set the time that the app will see.
-+ The app wlil offer a ->| button to "fast forward" based upon expected pace. The intention there is to
-make it easy to set the completed distance.
-+ The app is still useful if one runs after "sunset"; for my first run with this app, I was around 43 miles
-at sunset but had a goal of 52.5. The math it calculated was still helpful as I extended my run further.
+Same offer is available for anyone who wants to clean up the graphical design.
+`];
 
-This app is available free of charge. If you would like to donate, please send
-[$26.21 to the HWRTS podcast](https://howwasyourruntoday.com/donate').
+const backgroundColor = '#22bcb5';
 
-This app is also only available on Android. If you are an iOS developer or know an iOS developer, porting
-to iOS will be *very easy*. The entire codebase is and only needs to be re-compiled for iOS and posted
-on the App Store. [Code available on GitHub](https://github.com/TinyTheBrontosaurus/ultra-clock). Same offer is
-available for anyone who wants to clean up the graphics.
-`;
-
+const about_slides = aboutTxt.map((txt, index) => {return {
+  key: `help_${index}`,
+  title: index < 3 ? `How to use (pt. ${index + 1})` : "Contibute",
+  body: () => <Markdown>{txt}</Markdown>,
+  backgroundColor
+}});
 
 const slides = [
   {
@@ -89,33 +91,28 @@ The author is this app ran a similar run on December 30, 2020 using this app and
 
 *Note this app is not affiliated with HWYRT other than the author listens to all of the episodes
     `}</Markdown>,
-    backgroundColor: '#59b2ab',
   },
   {
     key: 'two',
     title: 'Math is hard',
     body: () => <Markdown>{mathIsHardTxt1}</Markdown>,
-    backgroundColor: '#22bcb5',
   },
   {
     key: 'two-two',
     title: 'Tired math is even harder',
     body: () => <Markdown>{mathIsHardTxt2}</Markdown>,
-    backgroundColor: '#22bcb5',
   },
-  {
-    key: 'three',
-    title: 'How to use',
-    body: () => <Markdown>{aboutTxt}</Markdown>,
-    backgroundColor: '#22bcb5',
-  }
-];
+].concat(about_slides);
 
 
 const styles = StyleSheet.create({
   slide: {
     flex: 1,
     backgroundColor: "#ab87ab",
+  },
+  slide_margin: {
+    marginLeft: 10,
+    marginRight: 10,
   },
   text: {
     color: 'rgba(255, 255, 255, 0.8)',
@@ -135,8 +132,10 @@ export default class About extends Component {
   _renderItem = ({ item }) => {
     return (
       <View style={styles.slide}>
-        <Text style={styles.title}>{item.title}</Text>
-        {item.body()}
+        <View style={styles.slide_margin}>
+          <Text style={styles.title}>{item.title}</Text>
+          {item.body()}
+        </View>
       </View>
     );
   };
