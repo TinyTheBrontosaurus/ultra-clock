@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   test:
     docker:
-      - image: circleci/android:latest
+      - image: circleci/node:latest
     steps:
       - checkout
       - run : npx test
