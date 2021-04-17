@@ -1,12 +1,17 @@
 version: 2.1
 jobs:
-  test:
+  build_and_test:
     docker:
       - image: circleci/node:latest
     steps:
       - checkout
-      - run : npx jest
+      - run:
+          name: install packages
+          command: npm install
+      - run:
+          name: run tests
+          command: npx jest
 workflows:
-  wf:
+  workflow:
     jobs:
-      - test
+      - build_and_test
