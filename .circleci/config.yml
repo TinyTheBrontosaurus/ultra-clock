@@ -5,7 +5,7 @@ jobs:
       - image: circleci/node:latest
     steps:
       - checkout
-      - run : npx test
+      - run : npx jest
 workflows:
   wf:
     jobs:
