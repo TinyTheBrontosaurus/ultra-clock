@@ -1,0 +1,12 @@
+version: 2.1
+jobs:
+  test:
+    docker:
+      - image: circleci/android
+    steps:
+      - checkout
+      - run : npx test
+workflows:
+  wf:
+    jobs:
+      - test
