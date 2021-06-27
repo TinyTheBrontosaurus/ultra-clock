@@ -55,7 +55,7 @@ export default class MainPage extends Component {
       start: start(),
       finish: moment("2020-12-30T16:20"),
       nowProgress: start(),
-      wallClock: moment(),
+      wallClock: MainPage.momentNoTimeZone(),
       // Distance from far sides of the speedometer in min/mile
       paceSpanMinutes: 5,
       // Walking pace, in minutes per mile
@@ -157,6 +157,15 @@ export default class MainPage extends Component {
     ['expected', `${this.ultraState.isStarted ? this.ultraState.distanceExpectedNow.toFixed(2) : labels.na} mi`],
   ];
 
+  static stripTimeZone(date) {
+    const DATE_LEN_TO_KEEP = 19;
+    return date.substring(0, DATE_LEN_TO_KEEP);
+  }
+
+  static momentNoTimeZone() {
+    let date = moment();
+    return MainPage.stripTimeZone(date.format());
+  }
 
   pressDateTime(mode, date) {
     this.state.targetDatePicker = mode;
@@ -174,12 +183,12 @@ export default class MainPage extends Component {
     else if (this.state.modeDatePicker === "date") {
       // Date was set. now select time
       let stateDelta = {showDatePicker: true, modeDatePicker: 'time'};
-      stateDelta[mode] = moment(date);
+      stateDelta[mode] = moment(MainPage.stripTimeZone(date));
       this.setState(stateDelta);
     }
     else {
       let stateDelta = {showDatePicker: false, modeDatePicker: 'date'};
-      stateDelta[mode] = moment(date);
+      stateDelta[mode] = moment(MainPage.stripTimeZone(date));
       this.setState(stateDelta);
     }
   }
@@ -197,7 +206,7 @@ export default class MainPage extends Component {
     setInterval(() => {
       if(!this.inputSpinnerInFocus && !this.state.demoMode && !this.state.showDatePicker) {
         this.setState({
-          wallClock: moment()
+          wallClock: momentNoTimeZone()
         });
       }
     }, 10000)

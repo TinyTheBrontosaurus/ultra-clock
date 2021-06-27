@@ -74,7 +74,7 @@
 
 
 ## Backlog
-- [ ] Notify HWYRT
+- [x] Notify HWYRT
 - [ ] Add Bryan's quote
 - [ ] Fix time picker to use UTC
 - [ ] Error states? Like if duration is negative
