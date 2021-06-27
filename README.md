@@ -58,7 +58,7 @@ In debug (best for faster dev). Takes a few minutes the first time, then update 
 ```
 npx react-native run-android
 ```
-
+``
 #### Release
 To send a release (for faster execution). Takes ~5 minutes
 

@@ -193,7 +193,7 @@ export default class UltraClockState {
    * @returns {moment.Moment} The datetime
    */
   get dateTimeToDistanceGoal() {
-    return moment.utc(this.dateTimeNowProgress.format()).add(this.durationToDistanceGoal);
+    return moment(this.dateTimeNowProgress.format()).add(this.durationToDistanceGoal);
   }
 
   /**
@@ -417,14 +417,4 @@ export default class UltraClockState {
   cvtDurationMsToPercentOfRace(duration) {
     return (duration / this.durationMsTotal) * 100;
   }
-
-  // cvtDurationToPercent(duration) {
-  //
-  //   let del_start_pct = this.momentToPercent(del_start);
-  //   let del_finish_pct = this.momentToPercent(del_finish);
-  //   let del_pct = del_finish_pct - del_start_pct;
-  //
-  //   return (del_pct / this.baselineTimePercent()) * 100;
-  // }
-
 };
