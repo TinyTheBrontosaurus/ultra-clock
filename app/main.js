@@ -32,10 +32,10 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import RNSpeedometer from 'react-native-speedometer';
 import UltraClockState from "./ultra-clock-state";
 // Real version
-// import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Mock version
-import AsyncStorage  from "react-native";
+// import AsyncStorage  from "react-native";
 
 
 import About from './about';
