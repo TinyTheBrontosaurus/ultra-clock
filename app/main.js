@@ -31,7 +31,12 @@ import {AnimatedCircularProgress} from 'react-native-circular-progress';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import RNSpeedometer from 'react-native-speedometer';
 import UltraClockState from "./ultra-clock-state";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// Real version
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// Mock version
+import AsyncStorage  from "react-native";
+
 
 import About from './about';
 
@@ -40,7 +45,7 @@ const DEMO_WALL_CLOCK = "wallClock";
 const SET_START = "start";
 const SET_FINISH = "finish";
 
-function stripTimeZone(date) {
+export function stripTimeZone(date) {
   const DATE_LEN_TO_KEEP = 16;
   return date.substring(0, DATE_LEN_TO_KEEP);
 }
