@@ -31,7 +31,12 @@ import {AnimatedCircularProgress} from 'react-native-circular-progress';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import RNSpeedometer from 'react-native-speedometer';
 import UltraClockState from "./ultra-clock-state";
-import AsyncStorage from 'react-native';
+// Real version
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+// Mock version
+// import AsyncStorage  from "react-native";
+
 
 import About from './about';
 
@@ -40,8 +45,23 @@ const DEMO_WALL_CLOCK = "wallClock";
 const SET_START = "start";
 const SET_FINISH = "finish";
 
+export function stripTimeZone(date) {
+  const DATE_LEN_TO_KEEP = 16;
+  return date.substring(0, DATE_LEN_TO_KEEP);
+}
+
+function stripTimeZoneSeconds(date) {
+  const DATE_LEN_TO_KEEP = 16;
+  return date.substring(0, DATE_LEN_TO_KEEP);
+}
+
+function momentNoTimeZone() {
+  let date = moment();
+  return moment(stripTimeZone(date.format()));
+}
+
 /**
- * The full board for crickets, including all the targets, the control board, and the statistics
+ *
  */
 export default class MainPage extends Component {
   constructor(props) {
@@ -55,7 +75,7 @@ export default class MainPage extends Component {
       start: start(),
       finish: moment("2020-12-30T16:20"),
       nowProgress: start(),
-      wallClock: moment(),
+      wallClock: momentNoTimeZone(),
       // Distance from far sides of the speedometer in min/mile
       paceSpanMinutes: 5,
       // Walking pace, in minutes per mile
@@ -157,7 +177,6 @@ export default class MainPage extends Component {
     ['expected', `${this.ultraState.isStarted ? this.ultraState.distanceExpectedNow.toFixed(2) : labels.na} mi`],
   ];
 
-
   pressDateTime(mode, date) {
     this.state.targetDatePicker = mode;
 
@@ -174,12 +193,12 @@ export default class MainPage extends Component {
     else if (this.state.modeDatePicker === "date") {
       // Date was set. now select time
       let stateDelta = {showDatePicker: true, modeDatePicker: 'time'};
-      stateDelta[mode] = moment(date);
+      stateDelta[mode] = moment(stripTimeZone(moment(date).format()));
       this.setState(stateDelta);
     }
     else {
       let stateDelta = {showDatePicker: false, modeDatePicker: 'date'};
-      stateDelta[mode] = moment(date);
+      stateDelta[mode] = moment(stripTimeZone(moment(date).format()));
       this.setState(stateDelta);
     }
   }
@@ -197,7 +216,7 @@ export default class MainPage extends Component {
     setInterval(() => {
       if(!this.inputSpinnerInFocus && !this.state.demoMode && !this.state.showDatePicker) {
         this.setState({
-          wallClock: moment()
+          wallClock: momentNoTimeZone()
         });
       }
     }, 10000)
@@ -400,7 +419,7 @@ export default class MainPage extends Component {
                   <Text>Start Time</Text>
                   </Body>
                   <Right>
-                    <Text>{this.state.start.format()}</Text>
+                    <Text>{stripTimeZoneSeconds(this.state.start.format())}</Text>
                   </Right>
                 </ListItem>
                 <ListItem icon>
@@ -413,7 +432,7 @@ export default class MainPage extends Component {
                   <Text>Finish Time</Text>
                   </Body>
                   <Right>
-                    <Text>{this.state.finish.format()}</Text>
+                    <Text>{stripTimeZoneSeconds(this.state.finish.format())}</Text>
                   </Right>
                 </ListItem>
                 <ListItem>

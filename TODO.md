@@ -74,9 +74,9 @@
 
 
 ## Backlog
-- [ ] Notify HWYRT
+- [x] Notify HWYRT
 - [ ] Add Bryan's quote
-- [ ] Fix time picker to use UTC
+- [x] Fix time picker to use UTC
 - [ ] Error states? Like if duration is negative
 - [ ] Add way to set width of target pace (in min/mi)
 - [x] Split up tables (Parameters, distance, time)
@@ -91,6 +91,7 @@
 - [ ] Show percentages of completion
 - [ ] Show "repeat what you did X more times"
 - [ ] Keep the phone unlocked
+- [ ] Add multi-day (for 100+ milers)
 
 ## Deferred
 - [ ] Add ways to change start/stop/distance using presets

@@ -1,5 +1,6 @@
 import moment from 'moment';
 import UltraClockState from "../app/ultra-clock-state";
+import {stripTimeZone} from "../app/main";
 
 let hmToMilliseconds = (hours, minutes) => ((hours * 60) + minutes) * 60 * 1000;
 let msToMilliseconds = (minutes, seconds) => ((minutes * 60) + seconds) * 1000;
@@ -7,15 +8,15 @@ let msToMilliseconds = (minutes, seconds) => ((minutes * 60) + seconds) * 1000;
 describe('Accessors', () => {
   test("before start", () => {
     // Arrange
-    let start = moment.utc("2020-12-30T07:13");
+    let start = moment("2020-12-30T07:13");
     let state = {
       distanceProgress: 0,
       distanceGoal: 50,
       distanceStep: 0.5,
       start: start,
-      finish: moment.utc("2020-12-30T16:20"),
+      finish: moment("2020-12-30T16:20"),
       nowProgress: start,
-      wallClock: moment.utc("2020-12-29T20:00"),
+      wallClock: moment("2020-12-29T20:00"),
       paceSpanMinutes: 5,
       paceStandardWalking: 20,
     };
@@ -28,10 +29,10 @@ describe('Accessors', () => {
     expect(out.distanceGoal).toBe(50);
     expect(out.distanceStep).toBe(0.5);
     expect(out.distanceRemaining).toBe(50);
-    expect(out.dateTimeStart.format()).toBe("2020-12-30T07:13:00Z");
-    expect(out.dateTimeFinish.format()).toBe("2020-12-30T16:20:00Z");
-    expect(out.dateTimeNowProgress.format()).toBe("2020-12-30T07:13:00Z");
-    expect(out.dateTimeWallClock.format()).toBe("2020-12-29T20:00:00Z");
+    expect(stripTimeZone(out.dateTimeStart.format())).toBe("2020-12-30T07:13");
+    expect(stripTimeZone(out.dateTimeFinish.format())).toBe("2020-12-30T16:20");
+    expect(stripTimeZone(out.dateTimeNowProgress.format())).toBe("2020-12-30T07:13");
+    expect(stripTimeZone(out.dateTimeWallClock.format())).toBe("2020-12-29T20:00");
     expect(out.durationMsRemaining).toBe(hmToMilliseconds(9, 7));
     expect(out.durationMsProgress).toBe(hmToMilliseconds(0, 0));
     expect(out.paceGoal).toBeCloseTo(10.94, 2);
@@ -45,7 +46,7 @@ describe('Accessors', () => {
     expect(out.durationMsWalkTimeToPace).toBeCloseTo(0, 2);
     expect(out.durationToDistanceGoalMs).toBe(hmToMilliseconds(9, 7));
     expect(out.durationToDistanceGoal.asMilliseconds()).toBe(hmToMilliseconds(9, 7));
-    expect(out.dateTimeToDistanceGoal.format()).toBe("2020-12-30T16:20:00Z");
+    expect(stripTimeZone(out.dateTimeToDistanceGoal.format())).toBe("2020-12-30T16:20");
     expect(out.paceAheadOfGoal).toBeCloseTo(0, 2);
     expect(out.paceSpanMinutes).toBe(5);
     expect(out.distanceSkipAheadRaw).toBeCloseTo(0, 2);
@@ -55,15 +56,15 @@ describe('Accessors', () => {
 
   test("During no progress", () => {
     // Arrange
-    let start = moment.utc("2020-12-30T07:13");
+    let start = moment("2020-12-30T07:13");
     let state = {
       distanceProgress: 0,
       distanceGoal: 50,
       distanceStep: 0.5,
       start: start,
-      finish: moment.utc("2020-12-30T16:20"),
+      finish: moment("2020-12-30T16:20"),
       nowProgress: start,
-      wallClock: moment.utc("2020-12-30T08:00"),
+      wallClock: moment("2020-12-30T08:00"),
       paceSpanMinutes: 5,
       paceStandardWalking: 20,
     };
@@ -76,10 +77,10 @@ describe('Accessors', () => {
     expect(out.distanceGoal).toBe(50);
     expect(out.distanceStep).toBe(0.5);
     expect(out.distanceRemaining).toBe(50);
-    expect(out.dateTimeStart.format()).toBe("2020-12-30T07:13:00Z");
-    expect(out.dateTimeFinish.format()).toBe("2020-12-30T16:20:00Z");
-    expect(out.dateTimeNowProgress.format()).toBe("2020-12-30T07:13:00Z");
-    expect(out.dateTimeWallClock.format()).toBe("2020-12-30T08:00:00Z");
+    expect(stripTimeZone(out.dateTimeStart.format())).toBe("2020-12-30T07:13");
+    expect(stripTimeZone(out.dateTimeFinish.format())).toBe("2020-12-30T16:20");
+    expect(stripTimeZone(out.dateTimeNowProgress.format())).toBe("2020-12-30T07:13");
+    expect(stripTimeZone(out.dateTimeWallClock.format())).toBe("2020-12-30T08:00");
     expect(out.durationMsRemaining).toBe(hmToMilliseconds(9, 7));
     expect(out.durationMsProgress).toBe(hmToMilliseconds(0, 0));
     expect(out.paceGoal).toBeCloseTo(10.94, 2);
@@ -93,7 +94,7 @@ describe('Accessors', () => {
     expect(out.durationMsWalkTimeToPace).toBeCloseTo(0, 2);
     expect(out.durationToDistanceGoalMs).toBe(hmToMilliseconds(9, 7));
     expect(out.durationToDistanceGoal.asMilliseconds()).toBe(hmToMilliseconds(9, 7));
-    expect(out.dateTimeToDistanceGoal.format()).toBe("2020-12-30T16:20:00Z");
+    expect(stripTimeZone(out.dateTimeToDistanceGoal.format())).toBe("2020-12-30T16:20");
     expect(out.paceAheadOfGoal).toBeCloseTo(0, 2);
     expect(out.paceSpanMinutes).toBe(5);
     expect(out.distanceSkipAheadRaw).toBeCloseTo(4.30, 2);
@@ -103,15 +104,15 @@ describe('Accessors', () => {
 
   test("During just pressed progress--fast", () => {
     // Arrange
-    let start = moment.utc("2020-12-30T07:13");
+    let start = moment("2020-12-30T07:13");
     let state = {
       distanceProgress: 4.5,
       distanceGoal: 50,
       distanceStep: 0.5,
       start: start,
-      finish: moment.utc("2020-12-30T16:20"),
-      nowProgress: moment.utc("2020-12-30T08:00"),
-      wallClock: moment.utc("2020-12-30T08:00"),
+      finish: moment("2020-12-30T16:20"),
+      nowProgress: moment("2020-12-30T08:00"),
+      wallClock: moment("2020-12-30T08:00"),
       paceSpanMinutes: 5,
       paceStandardWalking: 20,
     };
@@ -125,10 +126,10 @@ describe('Accessors', () => {
     expect(out.distanceStep).toBe(0.5);
     expect(out.distanceRemaining).toBe(45.5);
     expect(out.cvtDistanceToPercent(out.distanceProgress)).toBeCloseTo(9, 2);
-    expect(out.dateTimeStart.format()).toBe("2020-12-30T07:13:00Z");
-    expect(out.dateTimeFinish.format()).toBe("2020-12-30T16:20:00Z");
-    expect(out.dateTimeNowProgress.format()).toBe("2020-12-30T08:00:00Z");
-    expect(out.dateTimeWallClock.format()).toBe("2020-12-30T08:00:00Z");
+    expect(stripTimeZone(out.dateTimeStart.format())).toBe("2020-12-30T07:13");
+    expect(stripTimeZone(out.dateTimeFinish.format())).toBe("2020-12-30T16:20");
+    expect(stripTimeZone(out.dateTimeNowProgress.format())).toBe("2020-12-30T08:00");
+    expect(stripTimeZone(out.dateTimeWallClock.format())).toBe("2020-12-30T08:00");
     expect(UltraClockState.cvtDurationMsToString(out.durationMsRemaining)).toBe("8h 20m");
     expect(UltraClockState.cvtDurationMsToString(out.durationMsProgress)).toBe("47m");
     expect(UltraClockState.cvtDurationMsToString(out.durationMsTotal)).toBe("9h 7m");
@@ -144,7 +145,7 @@ describe('Accessors', () => {
     expect(UltraClockState.cvtDurationMsToString(out.durationMsRestTimeToPace)).toBe("2m");
     expect(UltraClockState.cvtDurationMsToString(out.durationMsWalkTimeToPace)).toBe("4m");
     expect(UltraClockState.cvtDurationToString(out.durationToDistanceGoal)).toBe("7h 55m");
-    expect(out.dateTimeToDistanceGoal.format()).toBe("2020-12-30T15:55:13Z");
+    expect(stripTimeZone(out.dateTimeToDistanceGoal.format())).toBe("2020-12-30T15:55");
     expect(out.cvtPaceToString(out.paceAheadOfGoal)).toBe("0:30");
     expect(out.paceSpanMinutes).toBe(5);
     expect(out.distanceSkipAheadRaw).toBeCloseTo(0, 2);
@@ -154,15 +155,15 @@ describe('Accessors', () => {
 
   test("During not pressed progress in a while--fast", () => {
     // Arrange
-    let start = moment.utc("2020-12-30T07:13");
+    let start = moment("2020-12-30T07:13");
     let state = {
       distanceProgress: 4.5,
       distanceGoal: 50,
       distanceStep: 0.5,
       start: start,
-      finish: moment.utc("2020-12-30T16:20"),
-      nowProgress: moment.utc("2020-12-30T08:00"),
-      wallClock: moment.utc("2020-12-30T09:00"),
+      finish: moment("2020-12-30T16:20"),
+      nowProgress: moment("2020-12-30T08:00"),
+      wallClock: moment("2020-12-30T09:00"),
       paceSpanMinutes: 5,
       paceStandardWalking: 20,
     };
@@ -176,10 +177,10 @@ describe('Accessors', () => {
     expect(out.distanceStep).toBe(0.5);
     expect(out.distanceRemaining).toBe(45.5);
     expect(out.cvtDistanceToPercent(out.distanceProgress)).toBeCloseTo(9, 2);
-    expect(out.dateTimeStart.format()).toBe("2020-12-30T07:13:00Z");
-    expect(out.dateTimeFinish.format()).toBe("2020-12-30T16:20:00Z");
-    expect(out.dateTimeNowProgress.format()).toBe("2020-12-30T08:00:00Z");
-    expect(out.dateTimeWallClock.format()).toBe("2020-12-30T09:00:00Z");
+    expect(stripTimeZone(out.dateTimeStart.format())).toBe("2020-12-30T07:13");
+    expect(stripTimeZone(out.dateTimeFinish.format())).toBe("2020-12-30T16:20");
+    expect(stripTimeZone(out.dateTimeNowProgress.format())).toBe("2020-12-30T08:00");
+    expect(stripTimeZone(out.dateTimeWallClock.format())).toBe("2020-12-30T09:00");
     expect(UltraClockState.cvtDurationMsToString(out.durationMsRemaining)).toBe("8h 20m");
     expect(UltraClockState.cvtDurationMsToString(out.durationMsProgress)).toBe("47m");
     expect(UltraClockState.cvtDurationMsToString(out.durationMsTotal)).toBe("9h 7m");
@@ -195,7 +196,7 @@ describe('Accessors', () => {
     expect(UltraClockState.cvtDurationMsToString(out.durationMsRestTimeToPace)).toBe("2m");
     expect(UltraClockState.cvtDurationMsToString(out.durationMsWalkTimeToPace)).toBe("4m");
     expect(UltraClockState.cvtDurationToString(out.durationToDistanceGoal)).toBe("7h 55m");
-    expect(out.dateTimeToDistanceGoal.format()).toBe("2020-12-30T15:55:13Z");
+    expect(stripTimeZone(out.dateTimeToDistanceGoal.format())).toBe("2020-12-30T15:55");
     expect(out.cvtPaceToString(out.paceAheadOfGoal)).toBe("0:30");
     expect(out.paceSpanMinutes).toBe(5);
     expect(out.distanceSkipAheadRaw).toBeCloseTo(5.74, 2);
@@ -205,15 +206,15 @@ describe('Accessors', () => {
 
   test("During just pressed progress after a while--fast", () => {
     // Arrange
-    let start = moment.utc("2020-12-30T07:13");
+    let start = moment("2020-12-30T07:13");
     let state = {
       distanceProgress: 14.5,
       distanceGoal: 50,
       distanceStep: 0.5,
       start: start,
-      finish: moment.utc("2020-12-30T16:20"),
-      nowProgress: moment.utc("2020-12-30T09:00"),
-      wallClock: moment.utc("2020-12-30T09:04"),
+      finish: moment("2020-12-30T16:20"),
+      nowProgress: moment("2020-12-30T09:00"),
+      wallClock: moment("2020-12-30T09:04"),
       paceSpanMinutes: 5,
       paceStandardWalking: 20,
     };
@@ -227,10 +228,10 @@ describe('Accessors', () => {
     expect(out.distanceStep).toBe(0.5);
     expect(out.distanceRemaining).toBe(35.5);
     expect(out.cvtDistanceToPercent(out.distanceProgress)).toBeCloseTo(29, 2);
-    expect(out.dateTimeStart.format()).toBe("2020-12-30T07:13:00Z");
-    expect(out.dateTimeFinish.format()).toBe("2020-12-30T16:20:00Z");
-    expect(out.dateTimeNowProgress.format()).toBe("2020-12-30T09:00:00Z");
-    expect(out.dateTimeWallClock.format()).toBe("2020-12-30T09:04:00Z");
+    expect(stripTimeZone(out.dateTimeStart.format())).toBe("2020-12-30T07:13");
+    expect(stripTimeZone(out.dateTimeFinish.format())).toBe("2020-12-30T16:20");
+    expect(stripTimeZone(out.dateTimeNowProgress.format())).toBe("2020-12-30T09:00");
+    expect(stripTimeZone(out.dateTimeWallClock.format())).toBe("2020-12-30T09:04");
     expect(UltraClockState.cvtDurationMsToString(out.durationMsRemaining)).toBe("7h 20m");
     expect(UltraClockState.cvtDurationMsToString(out.durationMsProgress)).toBe("1h 47m");
     expect(UltraClockState.cvtDurationMsToString(out.durationMsTotal)).toBe("9h 7m");
@@ -246,7 +247,7 @@ describe('Accessors', () => {
     expect(UltraClockState.cvtDurationMsToString(out.durationMsRestTimeToPace)).toBe("51m");
     expect(UltraClockState.cvtDurationMsToString(out.durationMsWalkTimeToPace)).toBe("1h 53m");
     expect(UltraClockState.cvtDurationToString(out.durationToDistanceGoal)).toBe("4h 21m");
-    expect(out.dateTimeToDistanceGoal.format()).toBe("2020-12-30T13:21:57Z");
+    expect(stripTimeZone(out.dateTimeToDistanceGoal.format())).toBe("2020-12-30T13:21");
     expect(out.cvtPaceToString(out.paceAheadOfGoal)).toBe("3:34");
     expect(out.paceSpanMinutes).toBe(5);
     expect(out.distanceSkipAheadRaw).toBeCloseTo(0.54, 2);
@@ -257,15 +258,15 @@ describe('Accessors', () => {
 
   test("Post just pressed progress --fast", () => {
     // Arrange
-    let start = moment.utc("2020-12-30T07:13");
+    let start = moment("2020-12-30T07:13");
     let state = {
       distanceProgress: 54.5,
       distanceGoal: 50,
       distanceStep: 0.5,
       start: start,
-      finish: moment.utc("2020-12-30T16:20"),
-      nowProgress: moment.utc("2020-12-30T17:00"),
-      wallClock: moment.utc("2020-12-30T17:04"),
+      finish: moment("2020-12-30T16:20"),
+      nowProgress: moment("2020-12-30T17:00"),
+      wallClock: moment("2020-12-30T17:04"),
       paceSpanMinutes: 5,
       paceStandardWalking: 20,
     };
@@ -279,10 +280,10 @@ describe('Accessors', () => {
     expect(out.distanceStep).toBe(0.5);
     expect(out.distanceRemaining).toBe(-4.5);
     expect(out.cvtDistanceToPercent(out.distanceProgress)).toBeCloseTo(100, 2);
-    expect(out.dateTimeStart.format()).toBe("2020-12-30T07:13:00Z");
-    expect(out.dateTimeFinish.format()).toBe("2020-12-30T16:20:00Z");
-    expect(out.dateTimeNowProgress.format()).toBe("2020-12-30T17:00:00Z");
-    expect(out.dateTimeWallClock.format()).toBe("2020-12-30T17:04:00Z");
+    expect(stripTimeZone(out.dateTimeStart.format())).toBe("2020-12-30T07:13");
+    expect(stripTimeZone(out.dateTimeFinish.format())).toBe("2020-12-30T16:20");
+    expect(stripTimeZone(out.dateTimeNowProgress.format())).toBe("2020-12-30T17:00");
+    expect(stripTimeZone(out.dateTimeWallClock.format())).toBe("2020-12-30T17:04");
     expect(UltraClockState.cvtDurationMsToString(out.durationMsRemaining)).toBe("-40m");
     expect(UltraClockState.cvtDurationMsToString(out.durationMsProgress)).toBe("9h 47m");
     expect(UltraClockState.cvtDurationMsToString(out.durationMsTotal)).toBe("9h 7m");
@@ -298,7 +299,7 @@ describe('Accessors', () => {
     expect(UltraClockState.cvtDurationMsToString(out.durationMsRestTimeToPace)).toBe("9m");
     expect(UltraClockState.cvtDurationMsToString(out.durationMsWalkTimeToPace)).toBe("20m");
     expect(UltraClockState.cvtDurationToString(out.durationToDistanceGoal)).toBe("-48m");
-    expect(out.dateTimeToDistanceGoal.format()).toBe("2020-12-30T16:11:31Z");
+    expect(stripTimeZone(out.dateTimeToDistanceGoal.format())).toBe("2020-12-30T16:11");
     expect(out.cvtPaceToString(out.paceAheadOfGoal)).toBe("0:10");
     expect(out.paceSpanMinutes).toBe(5);
     expect(out.distanceSkipAheadRaw).toBeCloseTo(0.37, 2);
@@ -311,14 +312,14 @@ describe('Accessors', () => {
 describe('Walk/rest', () => {
   test("Ahead", () => {
     // Arrange
-    let start = moment.utc("2020-12-30T07:00");
-    let now = moment.utc("2020-12-30T08:30");
+    let start = moment("2020-12-30T07:00");
+    let now = moment("2020-12-30T08:30");
     let state = {
       distanceProgress: 12,
       distanceGoal: 60,
       distanceStep: 0.5,
       start: start,
-      finish: moment.utc("2020-12-30T17:00"),
+      finish: moment("2020-12-30T17:00"),
       nowProgress: now,
       wallClock: now,
       paceSpanMinutes: 5,
@@ -345,14 +346,14 @@ describe('Walk/rest', () => {
 
   test("Rest waiting", () => {
     // Arrange
-    let start = moment.utc("2020-12-30T07:00");
-    let now = moment.utc("2020-12-30T09:00");
+    let start = moment("2020-12-30T07:00");
+    let now = moment("2020-12-30T09:00");
     let state = {
       distanceProgress: 12,
       distanceGoal: 60,
       distanceStep: 0.5,
       start: start,
-      finish: moment.utc("2020-12-30T17:00"),
+      finish: moment("2020-12-30T17:00"),
       nowProgress: now,
       wallClock: now,
       paceSpanMinutes: 5,
@@ -379,14 +380,14 @@ describe('Walk/rest', () => {
 
   test("Rest waiting", () => {
     // Arrange
-    let start = moment.utc("2020-12-30T07:00");
-    let now = moment.utc("2020-12-30T09:30");
+    let start = moment("2020-12-30T07:00");
+    let now = moment("2020-12-30T09:30");
     let state = {
       distanceProgress: 15,
       distanceGoal: 60,
       distanceStep: 0.5,
       start: start,
-      finish: moment.utc("2020-12-30T17:00"),
+      finish: moment("2020-12-30T17:00"),
       nowProgress: now,
       wallClock: now,
       paceSpanMinutes: 5,
